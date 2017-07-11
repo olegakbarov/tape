@@ -6,11 +6,10 @@
 (def Tray (.-Tray electron))
 
 (goog-define dev? false)
+(def log (.-log js/console))
 
 (def window (atom nil))
 (def tray (atom nil))
-
-(.hide (.-dock app))
 
 (defn load-page
   "When compiling with `:none` the compiled JS that calls .loadURL is
@@ -25,24 +24,29 @@
       (.loadURL window (str "file://" js/__dirname "/../../index.html"))
       (.loadURL window (str "file://" js/__dirname "/index.html"))))
 
+;; Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2))
+
 (defn get-window-position []
   (let [window-bounds (.getBounds @window)
         tray-bounds (.getBounds @tray)
-        x (.round js/Math (+ (- (.-x tray-bounds) (/ (.-width tray-bounds) 2)) (/ window-bounds 2)))
-        y (.round js/Math (+ (.-x tray-bounds) (.-height tray-bounds) 4))]
+        x (.round js/Math (- (+ (.-x tray-bounds)
+                                (/ (.-width tray-bounds) 2))
+                             (/ (.-x window-bounds) 2)))
+        y (.round js/Math (apply + [(.-y tray-bounds) (.-height tray-bounds) 4]))]
     [x y]))
 
 (defn show-window []
   (let [[x y] (get-window-position)]
+    (log x y)
     (do
       (.setPosition @window x y false)
       (.show @window)
       (.focus @window))))
 
 (defn toggle-window []
-  (.isVisible @window)
-    (.hide @window))
-    (show-window)
+  (if (.isVisible @window)
+    #(.hide @window)
+    show-window))
 
 (def path (js/require "path"))
 
@@ -53,25 +57,27 @@
                        :frame false
                        :fullscreenable false
                        :resizable true
-                       :transparent true}))
+                       :transparent false}))
 
 (defn init-tray-icon []
-  (reset! tray (Tray (.join path js/__dirname "../../resources/assets/flagTemplate.png"))
+  (let [p (.join path js/__dirname "../../../resources/assets/flagTemplate.png")]
+    (reset! tray (Tray. p))
     (do
       (.on @tray "right-click" toggle-window)
       (.on @tray "double-click" toggle-window)
-      (.on @tray "click" toggle-window (fn [e])))))
+      (.on @tray "click" show-window))))
 
 (defn init-browser []
   (reset! window (make-window))
-  (load-page @window)
-  (if dev? (.openDevTools @window))
-  (.on @window "closed" #(reset! window nil)))
+  (do
+    (load-page @window)
+    (when dev?
+        (.openDevTools @window #js {:mode "undocked"}))
+    (.on @window "closed" #(reset! window nil))))
 
 (defn init []
+  (.hide (.-dock app))
   (.on app "window-all-closed" #(when-not (= js/process.platform "darwin") (.quit app)))
-  (.on app "ready"
-    (do
-      init-browser
-      init-tray-icon))
+  (.on app "ready" init-browser)
+  (.on app "ready" init-tray-icon)
   (set! *main-cli-fn* (fn [] nil)))
