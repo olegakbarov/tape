@@ -4,6 +4,7 @@
 (def app           (.-app electron))
 (def BrowserWindow (.-BrowserWindow electron))
 (def Tray (.-Tray electron))
+(def ipc (.-ipcMain electron))
 
 (goog-define dev? false)
 (def log (.-log js/console))
@@ -37,11 +38,9 @@
 
 (defn show-window []
   (let [[x y] (get-window-position)]
-    (log x y)
-    (do
-      (.setPosition @window x y false)
-      (.show @window)
-      (.focus @window))))
+    (.setPosition @window x y false)
+    (.show @window)
+    (.focus @window)))
 
 (defn toggle-window []
   (if (.isVisible @window)
@@ -65,7 +64,7 @@
     (do
       (.on @tray "right-click" toggle-window)
       (.on @tray "double-click" toggle-window)
-      (.on @tray "click" show-window))))
+      (.on @tray "click" toggle-window))))
 
 (defn init-browser []
   (reset! window (make-window))
@@ -80,4 +79,5 @@
   (.on app "window-all-closed" #(when-not (= js/process.platform "darwin") (.quit app)))
   (.on app "ready" init-browser)
   (.on app "ready" init-tray-icon)
+  (.on ipc "show-window" show-window)
   (set! *main-cli-fn* (fn [] nil)))
