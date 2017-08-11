@@ -30,10 +30,13 @@
 (defn get-window-position []
   (let [window-bounds (.getBounds @window)
         tray-bounds (.getBounds @tray)
-        x (.round js/Math (- (+ (.-x tray-bounds)
-                                (/ (.-width tray-bounds) 2))
-                             (/ (.-x window-bounds) 2)))
-        y (.round js/Math (apply + [(.-y tray-bounds) (.-height tray-bounds) 4]))]
+        x (.round js/Math (- (.-x window-bounds)
+                             (+ (/ (get tray-bounds "x") 2))))
+        y (.round js/Math (+ (.-y tray-bounds) (.-height tray-bounds)))]
+    ; (log (str "get-window-position called"))
+    ; (log (str "window-bounds" (js->clj window-bounds)))
+    ; (log (str "x " (js->clj x)))
+    ; (log (str "tray-bounds")tray-bounds)
     [x y]))
 
 (defn show-window []
@@ -44,25 +47,26 @@
 
 (defn toggle-window []
   (if (.isVisible @window)
-    #(.hide @window)
-    show-window))
+    (.hide @window)
+    (show-window)))
 
 (def path (js/require "path"))
 
 (defn make-window []
-  (BrowserWindow. #js {:width 250
+  (BrowserWindow. #js {:x 790
+                       :y 21
+                       :width 250
                        :height 400
                        :show true
                        :frame false
                        :fullscreenable false
-                       :resizable true
+                       :resizable dev?
                        :transparent false}))
 
 (defn init-tray-icon []
   (let [p (.join path js/__dirname "../../../resources/assets/flagTemplate.png")]
     (reset! tray (Tray. p))
     (do
-      (.on @tray "right-click" toggle-window)
       (.on @tray "double-click" toggle-window)
       (.on @tray "click" toggle-window))))
 
