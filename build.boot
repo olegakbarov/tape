@@ -9,6 +9,8 @@
                  [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
                  [adzerk/boot-reload    "0.4.13"  :scope "test"]
                  [reagent "0.6.0"]
+                 [com.taoensso/timbre "4.10.0"]
+                 [camel-snake-kebab "0.4.0"]
                  [haslett "0.1.0"]])
 
 (require
