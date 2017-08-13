@@ -2,9 +2,10 @@
   (:require [reagent.core :as r]))
 
 (defonce db
-  {:ui { :screen :markets
-         :sort :asc}
+  (r/atom
+    {:ui { :screen :markets
+           :sort :asc}
 
-   :data []})
+     :data []}))
 
 

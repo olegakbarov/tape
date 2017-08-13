@@ -33,6 +33,7 @@ body {
   justify-content: space-around;
   width: 120px;
   text-transform: uppercase;
+  user-select: none;
 }
 
 .by_currency {
@@ -54,4 +55,10 @@ body {
 
 .by_market:hover {
   cursor: pointer;
+}
+
+.by_market.active,
+.by_currency.active {
+  color: #4141e0;
+  background-color: #fff;
 }
