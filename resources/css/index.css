@@ -1,0 +1,57 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+  line-height: 11px;
+  letter-spacing: .5px;
+}
+
+/*
+ blue #4141e0
+ dark #2c2cb1
+*/
+
+#header {
+  height: 40px;
+  wudth: 100%;
+  background-color: #4141e0;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 11px 0;
+  font-size: 9px;
+  line-height: 9px;
+}
+
+#toggle {
+  display: flex;
+  justify-content: space-around;
+  width: 120px;
+  text-transform: uppercase;
+}
+
+.by_currency {
+  padding: 4px 10px;
+  border: 1px solid white;
+  border-right: 0;
+  border-radius: 4px 0 0 4px;
+}
+
+.by_currency:hover {
+  cursor: pointer;
+}
+
+.by_market {
+  padding: 4px 10px;
+  border: 1px solid white;
+  border-radius: 0 4px 4px 0;
+}
+
+.by_market:hover {
+  cursor: pointer;
+}

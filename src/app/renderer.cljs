@@ -1,37 +1,33 @@
 (ns app.renderer
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]
-                   [taoensso.timbre :refer [log  trace  debug  info  warn  error  fatal]])
   (:require [reagent.core :as reagent :refer [atom]]
-            [clojure.string :as string :refer [split-lines]]
-            [clojure.walk]
-            [cljs.core.async :as a :refer [<! >! chan timeout]]
-            [taoensso.timbre :as timbre]
-            [haslett.client :as ws]))
+            [app.db :as db]))
 
 (defn init []
   (js/console.log "Starting Application"))
 
-(defonce state        (atom {}))
-
-(go
-  (let [stream (<! (ws/connect "ws://127.0.0.1:8080" {:source (chan 5)}))]
-    (go-loop []
-      (let [msg (<! (:source stream))
-            clj-msg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
-        (swap! state assoc (:Market clj-msg) clj-msg)
-        (js/console.log (clj->js @state)))
-      (recur))))
+(defn header []
+  [:div#header
+    [:div#toggle
+      [:div.by_currency {:onClick "currency"}]
+      [:div.by_market   "market"]]])
 
 (defn curr-pair-row [data key]
   (let [pair (:CurrencyPair data)
         avg (:Avg data)]
      (str pair " : " avg)))
 
-(defn root-component []
+(defn items-table [items]
   [:div
-   (for [[name info] @state]
+   (for [[name info] (:data db)]
      ^{:key key}
      [:div [:strong name] (str " " (curr-pair-row info key))])])
+
+(defn root-component []
+  (let [data (> (count (:data db))
+                0)])
+  [:div
+    [header]
+    [items-table data]])
 
 (reagent/render
   [root-component]
