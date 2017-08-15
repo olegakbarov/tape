@@ -6,14 +6,14 @@
             [cljs.core.async :as a :refer [<! >! chan timeout]]
             [taoensso.timbre :as timbre]
             [haslett.client :as ws]
-            [app.db :as db]))
+            [app.db :refer [db]]
+            [app.actions :as actions]))
 
 (go
   (let [stream (<! (ws/connect "ws://127.0.0.1:8080" {:source (chan 5)}))]
     (go-loop []
       (let [msg (<! (:source stream))
             clj-msg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
-        (swap! db assoc (:Market clj-msg) clj-msg)
-        (js/console.log (clj->js @db)))
+        (actions/update-db-with-ticker clj-msg))
       (recur))))
 

@@ -1,9 +1,3 @@
-# Electron & ClojureScript
-
-This repository contains an Electron app written in ClojureScript. In
-contrast to other examples out there this one uses ClojureScript for
-both parts of the Electron app: the main process and the renderer.
-
 #### Development
 
 For development you can start the compiler with `boot watch dev-build`.
