@@ -1,4 +1,9 @@
 target/
+/MyApp-*/
+/node_modules
+
+.tern-port
 .nrepl-port
-snippets.*
 .cljs_rhino_repl/
+
+snippets.*

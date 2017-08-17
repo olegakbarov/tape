@@ -1,0 +1,23 @@
+{
+  "name": "desktop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptounicorns/desktop.git"
+  },
+  "author": "",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/cryptounicorns/desktop/issues"
+  },
+  "homepage": "https://github.com/cryptounicorns/desktop#readme",
+  "dependencies": {
+    "electron": "^1.7.5",
+    "electron-packager": "^8.7.2"
+  }
+}
