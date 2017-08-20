@@ -1,15 +1,17 @@
 (ns app.actions
-  (:require [app.db :refer [db]]))
+  (:require [app.db :refer [db]]
+            [camel-snake-kebab.core :refer [->kebab-case]]))
 
 (defn to-screen [screen]
   (swap! db assoc-in [:ui :screen] screen))
 
+(defn process-ws-event [t]
+  (into {}
+    (for [[k v] t]
+      [(->kebab-case k) v])))
+
 (defn update-db-with-ticker [ticker]
-  (let [market (:Market ticker)
-        updated-at (:Timestamp ticker)
-        pair (:CurrencyPair ticker)
-        last-price (:Last ticker)]
-    (js/console.log (:markets @db))
-    (if-not (nil? (:Market ticker))
-      (swap! db assoc-in [:markets market pair] ticker))))
+  (let [t (process-ws-event ticker)
+        {:keys [market currency-pair]} t]
+    (swap! db assoc-in [:markets market currency-pair] t)))
 

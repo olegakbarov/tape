@@ -25,37 +25,36 @@
          "market"]]]))
 
 (defn curr-pair-row [data key]
-  (let [pair (:CurrencyPair data)
-        avg (:Avg data)]
+  (let [pair (:currency-pair data)
+        avg (:avg data)]
      (str pair " : " avg)))
 
-(defn items-table [items]
-  (let [screen (get-in @db [:ui :screen])]
-    ; [:div
-    ;   (cond
-    ;     (= screen :market) [:h1 "Markets"]
-    ;     (= screen :currency) [:h1 "Currency"])]
-    ;
-   ; (js/console.log (:data @db))
-   (for [[name info] (:data @db)]
-     ^{:key key}
-     [:div [:strong name] (str " " (curr-pair-row info key))])))
+; (defn items-table [items]
+;   (let [screen (get-in @db [:ui :screen])]
+;     [:div
+;       (cond
+;         (= screen :market)
+;         (for [[name info] (:market @db)]
+;           ^{:key key}
+;           [:div [:strong name] (str " " (curr-pair-row info key))])
+
+;         (= screen :currency) [:h1 "Currency"])]))
 
 (defn render-market-row [market]
+ (js/console.log market)
  (for [pair (keys market)]
-   (let [{:keys [Market CurrencyPair Avg Low High Timestamp]} (get market pair)
-         [left right] (split CurrencyPair "-")]
-     (js/console.log Market CurrencyPair Avg)
-     ^{:key (str (:Market market) "x" pair)}
+   (let [{:keys [market currency-pair avg low high timestamp]} (get market pair)
+         [left right] (split currency-pair "-")]
+     ^{:key (str market "x" pair)}
      [:div.currency_row
-       [:h5 Market]
+       [:h5 market]
        [:img.currpic {:src (str "images/" left ".png")
                       :style {:height "25px"}}]
        [:img.currpic {:src (str "images/" right ".png")
                       :style {:height "25px"}}]
 
-       [:h5 (str "Low: " Low)]
-       [:h5 (str "High: " High)]
+       [:h5 (str "Low: " low)]
+       [:h5 (str "High: " high)]
        [:div [:div "Updated: "]
              [:div (.fromNow (js/moment))]]])))
 
