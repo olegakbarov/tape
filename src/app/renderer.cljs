@@ -2,7 +2,9 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [app.db :refer [db]]
             [app.api]
-            [app.actions :as actions]))
+            [cljsjs.moment]
+            [app.actions :as actions]
+            [clojure.string :refer [split]]))
 
 (defn init []
   (js/console.log "Starting Application"))
@@ -34,28 +36,41 @@
     ;     (= screen :market) [:h1 "Markets"]
     ;     (= screen :currency) [:h1 "Currency"])]
     ;
-   (js/console.log (:data @db))
+   ; (js/console.log (:data @db))
    (for [[name info] (:data @db)]
      ^{:key key}
      [:div [:strong name] (str " " (curr-pair-row info key))])))
 
+(defn render-market-row [market]
+ (for [pair (keys market)]
+   (let [{:keys [Market CurrencyPair Avg Low High Timestamp]} (get market pair)
+         [left right] (split CurrencyPair "-")]
+     (js/console.log Market CurrencyPair Avg)
+     ^{:key (str (:Market market) "x" pair)}
+     [:div.currency_row
+       [:h5 Market]
+       [:img.currpic {:src (str "images/" left ".png")
+                      :style {:height "25px"}}]
+       [:img.currpic {:src (str "images/" right ".png")
+                      :style {:height "25px"}}]
 
-(defn root-component []
-  (let [data (> (count (:data db))
-                0)]
-    (js/console.log (clj->js (:markets @db)))
+       [:h5 (str "Low: " Low)]
+       [:h5 (str "High: " High)]
+       [:div [:div "Updated: "]
+             [:div (.fromNow (js/moment))]]])))
+
+
+(defn root []
+  (let [markets (:markets @db)]
     [:div
      [header]
-     ; (for [{:keys [:Name]} (clj->js (:data @db))]
-     ;   ^{:key }
-     ;   [:div])
-       ; [:div [:strong name] (str " " )])
-     [:img.currpic {:src "images/btc.png" :style {:height "25px"}}]
-     [:img.currpic {:src "images/eth.png" :style {:height "25px"}}]
-     [:img.currpic {:src "images/xrp.png" :style {:height "25px"}}]
-     [:img.currpic {:src "images/doge.png" :style {:height "25px"}}]
-     [:img.currpic {:src "images/dash.png" :style {:height "25px"}}]]))
+     [:div#wrapper
+       (for [name  (-> @db
+                       :markets
+                       keys)]
+         ^{:key (get markets name)}
+         (render-market-row (get markets name)))]]))
 
 (reagent/render
-  [root-component]
+  [root]
   (js/document.getElementById "container"))

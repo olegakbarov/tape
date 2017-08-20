@@ -10,7 +10,7 @@
             [app.actions :as actions]))
 
 (go
-  (let [stream (<! (ws/connect "ws://127.0.0.1:8080" {:source (chan 5)}))]
+  (let [stream (<! (ws/connect "ws://127.0.0.1:8080" {:source (chan)}))]
     (go-loop []
       (let [msg (<! (:source stream))
             clj-msg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]

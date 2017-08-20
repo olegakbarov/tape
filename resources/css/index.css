@@ -17,8 +17,10 @@ body {
 */
 
 #header {
-  height: 40px;
-  wudth: 100%;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  width: 100%;
   background-color: #4141e0;
   color: white;
   display: flex;
@@ -62,3 +64,17 @@ body {
   color: #4141e0;
   background-color: #fff;
 }
+
+
+/*  */
+
+#wrapper {
+  margin-top: 60px;
+}
+
+.currency_row {
+  display: flex;
+  padding: 5px;
+  border-bottom: 1px solid #ccc;
+}
+

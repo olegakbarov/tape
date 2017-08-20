@@ -9,5 +9,7 @@
         updated-at (:Timestamp ticker)
         pair (:CurrencyPair ticker)
         last-price (:Last ticker)]
-    (js/console.log (clj->js market))
-    (swap! db update-in [:markets market] assoc ticker)))
+    (js/console.log (:markets @db))
+    (if-not (nil? (:Market ticker))
+      (swap! db assoc-in [:markets market pair] ticker))))
+

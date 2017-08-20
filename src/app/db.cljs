@@ -6,8 +6,6 @@
     {:ui { :screen :markets
            :sort :asc}
 
-     :markets {:yobit {}
-               :bitfinex {}
-               :cex {}}}))
+     :markets {}}))
 
 
