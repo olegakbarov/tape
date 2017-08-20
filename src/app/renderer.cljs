@@ -41,7 +41,6 @@
 ;         (= screen :currency) [:h1 "Currency"])]))
 
 (defn render-market-row [market]
- (js/console.log market)
  (for [pair (keys market)]
    (let [{:keys [market currency-pair avg low high timestamp]} (get market pair)
          [left right] (split currency-pair "-")]
@@ -56,7 +55,7 @@
        [:h5 (str "Low: " low)]
        [:h5 (str "High: " high)]
        [:div [:div "Updated: "]
-             [:div (.fromNow (js/moment))]]])))
+             [:div (.fromNow (js/moment (* timestamp 1000)))]]])))
 
 
 (defn root []
