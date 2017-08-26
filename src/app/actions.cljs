@@ -13,5 +13,6 @@
 (defn update-db-with-ticker [ticker]
   (let [t (process-ws-event ticker)
         {:keys [market currency-pair]} t]
+    (js/console.log (clj->js (@db :markets)))
     (swap! db assoc-in [:markets market currency-pair] t)))
 
