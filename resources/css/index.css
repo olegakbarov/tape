@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+  display: none;
+  width: 0 !important
+}
+
 body {
   font-family: Interface, sans-serif;
   margin: 0;
@@ -23,51 +28,51 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: #4141e0;
+  background-color: #657AF3;
   color: white;
   display: flex;
   justify-content: space-around;
-  padding: 11px 0;
-  font-size: 9px;
-  line-height: 9px;
+  align-items: center;
+  font-size: 12px;
 }
 
 #toggle {
   display: flex;
   justify-content: space-around;
-  width: 120px;
-  text-transform: uppercase;
-  user-select: none;
+  width: 60%;
+  -webkit-user-select: none;
 }
 
-.by_currency {
-  padding: 4px 10px;
+.toggle_btn {
+  padding: 6px 10px;
   text-align: center;
   border: 1px solid white;
+  width: 50%;
+}
+
+.bestprice_btn {
   border-right: 0;
   border-radius: 4px 0 0 4px;
 }
 
-.by_currency:hover {
+.bestprice_btn:hover {
   cursor: pointer;
 }
 
-.by_market {
-  padding: 4px 10px;
+.market_btn {
   border: 1px solid white;
   border-radius: 0 4px 4px 0;
 }
 
-.by_market:hover {
+.market_btn:hover {
   cursor: pointer;
 }
 
-.by_market.active,
-.by_currency.active {
+.market_btn.active,
+.bestprice_btn.active {
   color: #4141e0;
   background-color: #fff;
 }
-
 
 /* Wrapper */
 

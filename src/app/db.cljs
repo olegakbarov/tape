@@ -6,6 +6,13 @@
     {:ui { :screen :markets
            :sort :asc}
 
-     :markets {}}))
+     :markets {"bitfinex" {"BTC-USD" {}
+                           "LTC-USD" {}}
+               "yobit" {"BTC-RUB" {}
+                        "BTC-USD" {}
+                        "LTC-USD" {}
+                        "LTC-RUB" {}}
+               "cex" {"BTC-RUB" {}
+                      "BTC-USD" {}}}}))
 
 

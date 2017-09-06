@@ -25,18 +25,12 @@
       (.loadURL window (str "file://" js/__dirname "/../../index.html"))
       (.loadURL window (str "file://" js/__dirname "/index.html"))))
 
-;; Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2))
-
 (defn get-window-position []
   (let [window-bounds (.getBounds @window)
         tray-bounds (.getBounds @tray)
         x (.round js/Math (- (.-x window-bounds)
                              (+ (/ (get tray-bounds "x") 2))))
         y (.round js/Math (+ (.-y tray-bounds) (.-height tray-bounds)))]
-    ; (log (str "get-window-position called"))
-    ; (log (str "window-bounds" (js->clj window-bounds)))
-    ; (log (str "x " (js->clj x)))
-    ; (log (str "tray-bounds")tray-bounds)
     [x y]))
 
 (defn show-window []
