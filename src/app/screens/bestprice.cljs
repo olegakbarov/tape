@@ -3,29 +3,11 @@
             [app.db :refer [db]]
             [app.components.header :refer [header]]
             [cljsjs.moment]
+            [app.logic :as logic]
             [app.actions :as actions]
             [clojure.string :refer [split]]))
 
-(defn get-pair-cell [left right]
- [:div
-   [:img.currpic {:src (str "images/" left ".png")
-                  :style {:height "25px"}}]
-   [:img.currpic {:src (str "images/" right ".png")
-                  :style {:height "25px"}}]])
-
-(defn render-market-row [m]
- (for [pair (keys m)]
-   (let [{:keys [market currency-pair avg low high timestamp]} (get m pair)
-         [left right] (split currency-pair "-")]
-     ^{:key (str market "x" pair)}
-     [:div.currency_row
-       [:h5 (str "Low: " low)]
-       [:h5 (str "High: " high)]])))
-
-; [:div [:div "Updated: "]
-;       [:div (.fromNow (js/moment (* timestamp 1000)))]]])))
-
-(defn thead []
+(defn t-head []
   [:div.thead_wrapper
     (for [i ["Pair" "Price" "Change" "Market"]]
      ^{:key i}
@@ -33,16 +15,29 @@
        [:span.thead_clickable
          (str "▼ " i)]])])
 
+(defn render-row [m]
+   (let [[key value] m
+         {:keys [market currency-pair avg low high timestamp]} value
+         [left right] (split currency-pair "-")]
+    ; (js/console.log m)
+    ^{:key (:currency-pair value)}
+    [:div.titem_wrapper
+      ^{:key "curr-pair"}
+      [:div.titem_cell currency-pair]
+      ^{:key "last-price"}
+      [:div.titem_cell (:last value)]
+      ^{:key "dynamcis"}
+      [:div.titem_cell "todo"]
+      ^{:key "market-name"}
+      [:div.titem_cell market]]))
+
 
 (defn bestprice []
   (let [markets (:markets @db)]
    [:div
      [header]
-     [thead]
+     [t-head]
      [:div.bestprice_wrapper
-       (for [name  (-> @db
-                       :markets
-                       keys)]
-         (let [n (get markets name)]
-           ^{:key n}
-           (render-market-row n)))]]))
+       (for [pair (logic/get-best-pairs)]
+         (render-row pair))]]))
+

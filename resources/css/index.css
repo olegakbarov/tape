@@ -82,13 +82,7 @@ body {
 /* Bestprice */
 
 .bestprice_wrapper {
-  margin-top: 100px;
-}
-
-.currency_row {
-  display: flex;
-  padding: 5px;
-  border-bottom: 1px solid rgba(151, 151, 151, .3);
+  margin-top: 102px;
 }
 
 .thead_wrapper {
@@ -118,3 +112,22 @@ span.thead_clickable:hover {
 }
 
 
+.titem_wrapper {
+  background-color: #fff;
+  display: flex;
+  border-bottom: 1px solid rgba(151, 151, 151, .3);
+  transition: all .3s ease;
+}
+
+
+.titem_wrapper:hover {
+  background-color: rgba(151, 151, 151, .1)
+}
+
+.titem_cell {
+  width: 25%;
+  padding: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
