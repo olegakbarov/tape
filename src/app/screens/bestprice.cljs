@@ -20,21 +20,29 @@
      ^{:key (str market "x" pair)}
      [:div.currency_row
        [:h5 (str "Low: " low)]
-       [:h5 (str "High: " high)]
-       [:div [:div "Updated: "]
-             [:div (.fromNow (js/moment (* timestamp 1000)))]]])))
+       [:h5 (str "High: " high)]])))
+
+; [:div [:div "Updated: "]
+;       [:div (.fromNow (js/moment (* timestamp 1000)))]]])))
 
 (defn thead []
-  [:div])
+  [:div.thead_wrapper
+    (for [i ["Pair" "Price" "Change" "Market"]]
+     ^{:key i}
+     [:div.thead_item
+       [:span.thead_clickable
+         (str "▼ " i)]])])
+
 
 (defn bestprice []
   (let [markets (:markets @db)]
-   [:div#wrapper
+   [:div
      [header]
      [thead]
-     (for [name  (-> @db
-                     :markets
-                     keys)]
-       (let [n (get markets name)]
-         ^{:key n}
-         (render-market-row n)))]))
+     [:div.bestprice_wrapper
+       (for [name  (-> @db
+                       :markets
+                       keys)]
+         (let [n (get markets name)]
+           ^{:key n}
+           (render-market-row n)))]]))
