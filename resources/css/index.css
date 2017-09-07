@@ -96,8 +96,7 @@ body {
 
 .thead_item {
   width: 25%;
-  text-align: center;
-  padding: 15px 0;
+  padding: 15px 8px;
   font-weight: 700;
   font-size: 12px;
   color: #7E7F81;
@@ -116,9 +115,9 @@ span.thead_clickable:hover {
   background-color: #fff;
   display: flex;
   border-bottom: 1px solid rgba(151, 151, 151, .3);
-  transition: all .3s ease;
+  transition: opacity .3s;
+  color: #7E7F81;
 }
-
 
 .titem_wrapper:hover {
   background-color: rgba(151, 151, 151, .1)
@@ -126,8 +125,17 @@ span.thead_clickable:hover {
 
 .titem_cell {
   width: 25%;
-  padding: 12px;
+  padding: 12px 8px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 700;
+}
+
+.titem_cell.market {
+  text-transform: uppercase;
+}
+
+.unfolded_item_wrapper {
+  border-bottom: 1px solid rgba(151, 151, 151, .3);
 }

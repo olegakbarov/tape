@@ -5,6 +5,7 @@
   (r/atom
     {:ui/screen :bestprice
      :ui/bestprice {:sort :asc}
+     :ui/expanded-row []
 
      :settings {:pairs-view :images}
 

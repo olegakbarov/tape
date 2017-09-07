@@ -46,3 +46,9 @@
       (str current-dir "/db_state.edn"
         (-> @db :markets)))))
 
+(defn expand-pair-row [pair market]
+  (let [[p m] (:ui/expanded-row @db)]
+    (swap! db assoc-in [:ui/expanded-row]
+                       (if (and (= p pair) (= m market))
+                           []
+                           [pair market]))))
