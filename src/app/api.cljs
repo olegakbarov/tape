@@ -7,14 +7,17 @@
             [taoensso.timbre :as timbre]
             [haslett.client :as ws]
             [app.db :refer [db]]
+            [app.config :refer [config]]
             [app.actions :as actions]))
 
-(go
-  ;; handle conn errors
-  (let [stream (<! (ws/connect "ws://localhost:8080/api/v1/tickers/stream" {:source (chan)}))]
-    (go-loop []
-      (let [msg (<! (:source stream))
-            clj-msg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
-        (actions/update-db-with-ticker clj-msg))
-      (recur))))
+(defn start-loop! []
+  (go
+    ;; handle conn errors
+    (let [endpoint (:ws-endpoint config)
+          stream (<! (ws/connect endpoint  {:source (chan)}))]
+      (go-loop []
+        (let [msg (<! (:source stream))
+              clj-msg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
+          (actions/update-db-with-ticker clj-msg))
+        (recur)))))
 

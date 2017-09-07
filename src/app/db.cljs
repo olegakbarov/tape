@@ -3,8 +3,10 @@
 
 (defonce db
   (r/atom
-    {:ui { :screen :markets
-           :sort :asc}
+    {:ui/screen :bestprice
+     :ui/bestprice {:sort :asc}
+
+     :settings {:pairs-view :images}
 
      :markets {"bitfinex" {"BTC-USD" {}
                            "LTC-USD" {}}
@@ -14,5 +16,4 @@
                         "LTC-RUB" {}}
                "cex" {"BTC-RUB" {}
                       "BTC-USD" {}}}}))
-
 

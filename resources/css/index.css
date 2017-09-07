@@ -9,6 +9,11 @@
   width: 0 !important
 }
 
+#debug_panel {
+  position: fixed;
+  bottom: 5px;
+}
+
 body {
   font-family: Interface, sans-serif;
   margin: 0;

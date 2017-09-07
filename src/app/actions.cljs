@@ -8,7 +8,7 @@
 
 ;; navigate to another screen
 (defn to-screen [screen]
-  (swap! db assoc-in [:ui :screen] screen))
+  (swap! db assoc-in [:ui/screen] screen))
 
 ;; event from websocket keywordized & kebabcased
 (defn process-ws-event [t]
@@ -17,16 +17,17 @@
       (for [[k v] t]
         [(->kebab-case k) v]))))
 
-;; adds ticket to db
+;; adds ticker to db
 (defn update-db-with-ticker [ticker]
   (let [t (process-ws-event ticker)
         {:keys [market currency-pair]} t]
-    (js/console.log t)
     (swap! db assoc-in [:markets market currency-pair] t)))
 
 ;; Notifs
-(defn test-notif []
-  (js/Notification. "Test notif" (clj->js {:body "Imagine its yours lol"})))
+(defn test-notif [title text]
+  (js/Notification.
+    title
+    (clj->js {:body text})))
 
 ;; Filestorage
 (defn cache-state []

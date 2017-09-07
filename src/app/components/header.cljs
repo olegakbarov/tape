@@ -4,7 +4,7 @@
             [app.actions :as actions]))
 
 (defn header []
-  (let [screen (get-in @db [:ui :screen])]
+  (let [screen (get-in @db [:ui/screen])]
     [:div#header
       [:div#toggle
         [:div.toggle_btn.bestprice_btn

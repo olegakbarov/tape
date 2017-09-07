@@ -1,3 +1,6 @@
+(def project
+  {:name "stargate" :version "0.9.0"})
+
 (set-env!
  :source-paths    #{"src"}
  :resource-paths  #{"resources"}
