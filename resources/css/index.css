@@ -2,6 +2,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-user-select: none;
 }
 
 ::-webkit-scrollbar {
@@ -14,6 +15,12 @@
   bottom: 5px;
 }
 
+html,
+body,
+#container {
+  height: 100%;
+}
+
 body {
   font-family: Interface, sans-serif;
   margin: 0;
@@ -22,11 +29,6 @@ body {
   line-height: 11px;
   letter-spacing: .5px;
 }
-
-/*
- blue #4141e0
- dark #2c2cb1
-*/
 
 #header {
   height: 50px;
@@ -39,6 +41,11 @@ body {
   justify-content: space-around;
   align-items: center;
   font-size: 12px;
+}
+
+#profile:hover,
+#settings:hover {
+  cursor: pointer;
 }
 
 #toggle {
@@ -109,7 +116,6 @@ span.thead_clickable {
 span.thead_clickable:hover {
   cursor: pointer;
 }
-
 
 .titem_wrapper {
   background-color: #fff;
@@ -211,3 +217,32 @@ span.thead_clickable:hover {
   margin-top: 5px;
   font-weight: normal;
 }
+
+/*  --------- Profile --------- */
+
+.profile_wrapper,
+.settings_wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: #657AF3;
+}
+
+.profile_wrapper > .back_arr,
+.settings_wrapper > .back_arr {
+  padding: 20px;
+}
+
+.profile_wrapper > .back_arr:hover,
+.settings_wrapper > .back_arr:hover {
+  cursor: pointer;
+}
+
+/*  --------- Settings --------- */
+
+#header.settings {
+  padding: 0 20px;
+  justify-content: flex-start;
+}
+
+/*  --------- Profile --------- */
+

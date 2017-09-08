@@ -5,7 +5,10 @@
             [app.actions :as actions]
             [app.config :refer [config]]
             [app.screens.bestprice :refer [bestprice]]
-            [app.screens.markets :refer [markets]]))
+            [app.screens.markets :refer [markets]]
+            [app.screens.settings :refer [settings]]
+            [app.screens.portfolio :refer [portfolio]]
+            [app.screens.alerts :refer [alerts]]))
 
 
 (defn init []
@@ -22,10 +25,13 @@
  (let [curr-screen (-> @db :ui/screen)]
    (condp = curr-screen
      :bestprice [bestprice]
-     :markets [markets])))
+     :markets   [markets]
+     :settings  [settings]
+     :portfolio [portfolio]
+     :alerts    [alerts])))
 
 (defn root []
-  [:div
+  [:div {:style {:height "100%"}}
    (when (= (:env config) :dev)
          [debug-panel])
    [router]])

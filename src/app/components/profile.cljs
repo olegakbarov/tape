@@ -1,25 +1,25 @@
-(ns app.components.header
+(ns app.components.profile
   (:require [reagent.core :as reagent]
             [app.db :refer [db]]
             [app.actions :as actions]))
 
 (defn header []
   (let [screen (get-in @db [:ui/screen])]
-    [:div#header
-      [:div#profile
-         {:on-click #(actions/to-screen :portfolio)}
-         [:img.currpic {:src (str "icons/user.svg")}]]
+    [:div#header.profile
+      [:img.back_arr
+       {:src "icons/arrow-left.svg"
+        :on-click #(actions/to-screen :bestprice)}]
       [:div#toggle
         [:div.toggle_btn.bestprice_btn
-         {:on-click #(actions/to-screen :bestprice)
-          :class (if (= screen :bestprice)
+         {:on-click #(actions/to-screen :portfolio)
+          :class (if (= screen :portfolio)
                      :active)}
-         "Bestprice"]
+         "Portfolio"]
         [:div.toggle_btn.market_btn
-         {:on-click #(actions/to-screen :markets)
-          :class (if (= screen :markets)
+         {:on-click #(actions/to-screen :alerts)
+          :class (if (= screen :alerts)
                      :active)}
-         "Markets"]]
+         "Alerts"]]
       [:div#settings
         {:on-click #(actions/to-screen :settings)}
         [:img.currpic {:src (str "icons/settings.svg")}]]]))

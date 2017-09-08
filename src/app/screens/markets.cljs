@@ -6,12 +6,13 @@
             [app.components.header :refer [header]]))
 
 (defn markets []
-  [:div.markets_wrapper
-   [header]
-   [:ul
-    (for [p pairs]
-      (let [{:keys [name symbol]} p]
-        ^{:key (str name "-" symbol)}
-        [:li (str name "-" symbol)]))]])
+  (let [markets (-> @db :markets)]
+    [:div.markets_wrapper
+     [header]
+     [:ul
+      (for [m markets]
+        (let [[name pairs] m]
+          ^{:key name}
+          [:li name]))]]))
 
 
