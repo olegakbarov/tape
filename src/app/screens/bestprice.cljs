@@ -4,6 +4,7 @@
             [app.components.header :refer [header]]
             [cljsjs.moment]
             [app.logic :as logic]
+            [app.utils.core :refer [curr-symbol->name]]
             [app.actions :as actions]
             [clojure.string :refer [split]]))
 
@@ -19,15 +20,32 @@
   (let [[key value] m
         {:keys [market currency-pair avg low high timestamp]} value
         [left right] (split currency-pair "-")]
-    (js/console.log m)
     ^{:key currency-pair}
     [:div.unfolded_item_wrapper
      {:on-click #(actions/expand-pair-row nil nil)}
-     [:img.currpic {:src (str "images/" left ".png")
-                    :style {:height "25px"}}]
-     [:img.currpic {:src (str "images/" right ".png")
-                    :style {:height "25px"}}]
-     [:h1 currency-pair]]))
+     [:div.unfolded_pair_row
+       [:div.toprow_box
+        [:h2.symbol left]
+        [:h4.name (curr-symbol->name left)]]
+       [:div.toprow_box.imgbox
+         [:img.currpic {:src (str "images/" left ".png")
+                        :style {:height "35px"}}]]
+       [:div.toprow_box.imgbox
+         [:img.currpic {:src (str "images/" right ".png")
+                        :style {:height "35px"}}]]
+       [:div.toprow_box
+        [:h2.symbol right]
+        [:h4.name (curr-symbol->name right)]]]
+     [:div.unfolded_pair_row.last
+       [:div.bottomrow_box
+        [:div.subtitle "High: "]
+        [:div.value high]]
+       [:div.bottomrow_box
+        [:div.subtitle "Low: "]
+        [:div.value low]]
+       [:div.bottomrow_box
+        [:div.subtitle "Market"]
+        [:div.value (.toUpperCase market)]]]]))
 
 (defn folded-row [m]
  (let [[key value] m
