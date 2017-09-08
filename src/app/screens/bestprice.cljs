@@ -8,17 +8,22 @@
             [app.actions :as actions]
             [clojure.string :refer [split]]))
 
+(defn row-unfolded? []
+  (some
+    #(not (nil? %))
+    (:ui/expanded-row @db)))
+
 (defn t-head []
   [:div.thead_wrapper
-    (for [i ["Pair" "Price" "Change" "Market"]]
+    {:style {:opacity (if (row-unfolded?) 0.3 1)}}
+    (for [i ["▼ Pair" "Price" "▼ Change" "Market"]]
      ^{:key i}
      [:div.thead_item
-       [:span.thead_clickable
-         (str "▼ " i)]])])
+       [:span.thead_clickable i]])])
 
 (defn expanded-row [m]
   (let [[key value] m
-        {:keys [market currency-pair avg low high timestamp]} value
+        {:keys [market currency-pair avg low high last timestamp]} value
         [left right] (split currency-pair "-")]
     ^{:key currency-pair}
     [:div.unfolded_item_wrapper
@@ -38,13 +43,16 @@
         [:h4.name (curr-symbol->name right)]]]
      [:div.unfolded_pair_row.last
        [:div.bottomrow_box
-        [:div.subtitle "High: "]
+        [:div.subtitle "Last:"]
+        [:div.value last]]
+       [:div.bottomrow_box
+        [:div.subtitle "High:"]
         [:div.value high]]
        [:div.bottomrow_box
-        [:div.subtitle "Low: "]
+        [:div.subtitle "Low:"]
         [:div.value low]]
        [:div.bottomrow_box
-        [:div.subtitle "Market"]
+        [:div.subtitle "Market:"]
         [:div.value (.toUpperCase market)]]]]))
 
 (defn folded-row [m]
@@ -52,7 +60,8 @@
        {:keys [market currency-pair last]} value]
     ^{:key currency-pair}
     [:div.titem_wrapper
-      {:on-click #(actions/expand-pair-row key market)}
+      {:style {:opacity (if (row-unfolded?) .3 1)}
+       :on-click #(actions/expand-pair-row key market)}
       ^{:key "curr-pair"}
       [:div.titem_cell currency-pair]
       ^{:key "last-price"}

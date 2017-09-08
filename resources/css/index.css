@@ -115,7 +115,7 @@ span.thead_clickable:hover {
   background-color: #fff;
   display: flex;
   border-bottom: 1px solid rgba(151, 151, 151, .3);
-  transition: opacity .3s;
+  /* transition: opacity .3s; */
   color: #7E7F81;
 }
 
@@ -142,12 +142,13 @@ span.thead_clickable:hover {
 }
 
 .unfolded_item_wrapper {
-  border-bottom: 1px solid rgba(151, 151, 151, .3);
+  border-bottom: 1px solid rgba(151, 151, 151, .1);
   padding: 20px 0;
 }
 
 .unfolded_pair_row {
   display: flex;
+  align-items: center;
 }
 
 .unfolded_pair_row > .toprow_box {
@@ -190,8 +191,12 @@ span.thead_clickable:hover {
   display: flex;
 }
 
+.unfolded_pair_row:hover {
+  cursor: pointer!important;
+}
+
 .bottomrow_box {
-  width: 33%;
+  width: 25%;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
