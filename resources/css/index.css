@@ -29,7 +29,7 @@ body {
 */
 
 #header {
-  height: 60px;
+  height: 50px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -82,14 +82,14 @@ body {
 /*  --------- Bestprice --------- */
 
 .bestprice_wrapper {
-  margin-top: 102px;
+  margin-top: 92px;
 }
 
 .thead_wrapper {
   position: fixed;
   background-color: #fff;
   width: 100%;
-  top: 60px;
+  top: 50px;
   display: flex;
   border-bottom: 1px solid rgba(151, 151, 151, .3);
 }
@@ -115,7 +115,6 @@ span.thead_clickable:hover {
   background-color: #fff;
   display: flex;
   border-bottom: 1px solid rgba(151, 151, 151, .3);
-  /* transition: opacity .3s; */
   color: #7E7F81;
 }
 
@@ -184,7 +183,7 @@ span.thead_clickable:hover {
 /*  --------- Markets --------- */
 
 .markets_wrapper {
-  margin-top: 60px;
+  margin-top: 50px;
 }
 
 .unfolded_pair_row {

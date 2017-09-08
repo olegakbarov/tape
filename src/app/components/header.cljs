@@ -6,6 +6,8 @@
 (defn header []
   (let [screen (get-in @db [:ui/screen])]
     [:div#header
+      [:div#profile
+         [:img.currpic {:src (str "icons/user.svg")}]]
       [:div#toggle
         [:div.toggle_btn.bestprice_btn
          {:on-click #(actions/to-screen :bestprice)
@@ -16,4 +18,6 @@
          {:on-click #(actions/to-screen :markets)
           :class (if (= screen :markets)
                      :active)}
-         "Markets"]]]))
+         "Markets"]]
+      [:div#settings
+        [:img.currpic {:src (str "icons/settings.svg")}]]]))
