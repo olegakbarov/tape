@@ -30,7 +30,7 @@
         tray-bounds (.getBounds @tray)
         x (.round js/Math (- (.-x window-bounds)
                              (+ (/ (get tray-bounds "x") 2))))
-        y (.round js/Math (+ (.-y tray-bounds) (.-height tray-bounds)))]
+        y (.round js/Math (apply + [10 (.-y tray-bounds) (.-height tray-bounds)]))]
     [x y]))
 
 (defn show-window []
@@ -58,7 +58,7 @@
                        :transparent false}))
 
 (defn init-tray-icon []
-  (let [p (.join path js/__dirname "../../../resources/assets/flagTemplate.png")]
+  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
     (reset! tray (Tray. p))
     (do
       (.on @tray "double-click" toggle-window)
