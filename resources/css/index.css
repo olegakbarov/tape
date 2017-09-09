@@ -244,5 +244,8 @@ span.thead_clickable:hover {
   justify-content: flex-start;
 }
 
-/*  --------- Profile --------- */
+/*  --------- Portfolio --------- */
 
+#portfolio_wrapper {
+  margin-top: 60px;
+}

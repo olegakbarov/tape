@@ -9,6 +9,8 @@
 
      :settings {:pairs-view :images}
 
+     :portfolio []
+
      :markets {"bitfinex" {"BTC-USD" {}
                            "LTC-USD" {}}
                "yobit" {"BTC-RUB" {}

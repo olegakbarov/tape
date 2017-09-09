@@ -7,4 +7,3 @@
     [header]
     [:h1 "Alerts"]])
 
-

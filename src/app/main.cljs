@@ -11,6 +11,7 @@
 
 (def window (atom nil))
 (def tray (atom nil))
+(def path (js/require "path"))
 
 (defn load-page
   "When compiling with `:none` the compiled JS that calls .loadURL is
@@ -43,8 +44,6 @@
   (if (.isVisible @window)
     (.hide @window)
     (show-window)))
-
-(def path (js/require "path"))
 
 (defn make-window []
   (BrowserWindow. #js {:x 790
