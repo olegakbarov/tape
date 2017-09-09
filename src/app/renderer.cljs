@@ -13,6 +13,7 @@
 
 (defn init []
   (start-loop!)
+  (actions/read-local-portfolio!)
   (js/console.log "Started ws listener..."))
 
 (defn debug-panel []

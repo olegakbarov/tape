@@ -16,8 +16,7 @@
 }
 
 html,
-body,
-#container {
+body {
   height: 100%;
 }
 
@@ -248,4 +247,52 @@ span.thead_clickable:hover {
 
 #portfolio_wrapper {
   margin-top: 60px;
+}
+
+.add_rec_wrapper {
+  display: flex;
+  padding: 15px;
+}
+
+.input_item {
+  display: block;
+  width: 33%;
+}
+
+input.input_item {
+  border: none;
+  font-size: 16px;
+  padding: 0 17px;
+}
+
+input.input_item {
+  outline: none;
+}
+
+.folio_table_header {
+  padding: 12px 0;
+  display: flex;
+  border-top: 1px solid rgba(151, 151, 151, .1);
+  font-weight: 700;
+  font-size: 12px;
+  color: #7E7F81;
+}
+
+.folio_row {
+  display: flex;
+  border-top: 1px solid rgba(151, 151, 151, .1);
+}
+
+.folio_row:last-child {
+  border-bottom: 1px solid rgba(151, 151, 151, .1);
+}
+
+.folio_table_header > .item,
+.folio_row > .item {
+  width: 33%;
+  padding: 5px 10px;
+}
+
+img.folio_plus:hover {
+  cursor: pointer;
 }

@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [app.components.profile :refer [header]]
             [app.actions :as actions]
+            [app.db :refer [db]]
             [clojure.string :as s]))
 
 (defn custom-parse-float [strng]
@@ -12,7 +13,7 @@
     (.parseFloat js/window val)))
 
 (defn update-name [val name]
-  (reset! name val))
+  (reset! name (.toUpperCase val)))
 
 (defn update-amount [val amount]
   (let [valid-chars "1234567890,."
@@ -32,38 +33,65 @@
      rec
      false)))
 
+(defn update-if-valid [name market amount]
+  (when-let [rec (valid-rec? {:name @name
+                              :amount (custom-parse-float @amount)
+                              :market @market})]
+    (actions/add-record rec)
+    (reset! name "")
+    (reset! amount "")
+    (reset! market "")))
+
 (defn add-rec []
   (let [name (r/atom "")
         amount (r/atom "")
         market (r/atom "")]
     (fn []
       [:div
-       [:input {:type "text"
-                :placeholder "BTC, ETH ..."
-                :value @name
-                :on-change #(update-name (-> % .-target .-value) name)}]
-       [:input {:type "text"
-                :placeholder "1000"
-                :value @amount
-                :on-change #(update-amount (-> % .-target .-value) amount)}]
-       [:input {:type "text"
-                :placeholder "CEX, BITTREX..."
-                :value @market
-                :on-change #(update-market (-> % .-target .-value) market)}]
-       [:button {:on-click #(when-let [rec (valid-rec? {:name @name
-                                                        :amount (custom-parse-float @amount)
-                                                        :market @market})]
-                              (actions/add-record rec)
-                              (reset! name "")
-                              (reset! amount "")
-                              (reset! market ""))}
-        "Add"]])))
+        [:div.add_rec_wrapper
+         [:input.input_item
+          {:type "text"
+           :placeholder "BTC"
+           :autoFocus true
+           :value @name
+           :on-change #(update-name (-> % .-target .-value) name)}]
+         [:input.input_item
+          {:type "text"
+           :placeholder "1000"
+           :value @amount
+           :on-change #(update-amount (-> % .-target .-value) amount)}]
+         [:input.input_item
+          {:type "text"
+           :placeholder "CEX"
+           :value @market
+           :on-change #(update-market (-> % .-target .-value) market)}]
+         [:div
+          [:img.folio_plus
+           {:src (str "icons/plus-circle.svg")
+            :on-click #(update-if-valid name market amount)}]]]])))
+
+(defn portfolio-list []
+  (let [folio (:portfolio @db)]
+   [:div
+    [:div.folio_table_header
+      [:div.item "Currency"]
+      [:div.item "Amount"]
+      [:div.item "Market"]]
+    (if (> (count folio) 0)
+      (for [row folio]
+        (let [{:keys [name amount market]} row]
+          ^{:key name}
+          [:div.folio_row
+            [:div.item name]
+            [:div.item amount]
+            [:div.item market]])))]))
 
 (defn portfolio []
   [:div
     [header]
     [:div#portfolio_wrapper
       [add-rec]
-      [:button {:on-click #(actions/save-portfolio)} "Save folio"]
-      [:button {:on-click #(actions/read-portfolio)} "Read folio"]
-      [:button {:on-click #(actions/log-folio)} "Log folio"]]])
+      [portfolio-list]]])
+      ; [:button {:on-click #(actions/save-portfolio)} "Save folio"]
+      ; [:button {:on-click #(actions/read-local-portfolio!)} "Read folio"]
+      ; [:button {:on-click #(actions/log-folio)} "Log folio"]]])
