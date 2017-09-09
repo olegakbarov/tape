@@ -15,11 +15,6 @@
   bottom: 5px;
 }
 
-html,
-body {
-  height: 100%;
-}
-
 body {
   font-family: Interface, sans-serif;
   margin: 0;
@@ -231,8 +226,7 @@ span.thead_clickable:hover {
   padding: 20px;
 }
 
-.profile_wrapper > .back_arr:hover,
-.settings_wrapper > .back_arr:hover {
+#header > .back_arr:hover {
   cursor: pointer;
 }
 

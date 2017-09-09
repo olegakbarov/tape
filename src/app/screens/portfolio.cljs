@@ -13,6 +13,8 @@
     (.parseFloat js/window val)))
 
 (defn update-name [val name]
+  ;; check for name in db
+  ;; autosuggest?
   (reset! name (.toUpperCase val)))
 
 (defn update-amount [val amount]
