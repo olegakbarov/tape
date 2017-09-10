@@ -32,7 +32,7 @@
      :alerts    [alerts])))
 
 (defn root []
-  [:div {:style {:height "100%"}}
+  [:div
    (when (= (:env config) :dev)
          [debug-panel])
    [router]])

@@ -16,7 +16,7 @@
 (defn t-head []
   [:div.thead_wrapper
     {:style {:opacity (if (row-unfolded?) 0.3 1)}}
-    (for [i ["▼ Pair" "Price" "▼ Change" "Market"]]
+    (for [i ["Pair" "Price" "Change" "Market"]]
      ^{:key i}
      [:div.thead_item
        [:span.thead_clickable i]])])

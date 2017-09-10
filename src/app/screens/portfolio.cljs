@@ -82,7 +82,7 @@
     (if (> (count folio) 0)
       (for [row folio]
         (let [{:keys [name amount market]} row]
-          ^{:key name}
+          ^{:key (str name "x" amount "x" market)}
           [:div.folio_row
             [:div.item name]
             [:div.item amount]
