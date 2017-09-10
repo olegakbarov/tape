@@ -7,3 +7,7 @@ target/
 .cljs_rhino_repl/
 
 snippets.*
+
+/.bash_history
+/.cache
+/.pki
