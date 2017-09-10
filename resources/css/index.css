@@ -179,13 +179,6 @@ span.thead_clickable:hover {
   padding: 0 5px;
 }
 
-
-/*  --------- Markets --------- */
-
-.markets_wrapper {
-  margin-top: 50px;
-}
-
 .unfolded_pair_row {
   display: flex;
 }
@@ -211,6 +204,31 @@ span.thead_clickable:hover {
   margin-top: 5px;
   font-weight: normal;
 }
+
+/*  --------- Markets --------- */
+
+.markets_wrapper {
+  margin-top: 50px;
+}
+
+.thead {
+  display: flex;
+}
+
+.thead > .item {
+  width: 25%;
+  padding: 5px 10px;
+}
+
+.market_row {
+  display: flex;
+}
+
+.market_row > .item {
+  width: 25%;
+  padding: 5px 10px;
+}
+
 
 /*  --------- Profile --------- */
 

@@ -5,14 +5,33 @@
             [app.constants.currs :refer [pairs]]
             [app.components.header :refer [header]]))
 
+(defn get-markets []
+  (reduce
+   (fn [acc [key val]]
+    (conj acc {:name key
+               :pairs-num (count (keys val))}))
+   []
+   (:markets @db)))
+
+
+(defn thead []
+ [:div.thead
+  [:div.item "Name"]
+  [:div.item "Pairs"]
+  [:div.item "BTC Cap"]
+  [:div.item "ETC Cap"]])
+
 (defn markets []
-  (let [markets (-> @db :markets)]
+  (let [markets (get-markets)]
+    (js/console.log (@db :markets))
     [:div.markets_wrapper
      [header]
-     [:ul
-      (for [m markets]
-        (let [[name pairs] m]
+     [thead]
+     (for [m markets]
+        (let [{:keys [name pairs-num]} m]
           ^{:key name}
-          [:li name]))]]))
-
+          [:div.market_row
+            [:div.item name]
+            [:div.item pairs-num]
+            [:div.item "cap"]]))]))
 
