@@ -58,18 +58,20 @@
 (defn folded-row [m]
  (let [[key value] m
        {:keys [market currency-pair last]} value]
-    ^{:key currency-pair}
-    [:div.titem_wrapper
-      {:style {:opacity (if (row-unfolded?) .3 1)}
-       :on-click #(actions/expand-pair-row key market)}
-      ^{:key "curr-pair"}
-      [:div.titem_cell currency-pair]
-      ^{:key "last-price"}
-      [:div.titem_cell last]
-      ^{:key "dynamcis"}
-      [:div.titem_cell "todo"]
-      ^{:key "market-name"}
-      [:div.titem_cell.market market]]))
+    (if (some nil? [market currency-pair last])
+      nil ;; dont render if got falsy
+      ^{:key (str currency-pair "x" market)}
+      [:div.titem_wrapper
+        {:style {:opacity (if (row-unfolded?) .3 1)}
+         :on-click #(actions/expand-pair-row key market)}
+        ^{:key "curr-pair"}
+        [:div.titem_cell currency-pair]
+        ^{:key "last-price"}
+        [:div.titem_cell last]
+        ^{:key "dynamcis"}
+        [:div.titem_cell "todo"]
+        ^{:key "market-name"}
+        [:div.titem_cell.market market]])))
 
 (defn render-row [m]
    (let [[key value] m
