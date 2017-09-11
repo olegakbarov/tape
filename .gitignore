@@ -13,3 +13,4 @@ snippets.*
 /.bash_history
 /.cache
 /.pki
+/.config
