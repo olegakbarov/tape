@@ -2,6 +2,7 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [app.db :refer [db]]
             [app.actions :as actions]
+            [app.logic :as logic]
             [app.constants.currs :refer [pairs]]
             [app.components.header :refer [header]]))
 
@@ -18,12 +19,11 @@
  [:div.thead
   [:div.item "Name"]
   [:div.item "Pairs"]
-  [:div.item "BTC Cap"]
+  [:div.item "Currencies"]
   [:div.item "ETC Cap"]])
 
 (defn markets []
   (let [markets (get-markets)]
-    (js/console.log (@db :markets))
     [:div.markets_wrapper
      [header]
      [thead]

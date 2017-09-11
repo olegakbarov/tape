@@ -3,7 +3,7 @@
             [app.db :refer [db]]))
 
 (defn get-best-pairs []
-  (let [markets (-> @db :markets)
+  (let [markets (:markets @db)
         market-items (vals markets)]
     (reduce
      (fn [acc item]
@@ -21,4 +21,24 @@
          item)))
      {}
      market-items)))
+
+(defn all-available-currs []
+  (into #{}
+    (flatten
+      (map
+       #(flatten (clojure.string/split % "-"))
+       (->> (:markets @db)
+            vals
+            (map keys)
+            flatten)))))
+
+(defn currs-by-market [market]
+  (let [m (:markets @db)
+        pairs (get m market)]
+    (reduce
+     (fn [acc item]
+       (flatten (conj acc
+                  (clojure.string/split item "-"))))
+     []
+     (keys pairs))))
 
