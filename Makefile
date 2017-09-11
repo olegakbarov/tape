@@ -5,7 +5,7 @@ include boot.properties
 boot_installer_url := https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
 
 name               := MyApp
-electron_version   ?= 0.31.2
+electron_version   ?= 1.7.6
 env                ?= dev
 os                 ?= $(shell uname -s | awk '{print tolower($$0)}')
 arch               ?= x64
