@@ -22,7 +22,12 @@
         (let [{:keys [name pairs-num]} m]
           ^{:key name}
           [:div.market_row
-            [:div.item name]
-            [:div.item pairs-num]
-            [:div.item "cap"]]))]))
+            [:div.item
+             [:div.name name]
+             [:div.number "BTC Volume"]
+             [:div.number "Number of pairs:"]]
+            [:div.item
+             [:div.name.right.green "●"]
+             [:div.number.right "100000"]
+             [:div.number.right pairs-num]]]))]))
 

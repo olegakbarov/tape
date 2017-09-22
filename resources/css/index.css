@@ -22,6 +22,7 @@ body {
   font-size: 11px;
   line-height: 11px;
   letter-spacing: .5px;
+  color: #7E7F81;
 }
 
 #header {
@@ -116,7 +117,6 @@ span.thead_clickable:hover {
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(151, 151, 151, .3);
-  color: #7E7F81;
 }
 
 .titem_wrapper:hover {
@@ -231,22 +231,34 @@ span.thead_clickable:hover {
   margin-top: 50px;
 }
 
-.thead {
-  display: flex;
-}
-
-.thead > .item {
-  width: 25%;
-  padding: 5px 10px;
-}
-
 .market_row {
   display: flex;
 }
 
 .market_row > .item {
-  width: 25%;
-  padding: 5px 10px;
+  width: 50%;
+  padding: 18px 12px;
+  border-bottom: 1px solid rgba(151, 151, 151, .1);
+}
+
+.market_row > .item > .name {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.item > *.right {
+  text-align: right;
+}
+
+.item > *.green {
+  color: #55EF62;
+}
+
+.market_row > .item > .number {
+ font-size: 11px;
+ line-height: 13px;
 }
 
 
