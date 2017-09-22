@@ -13,14 +13,6 @@
     #(not (nil? %))
     (:ui/expanded-row @db)))
 
-(defn t-head []
-  [:div.thead_wrapper
-    {:style {:opacity (if (row-unfolded?) 0.3 1)}}
-    (for [i ["Pair" "Price" "Change" "Market"]]
-     ^{:key i}
-     [:div.thead_item
-       [:span.thead_clickable i]])])
-
 (defn expanded-row [m]
   (let [[key value] m
         {:keys [market currency-pair avg low high last timestamp]} value
@@ -65,13 +57,12 @@
         {:style {:opacity (if (row-unfolded?) .3 1)}
          :on-click #(actions/expand-pair-row key market)}
         ^{:key "curr-pair"}
-        [:div.titem_cell currency-pair]
+        [:div.titem_cell
+          [:div.pair currency-pair
+            [:span.dynamics.green "  ▲ 0.00 %"]]
+          [:div.market market]]
         ^{:key "last-price"}
-        [:div.titem_cell last]
-        ^{:key "dynamcis"}
-        [:div.titem_cell "todo"]
-        ^{:key "market-name"}
-        [:div.titem_cell.market market]])))
+        [:div.titem_cell.price last]])))
 
 (defn render-row [m]
    (let [[key value] m
@@ -86,7 +77,6 @@
   (let [markets (:markets @db)]
    [:div
      [header]
-     [t-head]
      [:div.bestprice_wrapper
        (doall
          (for [pair (logic/get-best-pairs)]

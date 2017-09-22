@@ -83,7 +83,7 @@ body {
 /*  --------- Bestprice --------- */
 
 .bestprice_wrapper {
-  margin-top: 92px;
+  margin-top: 50px;
 }
 
 .thead_wrapper {
@@ -114,6 +114,7 @@ span.thead_clickable:hover {
 .titem_wrapper {
   background-color: #fff;
   display: flex;
+  align-items: center;
   border-bottom: 1px solid rgba(151, 151, 151, .3);
   color: #7E7F81;
 }
@@ -122,14 +123,33 @@ span.thead_clickable:hover {
   background-color: rgba(151, 151, 151, .1)
 }
 
-
 .titem_cell {
-  width: 25%;
-  padding: 12px 8px;
+  width: 50%;
+  padding: 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 700;
+}
+
+.titem_cell > .pair {
+  font-weight: bold;
+  line-height: 17px;
+  font-size: 15px;
+}
+
+.titem_cell > .market {
+  text-transform: uppercase;
+}
+
+.titem_cell.price {
+  font-size: 21px;
+  padding-left: 20px;
+}
+
+.pair > span.dynamics.green {
+  font-weight: 300;
+  color: #12D823;
+  font-size: 11px;
 }
 
 .titem_cell:hover {

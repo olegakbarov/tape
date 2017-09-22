@@ -10,8 +10,14 @@
             [app.screens.portfolio :refer [portfolio]]
             [app.screens.alerts :refer [alerts]]))
 
+(def electron (js/require "electron"))
+(def webframe (.-webFrame electron))
+(defn disable-resize! []
+  (.setVisualZoomLevelLimits webframe 1 1)
+  (.setLayoutZoomLevelLimits webframe 0 0))
 
 (defn init []
+  ; (disable-resize!)
   (start-loop!)
   (actions/read-local-portfolio!)
   (js/console.log "Started ws listener..."))

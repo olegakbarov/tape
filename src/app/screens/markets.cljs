@@ -14,19 +14,10 @@
    []
    (:markets @db)))
 
-
-(defn thead []
- [:div.thead
-  [:div.item "Name"]
-  [:div.item "Pairs"]
-  [:div.item "Currencies"]
-  [:div.item "ETC Cap"]])
-
 (defn markets []
   (let [markets (get-markets)]
     [:div.markets_wrapper
      [header]
-     [thead]
      (for [m markets]
         (let [{:keys [name pairs-num]} m]
           ^{:key name}
