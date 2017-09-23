@@ -4,7 +4,7 @@
             [app.components.dropdown :refer [dropdown]]
             [app.actions :as actions]
             [app.db :refer [db]]
-            [app.utils.core :refer [debounce]]
+            [app.utils.core :refer [get-market-names]]
             [clojure.string :as s]
             [cljsjs.react-motion]
             [goog.functions]))
@@ -88,7 +88,7 @@
            :handler on-curr-change}])
        (when @market-dropdown
         [dropdown
-          {:items ["WEX" "CEX"]
+          {:items (get-market-names)
            :value market
            :handler on-market-change}])])))
 
