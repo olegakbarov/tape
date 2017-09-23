@@ -39,8 +39,8 @@
 
 (defn root []
   [:div
-   (when (= (:env config) :dev)
-         [debug-panel])
+   ; (when (= (:env config) :dev)
+   ;       [debug-panel])
    [router]])
 
 (reagent/render

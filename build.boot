@@ -18,7 +18,8 @@
                  [binaryage/devtools      "0.9.4" :scope "test"]
                  [binaryage/dirac         "1.2.15" :scope "test"]
                  [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
-                 [cljsjs/moment "2.10.6-0"]])
+                 [cljsjs/moment "2.10.6-0"]
+                 [cljsjs/react-motion "0.5.0-0"]])
 
 (require
  '[adzerk.boot-cljs      :refer [cljs]]
