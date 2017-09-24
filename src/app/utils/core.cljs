@@ -17,8 +17,4 @@
    []
    (:markets @db)))
 
-(defn get-market-names []
-  (map
-   #(.toUpperCase %)
-   (keys (:markets @db))))
 

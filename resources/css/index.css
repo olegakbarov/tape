@@ -23,8 +23,11 @@ span.dynamics.green {
 
 .dropdown {
   display: flex;
-  background-color: rgba(151, 151, 151, .05);
+  background-color: #f3f3f3;
   padding: 12px;
+  position: absolute;
+  width: 100%;
+  z-index: 9999;
 }
 
 .dropdown > .pill {
@@ -320,7 +323,7 @@ span.thead_clickable:hover {
 /*  --------- Portfolio --------- */
 
 #portfolio_wrapper {
-  margin-top: 60px;
+  margin-top: 50px;
 }
 
 .add_rec_wrapper {
@@ -336,7 +339,7 @@ span.thead_clickable:hover {
 input.input_item {
   border: none;
   font-size: 16px;
-  padding: 0 17px;
+  padding: 0 10px 0 0;
 }
 
 input.input_item {
@@ -388,3 +391,8 @@ h3.assets_title {
   line-height: 26px;
 }
 
+/* ------ Alerts ----------- */
+
+#alerts_wrapper {
+  margin-top: 50px;
+}

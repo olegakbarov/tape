@@ -22,7 +22,12 @@
      {}
      market-items)))
 
-(defn all-available-currs []
+(defn get-market-names []
+  (map
+   #(.toUpperCase %)
+   (keys (:markets @db))))
+
+(defn get-all-currs []
   (into #{}
     (flatten
       (map
@@ -31,6 +36,13 @@
             vals
             (map keys)
             flatten)))))
+
+(defn get-crypto-currs
+  "TODO: remove hadcoded fiats"
+  []
+  (remove
+   #(some (fn [x] (= x %)) ["USD" "RUB"])
+   (get-all-currs)))
 
 (defn currs-by-market [market]
   (let [m (:markets @db)

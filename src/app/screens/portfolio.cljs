@@ -4,7 +4,8 @@
             [app.components.dropdown :refer [dropdown]]
             [app.actions :as actions]
             [app.db :refer [db]]
-            [app.utils.core :refer [get-market-names]]
+            [app.logic :refer [get-market-names
+                               get-crypto-currs]]
             [clojure.string :as s]
             [cljsjs.react-motion]
             [goog.functions]))
@@ -16,6 +17,7 @@
                 strng)]
     (.parseFloat js/window val)))
 
+;; TODO move to utils
 (defn update-amount [val amount]
   (let [valid-chars "1234567890,."
         l (last val)]
@@ -35,10 +37,12 @@
      false)))
 
 (defn update-if-valid [name market amount]
+  ;; TODO check if curr/market pair exists
   (when-let [rec (valid-rec? {:name @name
                               :amount (custom-parse-float @amount)
                               :market @market})]
     (actions/add-record rec)
+    (actions/save-portfolio)
     (reset! name "")
     (reset! amount "")
     (reset! market "")))
@@ -83,7 +87,7 @@
             :on-click #(update-if-valid name market amount)}]]]
        (when @curr-dropdown
         [dropdown
-          {:items ["BTC" "LTC"]
+          {:items (get-crypto-currs)
            :value name
            :handler on-curr-change}])
        (when @market-dropdown
