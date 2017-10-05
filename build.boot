@@ -1,5 +1,5 @@
 (def project
-  {:name "stargate" :version "0.9.0"})
+  {:name "cryptounicorns" :version "0.1.0"})
 
 (set-env!
  :source-paths    #{"src"}
@@ -10,13 +10,13 @@
                  [weasel "0.7.0" :scope "test"]
                  [adzerk/boot-cljs "1.7.228-1" :scope "test"]
                  [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
-                 [adzerk/boot-reload    "0.4.13"  :scope "test"]
-                 [reagent "0.6.0"]
+                 [adzerk/boot-reload "0.4.13" :scope "test"]
+                 [metosin.forks/reagent "0.6.1-SNAPSHOT"]
                  [com.taoensso/timbre "4.10.0"]
                  [camel-snake-kebab "0.4.0"]
                  [haslett "0.1.0"]
-                 [binaryage/devtools      "0.9.4" :scope "test"]
-                 [binaryage/dirac         "1.2.15" :scope "test"]
+                 [binaryage/devtools "0.9.4" :scope "test"]
+                 [binaryage/dirac "1.2.16" :scope "test"]
                  [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
                  [cljsjs/moment "2.10.6-0"]
                  [cljsjs/react-motion "0.5.0-0"]])
