@@ -1,7 +1,7 @@
 (ns app.screens.portfolio
   (:require [reagent.core :as r]
             [app.components.profile :refer [header]]
-            [app.components.dropdown :refer [dropdown]]
+            [app.components.form :refer [input-group]]
             [app.actions :as actions]
             [app.db :refer [db]]
             [app.logic :refer [get-market-names
@@ -47,55 +47,6 @@
     (reset! amount "")
     (reset! market "")))
 
-
-(defn add-rec []
-  (let [name (r/atom "")
-        amount (r/atom "")
-        market (r/atom "")
-        curr-dropdown (r/atom false)
-        market-dropdown (r/atom false)
-        on-market-change #(reset! market %)
-        on-curr-change #(reset! name %)]
-    (fn []
-      [:div
-        [:div.add_rec_wrapper
-         [:input.input_item
-          {:type "text"
-           :autoFocus true
-           :placeholder "1000"
-           :value @amount
-           :on-change #(update-amount (-> % .-target .-value) amount)}]
-         [:input.input_item
-          {:type "text"
-           :placeholder "CURR"
-           :on-focus #(reset! curr-dropdown true)
-           :on-blur (goog.functions.debounce
-                      #(reset! curr-dropdown false)
-                      10)
-           :value @name}]
-         [:input.input_item
-          {:type "text"
-           :placeholder "MRKT"
-           :on-focus #(reset! market-dropdown true)
-           :on-blur (goog.functions.debounce
-                      #(reset! market-dropdown false)
-                      10)
-           :value @market}]
-         [:div
-          [:img.folio_plus
-           {:src (str "icons/plus-circle.svg")
-            :on-click #(update-if-valid name market amount)}]]]
-       (when @curr-dropdown
-        [dropdown
-          {:items (get-crypto-currs)
-           :value name
-           :handler on-curr-change}])
-       (when @market-dropdown
-        [dropdown
-          {:items (get-market-names)
-           :value market
-           :handler on-market-change}])])))
-
 (defn portfolio-list []
   (let [folio (:portfolio @db)]
    [:div
@@ -111,12 +62,27 @@
               [:div.market market]]
             [:div.item.amount amount]])))]))
 
+(defn validate-amount [v]
+  (let [valid-chars "1234567890,."]
+    (if (s/includes? valid-chars v)
+        true
+        false)))
+
+(def input-configs
+   [{:name "amount"
+     :placeholder "1000"}
+    {:name "currency"
+     :placeholder "CURR"
+     :options (get-crypto-currs)}
+    {:name "market"
+     :placeholder "MRKT"
+     :options (get-market-names)}])
+
 (defn portfolio []
   [:div
     [header]
     [:div#portfolio_wrapper
-      [add-rec]
-      [portfolio-list]]])
+      [input-group input-configs]]])
       ; [:button {:on-click #(actions/save-portfolio)} "Save folio"]
       ; [:button {:on-click #(actions/read-local-portfolio!)} "Read folio"]
       ; [:button {:on-click #(actions/log-folio)} "Log folio"]]])

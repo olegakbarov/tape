@@ -24,6 +24,7 @@ span.dynamics.green {
 .dropdown {
   display: flex;
   background-color: #f3f3f3;
+  top: 30px;
   padding: 12px;
   position: absolute;
   width: 100%;
@@ -329,6 +330,8 @@ span.thead_clickable:hover {
 .add_rec_wrapper {
   display: flex;
   padding: 15px;
+  padding-left: 0px;
+  position: relative;
 }
 
 .input_item {
@@ -339,7 +342,8 @@ span.thead_clickable:hover {
 input.input_item {
   border: none;
   font-size: 16px;
-  padding: 0 10px 0 0;
+  width: 150px;
+  padding: 0px 10px 0 10px;
 }
 
 input.input_item {
