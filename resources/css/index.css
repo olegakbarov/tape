@@ -22,6 +22,7 @@ span.dynamics.green {
 }
 
 .dropdown {
+  margin-top: 10px;
   display: flex;
   background-color: #f3f3f3;
   top: 30px;
@@ -38,6 +39,11 @@ span.dynamics.green {
   line-height: 14px;
   border: 1px solid rgba(151, 151, 151, .3);
   border-radius: 12px;
+  transition: hover .2s ease-in;
+}
+
+.dropdown > .pill:hover {
+  background-color: #fff;
 }
 
 .dropdown > .pill:first-child {

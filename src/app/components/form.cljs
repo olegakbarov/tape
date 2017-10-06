@@ -29,10 +29,13 @@
                       (if validation-type
                        (when (validate-amount v) (swap! store assoc-in [idx :value] v))
                        (swap! store assoc-in [idx :value] v))))
-        on-select-opt #(do (goog.functions.debounce
-                             (.focus (:node (get @store (inc %2)))) 10)
-                           (swap! store assoc-in [%2 :value] %1))]
-    (js/console.log @store)
+        ;; TODO: for some reason works 80% of the time
+        on-select-opt #(do (swap! store assoc-in [%2 :value] %1)
+                           (let [next-node (:node (get @store (inc %2)))]
+                             (goog.functions.debounce
+                              (if next-node (.focus next-node)
+                                            (.focus @submit-ref))
+                              100)))]
     (fn []
       [:div
        (doall
@@ -59,7 +62,7 @@
        [:button
          {:type "submit"
           :ref #(reset! submit-ref %)
-          :on-click #(js/console.log @submit-ref)}
+          :on-click #(js/console.log @store)}
         [:img.folio_plus
          {:src (str "icons/plus-circle.svg")}]]])))
 

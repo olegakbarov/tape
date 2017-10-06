@@ -82,7 +82,8 @@
   [:div
     [header]
     [:div#portfolio_wrapper
-      [input-group input-configs]]])
+      [input-group input-configs]
+      [portfolio-list]]])
       ; [:button {:on-click #(actions/save-portfolio)} "Save folio"]
       ; [:button {:on-click #(actions/read-local-portfolio!)} "Read folio"]
       ; [:button {:on-click #(actions/log-folio)} "Log folio"]]])
