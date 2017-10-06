@@ -50,7 +50,7 @@
 (defn portfolio-list []
   (let [folio (:portfolio @db)]
    [:div
-    [:h3.assets_title " Your assets"]
+    [:h1.assets_title " Your assets"]
     (if (> (count folio) 0)
       (for [row folio]
         (let [{:keys [name amount market]} row]

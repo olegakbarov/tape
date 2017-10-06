@@ -1,7 +1,8 @@
 (ns app.components.form
   (:require [reagent.core :as r]
             [clojure.string :as s]
-            [goog.functions]))
+            [goog.functions]
+            [app.components.ui :refer [Button]]))
 
 (defn dropdown
   [idx options node handler]
@@ -17,6 +18,10 @@
 (defn validate-amount [v]
   (let [valid-chars "1234567890,."]
     (if (s/includes? valid-chars v) true false)))
+
+(defn update-field-with-opts [opts v]
+  (let [valid-opts (filter #(s/starts-with? % v) opts)]
+    valid-opts v))
 
 (defn input-group [cfgs]
   (let [store (r/atom (vec (replicate (count cfgs) {:node nil :value "" :valid false})))
@@ -35,7 +40,7 @@
                              (goog.functions.debounce
                               (if next-node (.focus next-node)
                                             (.focus @submit-ref))
-                              100)))]
+                              10)))]
     (fn []
       [:div
        (doall
@@ -59,10 +64,11 @@
                           (not (nil? options)))
                 [dropdown idx options node on-select-opt])]))
          cfgs))
-       [:button
-         {:type "submit"
-          :ref #(reset! submit-ref %)
-          :on-click #(js/console.log @store)}
-        [:img.folio_plus
-         {:src (str "icons/plus-circle.svg")}]]])))
+       [:div {:style {:padding "0 10px"}}
+         [Button
+           {:type "submit"
+            :ref #(reset! submit-ref %)
+            :on-click #(js/console.log @store)
+            :color "#12D823"}
+           "Add"]]])))
 
