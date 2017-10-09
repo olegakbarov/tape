@@ -5,11 +5,13 @@
             [app.logic :as logic]
             [app.utils.core :refer [get-markets]]
             [app.constants.currs :refer [pairs]]
-            [app.components.header :refer [header]]))
+            [app.components.header :refer [header]]
+            [app.components.ui :refer [Wrapper
+                                       Container]]))
 
 (defn markets []
   (let [markets (get-markets)]
-    [:div.markets_wrapper
+    [Wrapper
      [header]
      (for [m markets]
         (let [{:keys [name pairs-num]} m]

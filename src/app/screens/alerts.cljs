@@ -7,7 +7,9 @@
             [app.db :refer [db]]
             [app.logic :refer [get-market-names
                                get-crypto-currs]]
-            [goog.functions]))
+            [goog.functions]
+            [app.components.ui :refer [Wrapper
+                                       Container]]))
 
 
 (defn custom-parse-float [strng]
@@ -106,7 +108,7 @@
            :value @market}]]])))
 
 (defn alerts []
-  [:div
+  [Container
     [header]
-    [:div#alerts_wrapper
+    [Wrapper
       [add-rec]]])

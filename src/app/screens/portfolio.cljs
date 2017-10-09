@@ -8,7 +8,9 @@
                                get-crypto-currs]]
             [clojure.string :as s]
             [cljsjs.react-motion]
-            [goog.functions]))
+            [goog.functions]
+            [app.components.ui :refer [Wrapper
+                                       Container]]))
 
 (defn custom-parse-float [strng]
   (let [val (if (or (s/starts-with? strng ".")
@@ -79,9 +81,9 @@
      :options (get-market-names)}])
 
 (defn portfolio []
-  [:div
+  [Container
     [header]
-    [:div#portfolio_wrapper
+    [Wrapper
       [input-group input-configs]
       [portfolio-list]]])
       ; [:button {:on-click #(actions/save-portfolio)} "Save folio"]

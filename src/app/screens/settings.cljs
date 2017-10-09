@@ -3,11 +3,12 @@
             [app.actions :as actions]
             [app.db :refer [db]]
             [app.components.ui :refer [Button
-                                       Wrapper]]))
+                                       Wrapper
+                                       Container]]))
 
 (defn settings []
   (let [screen (get-in @db [:ui/screen])]
-    [:div
+    [Container
       [:div#header.settings
         [:img.back_arr
          {:src "icons/arrow-left.svg"

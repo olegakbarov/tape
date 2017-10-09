@@ -6,7 +6,9 @@
             [app.logic :as logic]
             [app.utils.core :refer [curr-symbol->name]]
             [app.actions :as actions]
-            [clojure.string :refer [split]]))
+            [clojure.string :refer [split]]
+            [app.components.ui :refer [Wrapper
+                                       Container]]))
 
 (defn row-unfolded? []
   (some
@@ -75,10 +77,10 @@
 
 (defn bestprice []
   (let [markets (:markets @db)]
-   [:div
-     [header]
-     [:div.bestprice_wrapper
-       (doall
-         (for [pair (logic/get-best-pairs)]
-           (render-row pair)))]]))
+   [Container
+    [header]
+    [Wrapper
+     (doall
+      (for [pair (logic/get-best-pairs)]
+       (render-row pair)))]]))
 

@@ -46,15 +46,15 @@
     (show-window)))
 
 (defn make-window []
-  (BrowserWindow. #js {:x 790
-                       :y 31
+  (BrowserWindow. #js {:x 763
+                       :y 16
                        :width 321
                        :height 468
                        :show true
                        :frame false
                        :fullscreenable false
                        :resizable dev?
-                       :transparent false}))
+                       :transparent true}))
 
 (defn init-tray-icon []
   (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]

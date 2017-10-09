@@ -1,6 +1,6 @@
 (ns app.components.ui
   (:require [reagent.core :as r]
-            [cljss.core :refer [defstyles defkeyframes]]
+            [cljss.core :refer [defstyles]]
             [cljss.reagent :as rss :include-macros true]))
 
 (def blue "#657AF3")
@@ -19,5 +19,10 @@
    :text-transform "uppercase"
    :font-size "13px"})
 
+(rss/defstyled Container :div
+  {:height "100%"})
+
 (rss/defstyled Wrapper :div
-  {:margin-top "50px"})
+  {:margin-top "50px"
+   :background-color "white"
+   :height "100%"})

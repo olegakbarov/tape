@@ -6,6 +6,7 @@
 (defn header []
   (let [screen (get-in @db [:ui/screen])]
     [:div#header
+      [:div#arrow]
       [:div#profile
          {:on-click #(actions/to-screen :portfolio)}
          [:img.currpic {:src (str "icons/user.svg")}]]

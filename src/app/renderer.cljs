@@ -38,10 +38,9 @@
      :alerts    [alerts])))
 
 (defn root []
-  [:div
    ; (when (= (:env config) :dev)
    ;       [debug-panel])
-   [router]])
+   [router])
 
 (reagent/render
   [root]
