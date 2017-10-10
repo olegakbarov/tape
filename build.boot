@@ -4,7 +4,7 @@
 (set-env!
  :source-paths    #{"src"}
  :resource-paths  #{"resources"}
- :dependencies '[[org.clojure/clojurescript "1.9.293"]
+ :dependencies '[[org.clojure/clojurescript "1.9.946"]
                  [org.clojure/tools.nrepl "0.2.12" :scope "test"]
                  [com.cemerick/piggieback "0.2.1" :scope "test"]
                  [weasel "0.7.0" :scope "test"]
