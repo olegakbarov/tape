@@ -1,3 +1,8 @@
+desktop
+-------
+
+[![Build Status](https://travis-ci.org/cryptounicorns/desktop.svg)](https://travis-ci.org/cryptounicorns/desktop)
+
 #### Development
 
 For development you can start the compiler with `boot watch dev-build`.
@@ -44,4 +49,3 @@ electron-packager target/ AppName --platform=darwin --arch=x64 --version=0.31.2
   "Market":"yobit"
 }
 ```
-

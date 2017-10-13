@@ -3,12 +3,18 @@
 include boot.properties
 
 boot_installer_url := https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
+
+name               := MyApp
+electron_version   ?= 1.7.6
+env                ?= dev
+os                 ?= $(shell uname -s | awk '{print tolower($$0)}')
+arch               ?= x64
 version            := $(shell jq -r .version package.json)
 path               := $(PWD)/bin:$(PWD)/node_modules/.bin:$(PATH)
-electron_version   ?= 0.31.2
-env                ?= dev
 
 export PATH=$(path)
+
+all: build
 
 .PHONY: boot
 boot:
@@ -34,8 +40,26 @@ dependencies: boot
 build: dependencies
 	boot $(env)-build
 	electron-packager                              \
-		target/ MyApp                          \
-		--platform=$(OSTYPE)                   \
-		--arch=x64                             \
+		target/ $(name)                        \
+		--platform=$(os)                       \
+		--arch=$(arch)                         \
 		--electron-version=$(electron_version) \
 		--overwrite
+
+.PHONY: run
+run: run-$(os)
+
+.PHONY: run-linux
+run-linux:
+	# I just love to isolate things :)
+	bwrap                                          \
+		--ro-bind   /            /             \
+		--bind      $(shell pwd) /home/$(USER) \
+		--proc      /proc                      \
+		--dev       /dev                       \
+		--share-net                            \
+		/home/$(USER)/$(name)-$(os)-$(arch)/$(name)
+
+.PHONY: run-darwin
+run-darwin:
+	./$(name)-$(os)-$(arch)/$(name)

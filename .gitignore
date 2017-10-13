@@ -7,3 +7,10 @@ target/
 .cljs_rhino_repl/
 
 snippets.*
+
+/boot-install
+
+/.bash_history
+/.cache
+/.pki
+/.config

@@ -1,0 +1,12 @@
+language: node_js
+
+# XXX: because it has 7.5GB of memory
+# instead of 4GB in container
+# see: https://docs.travis-ci.com/user/reference/overview/
+sudo: true
+
+node_js:
+  - lts/*
+  - node
+
+script: make
