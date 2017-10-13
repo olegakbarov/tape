@@ -18,31 +18,38 @@
            {:on-click #(handler opt idx)}
            opt])])))
 
+(def seps #{"." ","})
+
+(defn valid-chars? [x]
+       (apply str (filter #(re-matches #"^[0-9.,]" %) x)))
+
+(defn length-ok? [v]
+  (if (re-matches #"^[0-9.,]{1,15}$" v)
+      v
+      (subs v 0 15)))
+
+(defn has-sep? [v]
+  (let [[xs x] [(apply str (butlast v)) (last v)]]
+    (if (and (some seps x)
+             (some seps xs))
+        xs
+        v)))
+
 (defn str->amount
   "Validates the input string to acceptable currency form"
   [v]
   (if (= v "00")
     "0"
-    (let [seps #{"." ","}
-          valid-chars? (fn [x] (apply str (filter #(re-matches #"^[0-9.,]" %) x)))]
-      (if (and (= (count v) 1
-                 (some seps v)
-                 (valid-chars? v)))
-          (str 0 v)
-          (if (and (= (count v) 1)
-                   (valid-chars? v)) v
-            (let [length-ok? #(if (re-matches #"^[0-9.,]{1,15}$" %)
-                                  %
-                                  (subs % 0 15))
-                  has-sep? #(let [[xs x] [(apply str (butlast %)) (last %)]]
-                             (if (and (some seps x)
-                                      (some seps xs))
-                                xs
-                                %))]
-               (-> v
-                   valid-chars?
-                   length-ok?
-                   has-sep?)))))))
+    (if (and (= (count v) 1)
+             (some seps v))
+        (str 0 (valid-chars? v))
+        (if (and (= (count v) 1)
+                 (valid-chars? v))
+           v
+           (-> v
+               valid-chars?
+               length-ok?
+               has-sep?)))))
 
 (defn coll-suggest
   "Returns only elements of collection that starts with q"
