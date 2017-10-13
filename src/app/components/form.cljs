@@ -20,36 +20,41 @@
 
 (def seps #{"." ","})
 
-(defn valid-chars? [x]
-       (apply str (filter #(re-matches #"^[0-9.,]" %) x)))
+(defn valid-chars [x]
+ (apply str (filter #(re-matches #"^[0-9.]" %) x)))
 
-(defn length-ok? [v]
-  (if (re-matches #"^[0-9.,]{1,15}$" v)
-      v
-      (subs v 0 15)))
+(defn valid-length [v]
+ (if (re-matches #"^[0-9.,]{1,15}$" v)
+     v
+     (subs v 0 15)))
 
-(defn has-sep? [v]
-  (let [[xs x] [(apply str (butlast v)) (last v)]]
-    (if (and (some seps x)
-             (some seps xs))
-        xs
-        v)))
+(defn only-one-dot
+  "Filters out every special chars exept number and one dot (separator)"
+  [v]
+  (let [has-sep? #(re-matches #"^[0-9.,]" %)]
+    (reduce
+     (fn [acc ch]
+        (if (and (clojure.string/includes? acc ".")
+                 (= ch "."))
+          acc
+          (str acc ch)))
+     (s/split v ""))))
 
 (defn str->amount
   "Validates the input string to acceptable currency form"
   [v]
-  (if (= v "00")
-    "0"
-    (if (and (= (count v) 1)
-             (some seps v))
-        (str 0 (valid-chars? v))
-        (if (and (= (count v) 1)
-                 (valid-chars? v))
-           v
-           (-> v
-               valid-chars?
-               length-ok?
-               has-sep?)))))
+  (if (= (count (valid-length v)) 0) ""
+    (if (= v "00")
+      "0"
+      (if (and (= (count v) 1) (some seps v))
+          (str 0 (valid-length v))
+          (if (and (= (count v) 1) (valid-length v))
+             v
+             (-> v
+                 valid-length
+                 valid-chars
+                 only-one-dot))))))
+
 
 (defn coll-suggest
   "Returns only elements of collection that starts with q"
@@ -69,12 +74,9 @@
         get-ref #(swap! store assoc-in [%2 :node] %1)
         focused-idx (r/atom 0)
         submit-ref (r/atom nil)
-        on-change (fn [e idx validation-type]
+        on-change (fn [e idx]
                     (let [v (-> e .-target .-value)]
-                      ;; TODO: different validations
-                      (if validation-type
-                       (when (str->amount v) (swap! store assoc-in [idx :value] v))
-                       (swap! store assoc-in [idx :value] v))))
+                      (swap! store assoc-in [idx :value] (str->amount v))))
         ;; TODO: for some reason works 80% of the time
         on-select-opt #(do (swap! store assoc-in [%2 :value] %1)
                            (let [next-node (:node (get @store (inc %2)))]
@@ -96,7 +98,7 @@
                  {:type "text"
                   :placeholder placeholder
                   :autoFocus (= idx 0)
-                  :on-change #(on-change % idx validation-type)
+                  :on-change #(on-change % idx)
                   :ref #(get-ref % idx)
                   :on-focus #(reset! focused-idx idx)
                   :on-blur #(reset! focused-idx nil)

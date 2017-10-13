@@ -11,7 +11,6 @@
 
 ;; can't have two separators
 (is (= (str->amount "0..") "0."))
-(is (= (str->amount "0,.") "0,"))
 
 ;; can't be more than 15 chars
 (is (= (str->amount (apply str (repeat 16 1)))
