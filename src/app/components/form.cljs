@@ -24,26 +24,26 @@
  (apply str (filter #(re-matches #"^[0-9.]" %) x)))
 
 (defn valid-length [v]
- (if (re-matches #"^[0-9.,]{1,15}$" v)
+ (if (re-matches #"^[0-9.]{0,15}$" v)
      v
      (subs v 0 15)))
 
 (defn only-one-dot
-  "Filters out every special chars exept number and one dot (separator)"
+  "Filters out every special chars except number and one dot (separator)"
   [v]
-  (let [has-sep? #(re-matches #"^[0-9.,]" %)]
-    (reduce
-     (fn [acc ch]
-        (if (and (clojure.string/includes? acc ".")
-                 (= ch "."))
-          acc
-          (str acc ch)))
-     (s/split v ""))))
+  (reduce
+   (fn [acc ch]
+      (if (and (clojure.string/includes? acc ".")
+               (= ch "."))
+        acc
+        (str acc ch)))
+   (s/split v "")))
 
 (defn str->amount
   "Validates the input string to acceptable currency form"
   [v]
-  (if (= (count (valid-length v)) 0) ""
+  (if (= (count (valid-chars v)) 0)
+    ""
     (if (= v "00")
       "0"
       (if (and (= (count v) 1) (some seps v))
@@ -54,7 +54,6 @@
                  valid-length
                  valid-chars
                  only-one-dot))))))
-
 
 (defn coll-suggest
   "Returns only elements of collection that starts with q"
