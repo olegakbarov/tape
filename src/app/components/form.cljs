@@ -2,7 +2,10 @@
   (:require [reagent.core :as r]
             [clojure.string :as s]
             [goog.functions]
-            [app.components.ui :refer [Button]]))
+            [app.components.ui :refer [Button]]
+            [clojure.string :as s]
+            [cljs.spec.alpha :as spec]
+            [clojure.test :refer [is]]))
 
 (defn dropdown
   [idx options node handler]
@@ -15,15 +18,46 @@
            {:on-click #(handler opt idx)}
            opt])])))
 
-(defn validate-amount [v]
-  (let [valid-chars "1234567890,."]
-    (if (s/includes? valid-chars v) true false)))
+(defn str->amount
+  "Validates the input string to acceptable currency form"
+  [v]
+  (if (= v "00")
+    "0"
+    (let [seps #{"." ","}
+          valid-chars? (fn [x] (apply str (filter #(re-matches #"^[0-9.,]" %) x)))]
+      (if (and (= (count v) 1
+                 (some seps v)
+                 (valid-chars? v)))
+          (str 0 v)
+          (if (and (= (count v) 1)
+                   (valid-chars? v)) v
+            (let [length-ok? #(if (re-matches #"^[0-9.,]{1,15}$" %)
+                                  %
+                                  (subs % 0 15))
+                  has-sep? #(let [[xs x] [(apply str (butlast %)) (last %)]]
+                             (if (and (some seps x)
+                                      (some seps xs))
+                                xs
+                                %))]
+               (-> v
+                   valid-chars?
+                   length-ok?
+                   has-sep?)))))))
+
+(defn coll-suggest
+  "Returns only elements of collection that starts with q"
+  [coll q]
+  (filter
+   #(clojure.string/starts-with? % q)
+   coll))
 
 (defn update-field-with-opts [opts v]
   (let [valid-opts (filter #(s/starts-with? % v) opts)]
     valid-opts v))
 
-(defn input-group [cfgs]
+(defn input-group
+  "Generic input component. Takes care of validations and focusing DOM nodes in order"
+  [cfgs]
   (let [store (r/atom (vec (replicate (count cfgs) {:node nil :value "" :valid false})))
         get-ref #(swap! store assoc-in [%2 :node] %1)
         focused-idx (r/atom 0)
@@ -32,7 +66,7 @@
                     (let [v (-> e .-target .-value)]
                       ;; TODO: different validations
                       (if validation-type
-                       (when (validate-amount v) (swap! store assoc-in [idx :value] v))
+                       (when (str->amount v) (swap! store assoc-in [idx :value] v))
                        (swap! store assoc-in [idx :value] v))))
         ;; TODO: for some reason works 80% of the time
         on-select-opt #(do (swap! store assoc-in [%2 :value] %1)
