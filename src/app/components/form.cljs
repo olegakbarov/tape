@@ -1,11 +1,9 @@
 (ns app.components.form
   (:require [reagent.core :as r]
             [clojure.string :as s]
-            [goog.functions]
             [app.components.ui :refer [Button]]
             [clojure.string :as s]
-            [cljs.spec.alpha :as spec]
-            [clojure.test :refer [is]]))
+            [cljs.spec.alpha :as spec]))
 
 (defn dropdown
   [idx options node handler]
@@ -76,13 +74,10 @@
         on-change (fn [e idx]
                     (let [v (-> e .-target .-value)]
                       (swap! store assoc-in [idx :value] (str->amount v))))
-        ;; TODO: for some reason works 80% of the time
         on-select-opt #(do (swap! store assoc-in [%2 :value] %1)
                            (let [next-node (:node (get @store (inc %2)))]
-                             (goog.functions.debounce
                               (if next-node (.focus next-node)
-                                            (.focus @submit-ref))
-                              10)))]
+                                            (.focus @submit-ref))))]
     (fn []
       [:div
        (doall

@@ -1,14 +1,15 @@
 (ns app.screens.bestprice
   (:require [reagent.core :as reagent]
             [app.db :refer [db]]
-            [app.components.header :refer [header]]
             [cljsjs.moment]
             [app.logic :as logic]
             [app.utils.core :refer [curr-symbol->name]]
             [app.actions :as actions]
             [clojure.string :refer [split]]
+            [app.components.header :refer [Header]]
             [app.components.ui :refer [Wrapper
-                                       Container]]))
+                                       Container
+                                       Icon]]))
 
 (defn row-unfolded? []
   (some
@@ -76,11 +77,19 @@
         (folded-row m))))
 
 (defn bestprice []
-  (let [markets (:markets @db)]
+ (fn []
+  (let [toggle-items ["Bestprice" "Markets"]]
    [Container
-    [header]
+    [Header
+      [Icon
+       #(actions/to-screen :portfolio)
+       "icons/user.svg"]
+      [Icon
+        #(actions/to-screen :settings)
+        "icons/settings.svg"]
+      toggle-items]
     [Wrapper
      (doall
       (for [pair (logic/get-best-pairs)]
-       (render-row pair)))]]))
+       (render-row pair)))]])))
 

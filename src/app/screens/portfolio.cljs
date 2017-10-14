@@ -1,6 +1,6 @@
 (ns app.screens.portfolio
   (:require [reagent.core :as r]
-            [app.components.profile :refer [header]]
+            [app.components.header :refer [Header]]
             [app.components.form :refer [input-group]]
             [app.actions :as actions]
             [app.db :refer [db]]
@@ -8,9 +8,9 @@
                                get-crypto-currs]]
             [clojure.string :as s]
             [cljsjs.react-motion]
-            [goog.functions]
             [app.components.ui :refer [Wrapper
-                                       Container]]))
+                                       Container
+                                       Icon]]))
 
 (defn custom-parse-float [strng]
   (let [val (if (or (s/starts-with? strng ".")
@@ -18,15 +18,6 @@
                 (str "0" strng)
                 strng)]
     (.parseFloat js/window val)))
-
-;; TODO move to utils
-(defn update-amount [val amount]
-  (let [valid-chars "1234567890,."
-        l (last val)]
-    (if (= nil l)
-        (reset! amount "")
-        (when (s/includes? valid-chars l)
-              (reset! amount val)))))
 
 (defn update-market [val market]
   (reset! market val))
@@ -52,7 +43,6 @@
 (defn portfolio-list []
   (let [folio (:portfolio @db)]
    [:div
-    [:h1.assets_title " Your assets"]
     (if (> (count folio) 0)
       (for [row folio]
         (let [{:keys [name amount market]} row]
@@ -63,12 +53,6 @@
                 [:span.dynamics.green "  ▲ 0.00 %"]]
               [:div.market market]]
             [:div.item.amount amount]])))]))
-
-(defn validate-amount [v]
-  (let [valid-chars "1234567890,."]
-    (if (s/includes? valid-chars v)
-        true
-        false)))
 
 (def input-configs
    [{:name "amount"
@@ -81,11 +65,21 @@
      :options (get-market-names)}])
 
 (defn portfolio []
+ (let [toggle-items ["Portfolio" "Alerts"]]
   [Container
-    [header]
-    [Wrapper
-      [input-group input-configs]
-      [portfolio-list]]])
-      ; [:button {:on-click #(actions/save-portfolio)} "Save folio"]
-      ; [:button {:on-click #(actions/read-local-portfolio!)} "Read folio"]
-      ; [:button {:on-click #(actions/log-folio)} "Log folio"]]])
+   [Header
+    [Icon
+     #(actions/to-screen :bestprice)
+     "icons/arrow-left.svg"]
+    [Icon
+      #(actions/to-screen :settings)
+      "icons/settings.svg"]
+    toggle-items]
+   [Wrapper
+     [input-group input-configs]
+     [portfolio-list]]]))
+
+
+; [:button {:on-click #(actions/save-portfolio)} "Save folio"]
+; [:button {:on-click #(actions/read-local-portfolio!)} "Read folio"]
+; [:button {:on-click #(actions/log-folio)} "Log folio"]]])

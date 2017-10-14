@@ -1,26 +1,47 @@
 (ns app.components.header
   (:require [reagent.core :as reagent]
             [app.db :refer [db]]
-            [app.actions :as actions]))
+            [app.actions :as actions]
+            [cljss.reagent :as rss :include-macros true]
+            [app.components.colors :as colors]
+            [app.components.ui :refer [Icon
+                                       GroupWrap
+                                       GroupBtn]]))
 
-(defn header []
-  (let [screen (get-in @db [:ui/screen])]
-    [:div#header
+(rss/defstyled Hdr :div
+ {:height "50px"
+  :position "fixed"
+  :top "7px"
+  :width "100%"
+  :background-color colors/blue
+  :color colors/white
+  :display "flex"
+  :justify-content "space-around"
+  :align-items "center"
+  :font-size "12px"
+  :border-radius "6px 6px 0 0"})
+
+(defn Header [Left Right items]
+  (fn []
+   (let [screen (get-in @db [:ui/screen])]
+     [Hdr
       [:div#arrow]
-      [:div#profile
-         {:on-click #(actions/to-screen :portfolio)}
-         [:img.currpic {:src (str "icons/user.svg")}]]
-      [:div#toggle
-        [:div.toggle_btn.bestprice_btn
-         {:on-click #(actions/to-screen :bestprice)
-          :class (if (= screen :bestprice)
-                     :active)}
-         "Bestprice"]
-        [:div.toggle_btn.market_btn
-         {:on-click #(actions/to-screen :markets)
-          :class (if (= screen :markets)
-                     :active)}
-         "Markets"]]
-      [:div#settings
-        {:on-click #(actions/to-screen :settings)}
-        [:img.currpic {:src (str "icons/settings.svg")}]]]))
+      Left
+      [GroupWrap
+        (let [active? #(= screen (-> % .toLowerCase keyword))]
+          (doall
+           (map-indexed
+            (fn [idx text]
+             ^{:key text}
+             [:div {:on-click #(actions/to-screen (-> text
+                                                      .toLowerCase
+                                                      keyword))
+                    :style {:width "50%"}}
+              [GroupBtn
+               {:first? (= idx 0)
+                :last? (= (inc idx) (count items))
+                :active? (active? text)}
+               text]])
+            items)))]
+      Right])))
+

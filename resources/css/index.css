@@ -60,7 +60,7 @@ body {
 
 span.dynamics.green {
   font-weight: 300;
-  color: --green;
+  color: var(--green);
   font-size: 11px;
 }
 
@@ -98,63 +98,6 @@ span.dynamics.green {
 }
 
 /* end common */
-
-#header {
-  height: 50px;
-  position: fixed;
-  top: 7px;
-  width: 100%;
-  background-color: var(--blue);
-  color: white;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: 12px;
-  border-radius: 6px 6px 0 0;
-}
-
-#profile:hover,
-#settings:hover {
-  cursor: pointer;
-}
-
-#toggle {
-  display: flex;
-  justify-content: space-around;
-  width: 60%;
-  -webkit-user-select: none;
-}
-
-.toggle_btn {
-  padding: 6px 10px;
-  text-align: center;
-  border: 1px solid white;
-  width: 50%;
-}
-
-.bestprice_btn {
-  border-right: 0;
-  border-radius: 4px 0 0 4px;
-}
-
-.bestprice_btn:hover {
-  cursor: pointer;
-}
-
-.market_btn {
-  border: 1px solid whbite;
-  border-radius: 0 4px 4px 0;
-}
-
-.market_btn:hover {
-  cursor: pointer;
-}
-
-.market_btn.active,
-.bestprice_btn.active {
-  color: #4141e0;
-  background-color: #fff;
-}
 
 /*  --------- Bestprice --------- */
 
@@ -351,17 +294,6 @@ span.thead_clickable:hover {
   padding: 20px;
 }
 
-#header > .back_arr:hover {
-  cursor: pointer;
-}
-
-/*  --------- Settings --------- */
-
-#header.settings {
-  padding: 0 20px;
-  justify-content: flex-start;
-}
-
 /*  --------- Portfolio --------- */
 
 #portfolio_wrapper {
@@ -436,8 +368,3 @@ h1.assets_title {
   line-height: 26px;
 }
 
-/* ------ Alerts ----------- */
-
-#alerts_wrapper {
-  margin-top: 50px;
-}

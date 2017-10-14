@@ -29,8 +29,8 @@
    [:button {:on-click #(actions/cache-state)} "Cache me"]])
 
 (defn router []
- (let [curr-screen (-> @db :ui/screen)]
-   (condp = curr-screen
+ (let [s (-> @db :ui/screen)]
+   (condp = s
      :bestprice [bestprice]
      :markets   [markets]
      :settings  [settings]
@@ -38,8 +38,8 @@
      :alerts    [alerts])))
 
 (defn root []
-   ; (when (= (:env config) :dev)
-   ;       [debug-panel])
+   (when (= (:env config) :dev)
+         [debug-panel])
    [router])
 
 (reagent/render

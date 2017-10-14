@@ -5,14 +5,25 @@
             [app.logic :as logic]
             [app.utils.core :refer [get-markets]]
             [app.constants.currs :refer [pairs]]
-            [app.components.header :refer [header]]
+            [app.components.header :refer [Header]]
             [app.components.ui :refer [Wrapper
-                                       Container]]))
+                                       Container
+                                       Icon]]))
 
 (defn markets []
-  (let [markets (get-markets)]
+  (let [toggle-items ["Bestprice" "Markets"]
+        markets (get-markets)]
+   [Container
+    [Header
+      [Icon
+       #(actions/to-screen :portfolio)
+       "icons/user.svg"]
+      [Icon
+        #(actions/to-screen :settings)
+        "icons/settings.svg"]
+      toggle-items]
     [Wrapper
-     [header]
+     ; [header]
      (for [m markets]
         (let [{:keys [name pairs-num]} m]
           ^{:key name}
@@ -24,5 +35,5 @@
             [:div.item
              [:div.name.right.green "●"]
              [:div.number.right "100000"]
-             [:div.number.right pairs-num]]]))]))
+             [:div.number.right pairs-num]]]))]]))
 
