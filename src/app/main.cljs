@@ -6,8 +6,7 @@
 (def Tray (.-Tray electron))
 (def ipc (.-ipcMain electron))
 
-(goog-define dev? false)
-(def log (.-log js/console))
+(goog-define dev? true)
 
 (def window (atom nil))
 (def tray (atom nil))
@@ -66,9 +65,9 @@
 (defn init-browser []
   (reset! window (make-window))
   (do
-    (load-page @window)
-    (when dev?
-        (.openDevTools @window #js {:mode "undocked"}))
+    (load-page @window
+     (when dev?
+        (.openDevTools @window #js {:mode "undocked"})))
     (.on @window "closed" #(reset! window nil))))
 
 (defn init []

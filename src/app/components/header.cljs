@@ -1,6 +1,6 @@
 (ns app.components.header
   (:require [reagent.core :as reagent]
-            [app.db :refer [db]]
+            [app.db :refer [router]]
             [app.actions :as actions]
             [cljss.reagent :as rss :include-macros true]
             [app.components.colors :as colors]
@@ -23,7 +23,8 @@
 
 (defn Header [Left Right items]
   (fn []
-   (let [screen (get-in @db [:ui/screen])]
+   (js/console.log "Rendered header!")
+   (let [screen (get-in @router [:screen])]
      [Hdr
       [:div#arrow]
       Left

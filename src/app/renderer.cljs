@@ -1,6 +1,6 @@
 (ns app.renderer
   (:require [reagent.core :as reagent]
-            [app.db :refer [db]]
+            [app.db :refer [db router]]
             [app.api :refer [start-loop!]]
             [app.actions :as actions]
             [app.config :refer [config]]
@@ -22,14 +22,14 @@
   (actions/read-local-portfolio!)
   (js/console.log "Started ws listener..."))
 
-(defn debug-panel []
- [:div#debug_panel
-   [:button {:on-click #(js/console.log (:markets @db))} "State yo"]
-   [:button {:on-click #(actions/test-notif "TEST" "test")} "Notif me"]
-   [:button {:on-click #(actions/cache-state)} "Cache me"]])
+; (defn debug-panel []
+;  [:div#debug_panel
+;    [:button {:on-click #(js/console.log (:markets @db))} "State yo"]
+;    [:button {:on-click #(actions/test-notif "TEST" "test")} "Notif me"]
+;    [:button {:on-click #(actions/cache-state)} "Cache me"]])
 
-(defn router []
- (let [s (-> @db :ui/screen)]
+(defn routes []
+ (let [s (-> @router :screen)]
    (condp = s
      :bestprice [bestprice]
      :markets   [markets]
@@ -38,9 +38,9 @@
      :alerts    [alerts])))
 
 (defn root []
-   (when (= (:env config) :dev)
-         [debug-panel])
-   [router])
+   ; (when (= (:env config) :dev?)
+   ;       [debug-panel])
+   [routes])
 
 (reagent/render
   [root]

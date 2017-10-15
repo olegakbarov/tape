@@ -1,6 +1,6 @@
 (ns app.actions
   (:require [clojure.walk]
-            [app.db :refer [db]]
+            [app.db :refer [db router]]
             [camel-snake-kebab.core :refer [->kebab-case]]))
 
 (def electron (js/require "electron"))
@@ -8,7 +8,7 @@
 
 ;; Router
 (defn to-screen [screen]
-  (swap! db assoc-in [:ui/screen] screen))
+  (swap! router assoc-in [:screen] screen))
 
 ;; API
 (defn process-ws-event [t]

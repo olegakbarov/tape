@@ -2,7 +2,7 @@
   (:require [reagent.core :as reagent]
             [app.db :refer [db]]
             [cljsjs.moment]
-            [app.logic :as logic]
+            [app.logic.curr :refer [best-pairs]]
             [app.utils.core :refer [curr-symbol->name]]
             [app.actions :as actions]
             [clojure.string :refer [split]]
@@ -67,17 +67,26 @@
         ^{:key "last-price"}
         [:div.titem_cell.price last]])))
 
-(defn render-row [m]
+(defn render-row [m t-pair t-market]
+ (fn [m t-pair t-market]
    (let [[key value] m
          {:keys [market currency-pair avg low high timestamp]} value
-         [left right] (split currency-pair "-")
-         [t-pair t-market] (:ui/expanded-row @db)]
+         [left right] (split currency-pair "-")]
     (if (and (= t-pair key) (= t-market market))
-        (expanded-row m)
-        (folded-row m))))
+        [expanded-row m]
+        [folded-row m]))))
+
+(defn render-pairs []
+  (fn [t-pair t-market]
+   (let [markets (:markets @db)
+         pairs (best-pairs markets)
+         [t-pair t-market] (:ui/expanded-row @db)]
+    [:div
+     (for [pair pairs]
+      ^{:key (str pair)}
+      [render-row pair t-pair t-market])])))
 
 (defn bestprice []
- (fn []
   (let [toggle-items ["Bestprice" "Markets"]]
    [Container
     [Header
@@ -89,7 +98,5 @@
         "icons/settings.svg"]
       toggle-items]
     [Wrapper
-     (doall
-      (for [pair (logic/get-best-pairs)]
-       (render-row pair)))]])))
+     [render-pairs]]]))
 

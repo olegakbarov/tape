@@ -7,3 +7,4 @@ target/
 .cljs_rhino_repl/
 
 snippets.*
+out

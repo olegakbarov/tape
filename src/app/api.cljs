@@ -12,12 +12,14 @@
 
 (defn start-loop! []
   (go
-    ;; handle conn errors
+    ;; TODO handle conn errors
     (let [endpoint (:ws-endpoint config)
           stream (<! (ws/connect endpoint  {:source (chan)}))]
       (go-loop []
         (let [msg (<! (:source stream))
               clj-msg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
+
+          ;; (js/console.log (str (:markets @db)))
           (actions/update-db-with-ticker clj-msg))
         (recur)))))
 

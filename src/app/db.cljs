@@ -1,10 +1,13 @@
 (ns app.db
   (:require [reagent.core :as r]))
 
+(defonce router
+  (r/atom
+   {:screen :bestprice}))
+
 (defonce db
   (r/atom
-    {:ui/screen :bestprice
-     :ui/bestprice {:sort :asc}
+    {:ui/bestprice {:sort :asc}
      :ui/expanded-row []
 
      :settings {:pairs-view :images}
