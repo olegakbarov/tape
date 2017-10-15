@@ -10,20 +10,9 @@
                                        Container
                                        Icon]]))
 
-(defn markets []
-  (let [toggle-items ["Bestprice" "Markets"]
-        markets (get-markets)]
-   [Container
-    [Header
-      [Icon
-       #(actions/to-screen :portfolio)
-       "icons/user.svg"]
-      [Icon
-        #(actions/to-screen :settings)
-        "icons/settings.svg"]
-      toggle-items]
-    [Wrapper
-     ; [header]
+(defn render-markets []
+  (let [markets (get-markets)]
+   [:div
      (for [m markets]
         (let [{:keys [name pairs-num]} m]
           ^{:key name}
@@ -35,5 +24,19 @@
             [:div.item
              [:div.name.right.green "●"]
              [:div.number.right "100000"]
-             [:div.number.right pairs-num]]]))]]))
+             [:div.number.right pairs-num]]]))]))
 
+
+(defn markets []
+  (let [toggle-items ["Bestprice" "Markets"]]
+   [Container
+    [Header
+      [Icon
+       #(actions/to-screen :portfolio)
+       "icons/user.svg"]
+      [Icon
+        #(actions/to-screen :settings)
+        "icons/settings.svg"]
+      toggle-items]
+    [Wrapper
+     [render-markets]]]))

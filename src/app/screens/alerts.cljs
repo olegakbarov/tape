@@ -13,10 +13,15 @@
                                        Icon]]))
 
 (defn alerts []
+ (let [toggle-items ["Portfolio" "Alerts"]]
   [Container
    [Header
     [Icon
      #(actions/to-screen :bestprice)
-     "icons/arrow-left.svg"]]
+     "icons/arrow-left.svg"]
+    [Icon
+      #(actions/to-screen :settings)
+      "icons/settings.svg"]
+    toggle-items]
    [Wrapper
-     "alerts"]])
+     "alerts"]]))

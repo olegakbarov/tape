@@ -53,3 +53,10 @@
    :color (with-meta #(if % c/blue c/white) :active?)
    :&:hover {:cursor "pointer"}})
 
+(defn Checkbox [value on-change]
+  ;; generage custom "for"
+  [:div
+   [:input#tray.checkbox
+     {:type "checkbox"
+      :on-change on-change}]
+   [:label {:for "tray"}]])
