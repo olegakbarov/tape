@@ -55,25 +55,36 @@
                        :resizable dev?
                        :transparent true}))
 
-(defn init-tray-icon []
-  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
-    (reset! tray (Tray. p))
-    (do
-      (.on @tray "double-click" toggle-window)
-      (.on @tray "click" toggle-window))))
+(defn set-tray! []
+ (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
+  (reset! tray (Tray. p))))
+
+(defn set-tray-title! [text]
+  (.setTitle @tray text))
+
+(defn set-tray-event-handlers []
+  (do
+    (.on @tray "double-click" toggle-window)
+    (.on @tray "click" toggle-window)))
 
 (defn init-browser []
   (reset! window (make-window))
   (do
-    (load-page @window
-     (when dev?
-        (.openDevTools @window #js {:mode "undocked"})))
+    (load-page @window)
+    (when dev? (.openDevTools @window #js {:mode "undocked"}))
     (.on @window "closed" #(reset! window nil))))
+
+(defn set-title! [e text]
+  (.setTitle @tray text))
 
 (defn init []
   (.hide (.-dock app))
-  (.on app "window-all-closed" #(when-not (= js/process.platform "darwin") (.quit app)))
+  (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
+                                          (.quit app)))
   (.on app "ready" init-browser)
-  (.on app "ready" init-tray-icon)
+  (.on app "ready" set-tray!)
+  (.on app "ready" set-tray-event-handlers)
   (.on ipc "show-window" show-window)
+  (.on ipc "set-title" set-title!)
   (set! *main-cli-fn* (fn [] nil)))
+
