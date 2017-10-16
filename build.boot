@@ -12,6 +12,9 @@
                  [adzerk/boot-cljs "1.7.228-1" :scope "test"]
                  [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
                  [adzerk/boot-reload "0.4.13" :scope "test"]
+
+                 [powerlaces/boot-figreload "LATEST" :scope "test"]
+
                  [metosin.forks/reagent "0.6.1-SNAPSHOT"]
                  [com.taoensso/timbre "4.10.0"]
                  [camel-snake-kebab "0.4.0"]
@@ -26,7 +29,8 @@
 (require
  '[adzerk.boot-cljs      :refer [cljs]]
  '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
- '[adzerk.boot-reload    :refer [reload]]
+ ; '[adzerk.boot-reload    :refer [reload]]
+ '[powerlaces.boot-figreload     :refer [reload]]
  '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]])
 
 (deftask prod-build []

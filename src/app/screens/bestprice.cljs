@@ -15,7 +15,7 @@
 (def ipc (.-ipcRenderer electron))
 
 (defn set-title [text]
- (let [fmtd (str "BTC $" text)]
+ (let [fmtd (str " $" text)]
   (.send ipc "set-title" fmtd)))
 
 (defn row-unfolded? []
