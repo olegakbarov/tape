@@ -2,7 +2,6 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [app.db :refer [db]]
             [app.actions :as actions]
-            [app.logic :as logic]
             [app.utils.core :refer [get-markets]]
             [app.constants.currs :refer [pairs]]
             [app.components.header :refer [Header]]
@@ -25,7 +24,6 @@
              [:div.name.right.green "●"]
              [:div.number.right "100000"]
              [:div.number.right pairs-num]]]))]))
-
 
 (defn markets []
   (let [toggle-items ["Bestprice" "Markets"]]

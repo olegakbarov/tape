@@ -5,8 +5,8 @@
             [app.components.dropdown :refer [dropdown]]
             [app.actions :as actions]
             [app.db :refer [db]]
-            [app.logic :refer [get-market-names
-                               get-crypto-currs]]
+            [app.logic.curr :refer [get-market-names
+                                    get-crypto-currs]]
             [goog.functions]
             [app.components.ui :refer [Wrapper
                                        Container
