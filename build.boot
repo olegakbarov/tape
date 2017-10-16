@@ -12,16 +12,13 @@
                  [adzerk/boot-cljs "1.7.228-1" :scope "test"]
                  [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
                  [adzerk/boot-reload "0.4.13" :scope "test"]
-
                  [powerlaces/boot-figreload "LATEST" :scope "test"]
-
-                 [metosin.forks/reagent "0.6.1-SNAPSHOT"]
-                 [com.taoensso/timbre "4.10.0"]
-                 [camel-snake-kebab "0.4.0"]
-                 [haslett "0.1.0"]
                  [binaryage/devtools "0.9.4" :scope "test"]
                  [binaryage/dirac "1.2.16" :scope "test"]
                  [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
+                 [metosin.forks/reagent "0.6.1-SNAPSHOT"]
+                 [camel-snake-kebab "0.4.0"]
+                 [haslett "0.1.0"]
                  [cljsjs/moment "2.10.6-0"]
                  [cljsjs/react-motion "0.5.0-0"]
                  [org.roman01la/cljss "1.5.5"]])
@@ -29,7 +26,6 @@
 (require
  '[adzerk.boot-cljs      :refer [cljs]]
  '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
- ; '[adzerk.boot-reload    :refer [reload]]
  '[powerlaces.boot-figreload     :refer [reload]]
  '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]])
 

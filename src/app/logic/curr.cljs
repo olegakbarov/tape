@@ -2,26 +2,31 @@
   (:require [clojure.walk]
             [app.db :refer [db]]))
 
-(defn best-pairs
-  "Returns pairs with lowest prices across "
-  [markets]
+(defn get-lowest-prices [markets]
   (let [market-items (vals markets)]
     (reduce
      (fn [acc item]
       (into {}
-        (map
-         (fn [item]
-          (let [[key val] item
-                acc-pair (get acc key)]
-            (if-not acc-pair
-                (assoc acc key val)
-                (if (< (:last val)
-                       (:last acc-pair))
-                    (assoc acc key val)
-                    acc))))
+       (map
+        (fn [item]
+         (let [[key val] item
+               acc-pair (get acc key)]
+           (if-not acc-pair
+             (assoc acc key val)
+             (if (< (:last val)
+                    (:last acc-pair))
+                 (assoc acc key val)
+                 acc))))
          item)))
      {}
      market-items)))
+
+(defn best-pairs
+  "Returns pairs with lowest prices across "
+  ([markets]
+   (get-lowest-prices markets))
+  ([markets pair-name]
+   (:sell (get (get-lowest-prices markets) pair-name))))
 
 (defn get-market-names []
   (map

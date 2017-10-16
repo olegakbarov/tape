@@ -11,13 +11,6 @@
                                        Container
                                        Icon]]))
 
-(def electron (js/require "electron"))
-(def ipc (.-ipcRenderer electron))
-
-(defn set-title [text]
- (let [fmtd (str " $" text)]
-  (.send ipc "set-title" fmtd)))
-
 (defn row-unfolded? []
   (some
     #(not (nil? %))
@@ -88,7 +81,6 @@
    (let [markets (:markets @db)
          pairs (best-pairs markets)
          [t-pair t-market] (:ui/expanded-row @db)]
-    (set-title (:sell (get pairs "BTC-USD")))
     [:div
      (for [pair pairs]
       ^{:key (str pair)}
