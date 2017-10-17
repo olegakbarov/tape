@@ -1,7 +1,10 @@
-(ns app.main)
+(ns app.main
+  (:require [app.config :refer [config]]))
 
-(def electron      (js/require "electron"))
-(def app           (.-app electron))
+(def electron (js/require "electron"))
+(def path (js/require "path"))
+
+(def app (.-app electron))
 (def BrowserWindow (.-BrowserWindow electron))
 (def Tray (.-Tray electron))
 (def ipc (.-ipcMain electron))
@@ -9,11 +12,8 @@
 (goog-define dev? true)
 
 (def webframe (.-webFrame electron))
-(def remote (.-remote electron))
 (def window (atom nil))
 (def tray (atom nil))
-(def path (js/require "path"))
-(def fs (js/require "fs"))
 
 (defn load-page
   "When compiling with `:none` the compiled JS that calls .loadURL is
@@ -62,9 +62,6 @@
  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
   (reset! tray (Tray. p))))
 
-; (defn set-tray-title! [text]
-;   (.setTitle @tray text))
-
 (defn set-tray-event-handlers []
   (do
     (.on @tray "double-click" toggle-window)
@@ -84,22 +81,6 @@
   (.setVisualZoomLevelLimits webframe 1 1)
   (.setLayoutZoomLevelLimits webframe 0 0))
 
-;; STORAGE
-
-(def user-path (.getPath (.-app remote) "userData"))
-
-(defn read-file! [name]
- (try
-  (let [raw-file (.readFileSync fs (str user-path "/portfolio.edn") "utf-8")]
-    (cljs.reader/read-string raw-file))
-  (catch :default e e
-    (js/console.log e))))
-
-(defn write-file! [name content]
- (.writeFile fs (str user-path "/" name) {:data content}))
-
-;; INIT
-
 (defn init []
   (.hide (.-dock app))
   (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
@@ -109,8 +90,6 @@
   (.on app "ready" set-tray-event-handlers)
   (.on ipc "show-window" show-window)
   (.on ipc "set-title" set-title!)
-  (.on ipc "write-file" write-file!)
-  (.on ipc "read-file" read-file!)
   ;; TODO
   (when-not dev? (disable-resize!))
   (set! *main-cli-fn* (fn [] nil)))

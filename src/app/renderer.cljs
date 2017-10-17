@@ -3,7 +3,7 @@
             [app.db :refer [db router]]
             [app.api :refer [start-loop!]]
             [app.listeners :refer [start-listeners!]]
-            [app.actions.storage :refer [read-portfolio!]]
+            [app.actions.storage :refer [read-file!]]
             [app.config :refer [config]]
             [app.screens.bestprice :refer [bestprice]]
             [app.screens.markets :refer [markets]]
@@ -12,7 +12,7 @@
             [app.screens.alerts :refer [alerts]]))
 
 (defn init []
- (read-portfolio!)
+ (read-file! "portfolio.edn")
  (start-loop!)
  (start-listeners!))
 

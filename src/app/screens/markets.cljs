@@ -1,7 +1,7 @@
 (ns app.screens.markets
   (:require [reagent.core :as reagent :refer [atom]]
             [app.db :refer [db]]
-            [app.actions :as actions]
+            [app.actions.ui :refer [to-screen]]
             [app.utils.core :refer [get-markets]]
             [app.constants.currs :refer [pairs]]
             [app.components.header :refer [Header]]
@@ -30,10 +30,10 @@
    [Container
     [Header
       [Icon
-       #(actions/to-screen :portfolio)
+       #(to-screen :portfolio)
        "icons/user.svg"]
       [Icon
-        #(actions/to-screen :settings)
+        #(to-screen :settings)
         "icons/settings.svg"]
       toggle-items]
     [Wrapper

@@ -1,7 +1,7 @@
 (ns app.components.header
   (:require [reagent.core :as reagent]
             [app.db :refer [router]]
-            [app.actions :as actions]
+            [app.actions.ui :refer [to-screen]]
             [cljss.reagent :as rss :include-macros true]
             [app.components.colors :as colors]
             [app.components.ui :refer [Icon
@@ -34,9 +34,9 @@
            (map-indexed
             (fn [idx text]
              ^{:key text}
-             [:div {:on-click #(actions/to-screen (-> text
-                                                      .toLowerCase
-                                                      keyword))
+             [:div {:on-click #(to-screen (-> text
+                                              .toLowerCase
+                                              keyword))
                     :style {:width "50%"}}
               [GroupBtn
                {:first? (= idx 0)

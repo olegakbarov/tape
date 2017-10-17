@@ -1,7 +1,6 @@
 (ns app.components.dropdown
   (:require [reagent.core :as reagent]
-            [app.db :refer [db]]
-            [app.actions :as actions]))
+            [app.db :refer [db]]))
 
 (defn dropdown
   "Abstract selectable list. Accepts coll of strings and select fn

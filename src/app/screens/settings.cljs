@@ -1,6 +1,6 @@
 (ns app.screens.settings
   (:require [reagent.core :as reagent]
-            [app.actions :as actions]
+            [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
             [app.components.header :refer [Header]]
             [app.components.ui :refer [Button
@@ -12,7 +12,7 @@
   [Container
    [Header
     [Icon
-     #(actions/to-screen :bestprice)
+     #(to-screen :bestprice)
      "icons/arrow-left.svg"]]
    [Wrapper
     [:div {:style {:padding "0 10px"}}

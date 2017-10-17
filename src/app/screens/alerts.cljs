@@ -3,7 +3,7 @@
             [clojure.string :as s]
             [app.components.header :refer [Header]]
             [app.components.dropdown :refer [dropdown]]
-            [app.actions :as actions]
+            [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
             [app.logic.curr :refer [get-market-names
                                     get-crypto-currs]]
@@ -17,10 +17,10 @@
   [Container
    [Header
     [Icon
-     #(actions/to-screen :bestprice)
+     #(to-screen :bestprice)
      "icons/arrow-left.svg"]
     [Icon
-      #(actions/to-screen :settings)
+      #(to-screen :settings)
       "icons/settings.svg"]
     toggle-items]
    [Wrapper

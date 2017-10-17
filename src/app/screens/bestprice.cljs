@@ -4,7 +4,7 @@
             [cljsjs.moment]
             [app.logic.curr :refer [best-pairs]]
             [app.utils.core :refer [curr-symbol->name]]
-            [app.actions :as actions]
+            [app.actions.ui :refer [to-screen]]
             [clojure.string :refer [split]]
             [app.components.header :refer [Header]]
             [app.components.ui :refer [Wrapper
@@ -91,10 +91,10 @@
    [Container
     [Header
       [Icon
-       #(actions/to-screen :portfolio)
+       #(to-screen :portfolio)
        "icons/user.svg"]
       [Icon
-        #(actions/to-screen :settings)
+        #(to-screen :settings)
         "icons/settings.svg"]
       toggle-items]
     [Wrapper
