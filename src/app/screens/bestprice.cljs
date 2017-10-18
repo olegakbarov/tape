@@ -4,87 +4,74 @@
             [cljsjs.moment]
             [app.logic.curr :refer [best-pairs]]
             [app.utils.core :refer [curr-symbol->name]]
-            [app.actions.ui :refer [to-screen]]
+            [app.actions.ui :refer [to-screen
+                                    expand-pair-row]]
             [clojure.string :refer [split]]
             [app.components.header :refer [Header]]
+            [app.components.colors :refer [green]]
             [app.components.ui :refer [Wrapper
                                        Container
-                                       Icon]]))
+                                       Icon]]
+            [cljss.core :refer [defstyles]]
+            [cljss.reagent :as rss :include-macros true]))
 
-(defn row-unfolded? []
-  (some
-    #(not (nil? %))
-    (:ui/expanded-row @db)))
+(rss/defstyled RowWrap :div
+  {:background-color "#fff"
+   :display "flex"
+   :align-items "top"
+   :padding "10px 0"
+   :&:hover {:background-color "rgba(151, 151, 151, .05)"
+             :cursor "pointer"}})
 
-(defn expanded-row [m]
-  (let [[key value] m
-        {:keys [market currency-pair avg low high last timestamp]} value
-        [left right] (split currency-pair "-")]
-    ^{:key currency-pair}
-    [:div.unfolded_item_wrapper
-     {:on-click #(actions/expand-pair-row nil nil)}
-     [:div.unfolded_pair_row
-       [:div.toprow_box
-        [:h2.symbol left]
-        [:h4.name (curr-symbol->name left)]]
-       [:div.toprow_box.imgbox
-         [:img.currpic {:src (str "images/" left ".png")
-                        :style {:height "35px"}}]]
-       [:div.toprow_box.imgbox
-         [:img.currpic {:src (str "images/" right ".png")
-                        :style {:height "35px"}}]]
-       [:div.toprow_box
-        [:h2.symbol right]
-        [:h4.name (curr-symbol->name right)]]]
-     [:div.unfolded_pair_row.last
-       [:div.bottomrow_box
-        [:div.subtitle "Last:"]
-        [:div.value last]]
-       [:div.bottomrow_box
-        [:div.subtitle "High:"]
-        [:div.value high]]
-       [:div.bottomrow_box
-        [:div.subtitle "Low:"]
-        [:div.value low]]
-       [:div.bottomrow_box
-        [:div.subtitle "Market:"]
-        [:div.value (.toUpperCase market)]]]]))
+(rss/defstyled LeftCell :div
+ {:width "50%"
+  :white-space "nowrap"
+  :overflow "hidden"
+  :text-overflow "ellipsis"
+  :padding-left "8px"})
 
-(defn folded-row [m]
- (let [[key value] m
-       {:keys [market currency-pair last]} value]
-    (if (some nil? [market currency-pair last])
-      nil ;; dont render if got falsy
-      ^{:key (str currency-pair "x" market)}
-      [:div.titem_wrapper
-        {:style {:opacity (if (row-unfolded?) .3 1)}
-         :on-click #(actions/expand-pair-row key market)}
-        ^{:key "curr-pair"}
-        [:div.titem_cell
-          [:div.pair currency-pair
-            [:span.dynamics.green "  ▲ 0.00 %"]]
-          [:div.market market]]
-        ^{:key "last-price"}
-        [:div.titem_cell.price last]])))
+(rss/defstyled Title :div
+ {:line-height "17px"
+  :font-size "15px"})
 
-(defn render-row [m t-pair t-market]
- (fn [m t-pair t-market]
-   (let [[key value] m
-         {:keys [market currency-pair avg low high timestamp]} value
-         [left right] (split currency-pair "-")]
-    (if (and (= t-pair key) (= t-market market))
-        [expanded-row m]
-        [folded-row m]))))
+(rss/defstyled Swing :div
+ {:line-height "14px"
+  :color green
+  :font-size "11px"})
 
-(defn render-pairs []
-  (fn [t-pair t-market]
-   (let [markets (:markets @db)
-         pairs (best-pairs markets)
-         [t-pair t-market] (:ui/expanded-row @db)]
+(rss/defstyled Market :div
+ {:line-height "17px"
+  :text-transform "uppercase"})
+
+(rss/defstyled RightCell :div
+ {:width "50%"
+  :text-align "right"
+  :font-size "17px"
+  :line-height "17px"
+  :vertical-align "top"
+  :padding-right "8px"})
+
+(defn Row [pair]
+ (let [[pair-str info] pair
+       {:keys [market currency-pair last]} info]
+  [RowWrap
+   ^{:key "currency-pair"}
+   [LeftCell
+    [Title currency-pair]
+    [Market market]]
+   ^{:key "last-price"}
+   [RightCell
+    last
+    [Swing " ▲ 0.00 %"]]]))
+
+(defn render-rows []
+ (fn []
+  (let [markets (:markets @db)
+        pairs (best-pairs markets)]
     [:div
      (for [pair pairs]
       ^{:key (str pair)}
-      [render-row pair t-pair t-market])])))
+      [Row pair])])))
 
 (defn bestprice []
   (let [toggle-items ["Bestprice" "Markets"]]
@@ -98,5 +85,5 @@
         "icons/settings.svg"]
       toggle-items]
     [Wrapper
-     [render-pairs]]]))
+     [render-rows]]]))
 
