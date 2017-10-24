@@ -79,14 +79,15 @@
                               (if next-node (.focus next-node)
                                             (.focus @submit-ref))))]
     (fn []
-      [:div
+     [:div
+      [:div.add_rec_wrapper
        (doall
         (map-indexed
           (fn [idx cfg]
             (let [{:keys [node value]} (get @store idx)
                   {:keys [name options placeholder validation-type]} cfg]
               ^{:key name}
-              [:div.add_rec_wrapper
+              [:div.add_rec_input
                [:div
                 [:input.input_item
                  {:type "text"
@@ -96,16 +97,14 @@
                   :ref #(get-ref % idx)
                   :on-focus #(reset! focused-idx idx)
                   :on-blur #(reset! focused-idx nil)
-                  :value (:value (get @store idx))}]]
-               (when (and (= idx @focused-idx)
-                          (not (nil? options)))
-                [dropdown idx options node on-select-opt])]))
-         cfgs))
-       [:div {:style {:padding "0 10px"}}
-         [Button
-           {:type "submit"
-            :ref #(reset! submit-ref %)
-            :on-click #(js/console.log @store)
-            :color "#12D823"}
-           "Add"]]])))
+                  :value (:value (get @store idx))}]]]))
+         cfgs))]
+      ; [dropdown idx options node on-select-opt]
+      [:div {:style {:padding "0 10px"}}
+        [Button
+          {:type "submit"
+           :ref #(reset! submit-ref %)
+           :on-click #(js/console.log @store)
+           :color "#12D823"}
+          "Add"]]])))
 

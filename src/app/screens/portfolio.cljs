@@ -12,34 +12,6 @@
                                        Container
                                        Icon]]))
 
-; (defn custom-parse-float [strng]
-;   (let [val (if (or (s/starts-with? strng ".")
-;                     (s/starts-with? strng ","))
-;                 (str "0" strng)
-;                 strng)]
-;     (.parseFloat js/window val)))
-
-; (defn update-market [val market]
-;   (reset! market val))
-
-; (defn valid-rec? [rec]
-;   (let [{:keys [name amount]} rec]
-;     (if
-;      (and (> amount 0) (not (s/blank? name)))
-;      rec
-;      false)))
-
-; (defn update-if-valid [name market amount]
-;   ;; TODO check if curr/market pair exists
-;   (when-let [rec (valid-rec? {:name @name
-;                               :amount (custom-parse-float @amount)
-;                               :market @market})]
-;     (actions/add-record rec)
-;     (actions/save-portfolio)
-;     (reset! name "")
-;     (reset! amount "")
-;     (reset! market "")))
-
 (defn portfolio-list []
   (let [folio (:portfolio @db)]
    [:div

@@ -4,7 +4,8 @@
 (set-env!
  :source-paths    #{"src"}
  :resource-paths  #{"resources"}
- :dependencies '[[org.clojure/clojurescript "1.9.946"]
+ :dependencies '[[org.clojure/clojure "1.9.0-alpha16"]
+                 [org.clojure/clojurescript "1.9.946"]
                  [org.clojure/tools.nrepl "0.2.12" :scope "test"]
                  [org.clojure/test.check "0.9.0" :scope "test"]
                  [com.cemerick/piggieback "0.2.1" :scope "test"]
@@ -47,7 +48,7 @@
     (cljs-repl :ids #{"renderer"})
     (reload    :ids #{"renderer"}
                :ws-host "localhost"
-               :on-jsload 'app.renderer/init
+               ; :on-jsload 'app.renderer/init
                :target-path "target")
     (cljs      :ids #{"renderer"})
     ;; path.resolve(".") which is used in CLJS's node shim

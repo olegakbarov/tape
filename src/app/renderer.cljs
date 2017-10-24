@@ -1,7 +1,7 @@
 (ns app.renderer
   (:require [reagent.core :as reagent]
             [app.db :refer [db router]]
-            [app.api :refer [start-loop!]]
+            [app.api :refer [listen-ws!]]
             [app.listeners :refer [start-listeners!]]
             [app.actions.storage :refer [read-file!]]
             [app.config :refer [config]]
@@ -11,9 +11,11 @@
             [app.screens.portfolio :refer [portfolio]]
             [app.screens.alerts :refer [alerts]]))
 
+(enable-console-print!)
+
 (defn init []
  (read-file! "portfolio.edn")
- (start-loop!)
+ (listen-ws!)
  (start-listeners!))
 
 (defn routes []

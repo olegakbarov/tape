@@ -25,8 +25,8 @@
   at compile time using the `:clojure-defines` compiler option."
   [window]
   (if dev?
-      (.loadURL window (str "file://" js/__dirname "/../../index.html"))
-      (.loadURL window (str "file://" js/__dirname "/index.html"))))
+   (.loadURL window (str "file://" js/__dirname "/../../index.html"))
+   (.loadURL window (str "file://" js/__dirname "/index.html"))))
 
 (defn get-window-position []
   (let [window-bounds (.getBounds @window)

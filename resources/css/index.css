@@ -171,7 +171,7 @@ span.dynamics.green {
   position: relative;
 }
 
-.input_item {
+.add_rec_input {
   display: block;
   width: 33%;
 }
@@ -179,7 +179,6 @@ span.dynamics.green {
 input.input_item {
   border: none;
   font-size: 16px;
-  width: 150px;
   padding: 0px 10px 0 10px;
 }
 
@@ -270,4 +269,21 @@ input:checked + label {
 input:checked + label:after {
   left: auto;
   right: 0;
+}
+
+/* --------------- */
+
+@keyframes highlight {
+  0%   {
+    background-color: var(--green);
+    opacity: .3;
+  }
+  100% {
+    background-color: white;
+    opacity: 1;
+  }
+}
+
+.row_animation_wrap {
+  animation: 1s ease-out 0s 1 highlight;
 }
