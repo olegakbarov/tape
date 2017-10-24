@@ -1,6 +1,6 @@
 (ns app.screens.bestprice
   (:require-macros [app.macros :refer [profile]])
-  (:require [reagent.core :as reagent]
+  (:require [reagent.core :as r]
             [app.db :refer [db]]
             [cljsjs.moment]
             [app.logic.curr :refer [best-pairs]]
@@ -19,7 +19,7 @@
             [cljss.reagent :as rss :include-macros true]
             [goog.object :as gobj]))
 
-(def open (reagent/atom false))
+(def open (r/atom false))
 
 (rss/defstyled RowWrap :div
   {
@@ -75,7 +75,7 @@
  (fn []
   (let [markets (:markets @db)
         ; pairs (profile "best-pairs" (best-pairs markets))
-        pairs (best-pairs markets)]
+        pairs @(r/track best-pairs markets)]
     [:div
      (for [pair pairs]
       ^{:key (str pair)}
@@ -97,7 +97,7 @@
         :border-radius "4px 4px 0 0"
         :transform (str "translateY(" y "px)")}}]))
 
-(def Child-comp (reagent/reactify-component Child))
+(def Child-comp (r/reactify-component Child))
 
 (defn one-pair-view []
   (fn []
@@ -106,7 +106,7 @@
                                      -320
                                      0))}}
      (fn [x]
-      (reagent/create-element Child-comp #js {} x))]]))
+      (r/create-element Child-comp #js {} x))]]))
 
 (defn bestprice []
   (let [toggle-items ["Bestprice" "Markets"]]
