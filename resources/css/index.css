@@ -107,11 +107,17 @@ span.dynamics.green {
 }
 
 .filter_item {
-  padding: 8px;
+  font-size: 10px;
+  padding: 4px 6px 5px 6px;
+  margin-left: 4px;
+  border: 1px solid black;
+  border-radius: 50px;
+  text-transform: uppercase;
 }
 
 .filter_item.selected {
-  text-decoration: underline;
+  background-color: black;
+  color: white;
 }
 
 /*  --------- Markets --------- */

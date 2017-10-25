@@ -82,14 +82,16 @@
 (defn filter-box []
   [:div.filter_box
    [:div.filter_item
-    {:class (if (= :favorites @applied-filter) "selected")}
+    {:class (if (= :favorites @applied-filter) "selected" "")
+     :on-click #(toggle-filter :favorites)}
     "favorites"]
    [:div.filter_item
-    {:class (if (= :price @applied-filter) "selected")
+    {:class (if (= :price @applied-filter) "selected" "")
      :on-click #(toggle-filter :price)}
     "lowest price"]
    [:div.filter_item
-    {:class (if (= :volatile @applied-filter) "selected")}
+    {:class (if (= :volatile @applied-filter) "selected" "")
+     :on-click #(toggle-filter :volatile)}
     "volatile"]])
 
 (defn render-rows []
@@ -97,6 +99,8 @@
   (let [markets (:markets @db)
         pairs (condp = @applied-filter
                 :price @(r/track best-pairs markets)
+                :favorites nil
+                :volatile nil
                 nil @(r/track all-pairs markets))]
    (if (every? empty? pairs)
     nil
