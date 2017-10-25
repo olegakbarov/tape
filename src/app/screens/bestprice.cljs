@@ -3,7 +3,8 @@
   (:require [reagent.core :as r]
             [app.db :refer [db]]
             [cljsjs.moment]
-            [app.logic.curr :refer [best-pairs]]
+            [app.logic.curr :refer [best-pairs
+                                    all-pairs]]
             [app.utils.core :refer [curr-symbol->name]]
             [app.actions.ui :refer [to-screen]]
             [clojure.string :refer [split]]
@@ -21,10 +22,17 @@
 
 (def open (r/atom false))
 
+(def applied-filter (r/atom nil))
+
+(defn toggle-filter
+  "k - keyword of filter applied"
+  [k]
+  (reset! applied-filter (if (= k @applied-filter)
+                             nil
+                             k)))
+
 (rss/defstyled RowWrap :div
-  {
-   ; :background-color "#fff"
-   :display "flex"
+  {:display "flex"
    :align-items "top"
    :padding "10px 0"
    :&:hover {:background-color "rgba(151, 151, 151, .05)"
@@ -35,7 +43,7 @@
   :white-space "nowrap"
   :overflow "hidden"
   :text-overflow "ellipsis"
-  :padding-left "8px"})
+  :padding-left "12px"})
 
 (rss/defstyled Title :div
  {:line-height "17px"
@@ -48,7 +56,8 @@
 
 (rss/defstyled Market :div
  {:line-height "17px"
-  :text-transform "uppercase"})
+  :text-transform "uppercase"
+  :color "#ccc"})
 
 (rss/defstyled RightCell :div
  {:width "50%"
@@ -56,11 +65,10 @@
   :font-size "17px"
   :line-height "17px"
   :vertical-align "top"
-  :padding-right "8px"})
+  :padding-right "12px"})
 
 (defn Row [pair]
- (let [[pair-str info] pair
-       {:keys [market currency-pair last]} info]
+ (let [{:keys [market currency-pair last]} pair]
   [RowWrap
    ^{:key "currency-pair"}
    [LeftCell
@@ -69,18 +77,34 @@
    ^{:key "last-price"}
    [RightCell
     last
-    [Swing "+ 0.00 %"]]]))
+    [Swing "+ 1.04 (0.002 %)"]]]))
+
+(defn filter-box []
+  [:div.filter_box
+   [:div.filter_item
+    {:class (if (= :favorites @applied-filter) "selected")}
+    "favorites"]
+   [:div.filter_item
+    {:class (if (= :price @applied-filter) "selected")
+     :on-click #(toggle-filter :price)}
+    "lowest price"]
+   [:div.filter_item
+    {:class (if (= :volatile @applied-filter) "selected")}
+    "volatile"]])
 
 (defn render-rows []
  (fn []
   (let [markets (:markets @db)
-        ; pairs (profile "best-pairs" (best-pairs markets))
-        pairs @(r/track best-pairs markets)]
+        pairs (condp = @applied-filter
+                :price @(r/track best-pairs markets)
+                nil @(r/track all-pairs markets))]
+   (if (every? empty? pairs)
+    nil
     [:div
      (for [pair pairs]
       ^{:key (str pair)}
       [:div.row_animation_wrap {:on-click #(reset! open (not @open))}
-       [Row pair]])])))
+       [Row pair]])]))))
 
 (defn Child
   [{c :children}]
@@ -120,8 +144,6 @@
         "icons/settings.svg"]
       toggle-items]
     [Wrapper
+     [filter-box]
      [render-rows]
      [one-pair-view]]]))
-
-
-

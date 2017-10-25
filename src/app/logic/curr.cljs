@@ -6,33 +6,42 @@
   (let [market-items (vals markets)]
     (reduce
      (fn [acc item]
-      (into {}
-       (map
-        (fn [item]
-         (let [[key val] item
-               acc-pair (get acc key)]
-           (if-not acc-pair
-             (assoc acc key val)
-             (if (< (:last val)
-                    (:last acc-pair))
-                 (assoc acc key val)
-                 acc))))
-         item)))
+        (into {}
+         (map
+          (fn [item]
+           (let [[key val] item
+                 acc-pair (get acc key)]
+             (if-not acc-pair
+               (assoc acc key val)
+               (if (< (:last val)
+                      (:last acc-pair))
+                   (assoc acc key val)
+                   acc)))))
+         item))
      {}
      market-items)))
 
 (defn best-pairs
   "Returns pairs with lowest prices across "
   ([markets]
-   (get-lowest-prices markets))
+   (remove empty? (vals (get-lowest-prices markets))))
   ([markets pair-name]
    (:sell (get (get-lowest-prices markets) pair-name))))
+
+(defn all-pairs [markets]
+  (->> markets
+       vals
+       flatten
+       (map vals)
+       flatten))
 
 (defn get-market-names []
   (map
    #(.toUpperCase %)
    (keys (:markets @db))))
 
+
+;; rename get-all-curr-symbols
 (defn get-all-currs []
   (into #{}
     (flatten

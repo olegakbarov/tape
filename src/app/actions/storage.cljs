@@ -12,7 +12,6 @@
     (try
       (let [raw-file (.readFileSync fs (str p "/" name) "utf-8")
             contents (cljs.reader/read-string raw-file)]
-        (js/console.log contents)
         (swap! db assoc :portfolio (:portfolio contents)))
       (catch :default e e
         (js/console.log e)))))

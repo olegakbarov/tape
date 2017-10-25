@@ -51,7 +51,7 @@
   (BrowserWindow. #js {:x 763
                        :y 10
                        :width 321
-                       :height 468
+                       :height 600
                        :show true
                        :frame false
                        :fullscreenable false

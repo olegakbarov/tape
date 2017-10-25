@@ -101,7 +101,18 @@ span.dynamics.green {
 
 /*  --------- Bestprice --------- */
 
-/* Refactored to cljss! */
+.filter_box {
+  padding: 8px;
+  display: flex;
+}
+
+.filter_item {
+  padding: 8px;
+}
+
+.filter_item.selected {
+  text-decoration: underline;
+}
 
 /*  --------- Markets --------- */
 
