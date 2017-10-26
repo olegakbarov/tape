@@ -98,10 +98,11 @@
                 :favorites nil
                 :volatile nil
                 nil @(r/track all-pairs markets))]
+   (js/console.log pairs)
    (if (every? empty? pairs)
     nil
     [:div
-     (for [pair pairs]
+     (for [pair (remove empty? pairs)]
       ^{:key (str pair)}
       [:div.row_animation_wrap {:on-click #(reset! open (not @open))}
        [Row pair]])]))))

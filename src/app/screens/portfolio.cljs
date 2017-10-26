@@ -24,7 +24,7 @@
               [:div.market market]]
             [:div.item.amount amount]])))]))
 
-(def input-configs
+(def fields
    [{:name "amount"
      :placeholder "1000"}
     {:name "currency"
@@ -35,15 +35,7 @@
      :options (get-market-names)}])
 
 (defn portfolio []
-   ; [Header
-   ;  [Icon
-   ;   #(to-screen :bestprice)
-   ;   "icons/arrow-left.svg"]
-   ;  [Icon
-   ;    #(to-screen :settings)
-   ;    "icons/settings.svg"]
-   ;  toggle-items]
-   [Wrapper
-     [input-group input-configs]
-     [portfolio-list]])
+  [Wrapper
+    [input-group fields]
+    [portfolio-list]])
 

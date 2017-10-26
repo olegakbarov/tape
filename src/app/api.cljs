@@ -13,7 +13,7 @@
 (defn listen-ws! []
  (a/go
   (let [endpoint (:ws-endpoint config)
-        stream (<! (ws/connect endpoint  {:source (chan 1)}))]
+        stream (<! (ws/connect endpoint {:source (chan (a/sliding-buffer 1))}))]
     (a/go-loop []
       (let [msg (<! (:source stream))
             cmsg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
