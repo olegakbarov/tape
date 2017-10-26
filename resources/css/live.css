@@ -1,0 +1,76 @@
+.filter_box {
+  padding: 8px;
+  display: flex;
+}
+
+.filter_item {
+  font-size: 10px;
+  padding: 4px 6px 5px 6px;
+  margin-left: 4px;
+  border: 1px solid black;
+  border-radius: 50px;
+  text-transform: uppercase;
+}
+
+.filter_item.selected {
+  background-color: black;
+  color: white;
+}
+
+@keyframes highlight {
+  0%   {
+    background-color: var(--green);
+    opacity: .3;
+  }
+  100% {
+    background-color: white;
+    opacity: 1;
+  }
+}
+
+.row_wrap {
+  display: flex;
+  align-items: top;
+  padding: 10px 0;
+  animation: 1s ease-out 0s 1 highlight;
+}
+
+.row_wrap:hover {
+  background-color: rgba(151, 151, 151, .05);
+  cursor: pointer;
+}
+
+.left_cell {
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 12px;
+}
+
+.left_cell > .title {
+  line-height: 17px;
+  font-size: 15px;
+}
+
+.left_cell > .market {
+  line-height: 17px;
+  text-transform: uppercase;
+  color: #ccc;
+}
+
+.right_cell {
+  width: 50%;
+  text-align: right;
+  font-size: 17px;
+  line-height: 17px;
+  vertical-align: top;
+  padding-right: 12px;
+}
+
+.right_cell > .swing {
+  line-height: 14px;
+  color: var(--green);
+  font-size: 11px;
+}
+

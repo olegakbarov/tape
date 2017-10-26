@@ -1,3 +1,7 @@
+@import url("_colors.css");
+@import url("common.css");
+@import url("live.css");
+
 html {
   height: 100%;
   width: 100%;
@@ -22,10 +26,6 @@ body {
   position: relative;
 }
 
-:root {
-  --green: #12D823;
-  --blue: #657AF3;
-}
 
 #arrow {
   position: absolute;
@@ -95,69 +95,6 @@ span.dynamics.green {
 
 .dropdown > .pill:hover{
   cursor: pointer;
-}
-
-/* end common */
-
-/*  --------- Bestprice --------- */
-
-.filter_box {
-  padding: 8px;
-  display: flex;
-}
-
-.filter_item {
-  font-size: 10px;
-  padding: 4px 6px 5px 6px;
-  margin-left: 4px;
-  border: 1px solid black;
-  border-radius: 50px;
-  text-transform: uppercase;
-}
-
-.filter_item.selected {
-  background-color: black;
-  color: white;
-}
-
-/*  --------- Markets --------- */
-
-.markets_wrapper {
-  margin-top: 50px;
-}
-
-.market_row {
-  display: flex;
-}
-
-
-.market_row:hover {
-  background-color: rgba(151, 151, 151, .05)
-}
-
-.market_row > .item {
-  width: 50%;
-  padding: 18px 12px;
-}
-
-.market_row > .item > .name {
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 18px;
-}
-
-.item > *.right {
-  text-align: right;
-}
-
-.item > *.green {
-  color: #55EF62;
-}
-
-.market_row > .item > .number {
- font-size: 11px;
- line-height: 13px;
 }
 
 
@@ -290,17 +227,19 @@ input:checked + label:after {
 
 /* --------------- */
 
-@keyframes highlight {
-  0%   {
-    background-color: var(--green);
-    opacity: .3;
-  }
-  100% {
-    background-color: white;
-    opacity: 1;
-  }
-}
+/* @keyframes highlight { */
+/*   0%   { */
+/*     background-color: var(--green); */
+/*     opacity: .3; */
+/*   } */
+/*   100% { */
+/*     background-color: white; */
+/*     opacity: 1; */
+/*   } */
+/* } */
 
-.row_animation_wrap {
-  animation: 1s ease-out 0s 1 highlight;
-}
+/* .row_animation_wrap { */
+/*   animation: 1s ease-out 0s 1 highlight; */
+/* } */
+
+

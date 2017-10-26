@@ -103,8 +103,8 @@
       [:div {:style {:padding "0 10px"}}
         [Button
           {:type "submit"
-           :ref #(reset! submit-ref %)
            :on-click #(js/console.log @store)
-           :color "#12D823"}
-          "Add"]]])))
+           :ref #(reset! submit-ref %)
+           :color "#12D823"
+           :text "Add"}]]])))
 

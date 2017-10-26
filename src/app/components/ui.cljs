@@ -4,26 +4,26 @@
             [cljss.reagent :as rss :include-macros true]
             [app.components.colors :as c]))
 
-(rss/defstyled Button :button
-  {:padding "10px"
-   :width "100%"
-   :background-color :color
-   :color "#fff"
-   :type :type
-   :ref :ref
-   :on-click :on-click
-   :border "none"
-   :border-radius "4px"
-   :text-transform "uppercase"
-   :font-size "13px"})
+(defn Button [params]
+  (let [{:keys [on-click type ref text color]} params]
+    [:button.button
+     (merge
+      (when color {:style {:background-color color}})
+      {:on-click on-click
+       :ref ref
+       :type type})
+     text]))
 
-(rss/defstyled Container :div
-  {:height "100%"})
+(defn Container []
+  [:div
+   {:style {:height "100%"}}])
 
-(rss/defstyled Wrapper :div
-  {:margin-top "50px"
-   :background-color "white"
-   :height "100%"})
+(defn Wrapper []
+  [:div
+    {:style
+     {:margin-top "50px"
+      :background-color "white"
+      :height "100%"}}])
 
 (rss/defstyled IconImg :img
   {:width "20px"
@@ -37,11 +37,13 @@
    {:on-click on-click}
    [IconImg {:src src}]])
 
-(rss/defstyled GroupWrap :div
-  {:display "flex"
-   :justify-content "space-around"
-   :width "60%";
-   :-webkit-user-select "none"})
+(defn GroupWrap []
+  [:div
+   {:style
+    {:display "flex"
+     :justify-content "space-around"
+     :width "60%";
+     :-webkit-user-select "none"}}])
 
 (rss/defstyled GroupBtn :div
   {:padding "6px 10px"

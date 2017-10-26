@@ -27,53 +27,17 @@
                              nil
                              k)))
 
-(rss/defstyled RowWrap :div
-  {:display "flex"
-   :align-items "top"
-   :padding "10px 0"
-   :&:hover {:background-color "rgba(151, 151, 151, .05)"
-             :cursor "pointer"}})
-
-(rss/defstyled LeftCell :div
- {:width "50%"
-  :white-space "nowrap"
-  :overflow "hidden"
-  :text-overflow "ellipsis"
-  :padding-left "12px"})
-
-(rss/defstyled Title :div
- {:line-height "17px"
-  :font-size "15px"})
-
-(rss/defstyled Swing :div
- {:line-height "14px"
-  :color green
-  :font-size "11px"})
-
-(rss/defstyled Market :div
- {:line-height "17px"
-  :text-transform "uppercase"
-  :color "#ccc"})
-
-(rss/defstyled RightCell :div
- {:width "50%"
-  :text-align "right"
-  :font-size "17px"
-  :line-height "17px"
-  :vertical-align "top"
-  :padding-right "12px"})
-
 (defn Row [pair]
  (let [{:keys [market currency-pair last]} pair]
-  [RowWrap
+  [:div.row_wrap
    ^{:key "currency-pair"}
-   [LeftCell
-    [Title currency-pair]
-    [Market market]]
+   [:div.left_cell
+    [:div.title currency-pair]
+    [:div.market market]]
    ^{:key "last-price"}
-   [RightCell
+   [:div.right_cell
     last
-    [Swing "+ 1.04 (0.002 %)"]]]))
+    [:div.swing "+ 1.04 (0.002 %)"]]]))
 
 (defn filter-box []
   [:div.filter_box
