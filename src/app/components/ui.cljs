@@ -14,16 +14,13 @@
        :type type})
      text]))
 
-(defn Container []
-  [:div
-   {:style {:height "100%"}}])
+(rss/defstyled Container :div
+  {:height "100%"})
 
-(defn Wrapper []
-  [:div
-    {:style
-     {:margin-top "50px"
-      :background-color "white"
-      :height "100%"}}])
+(rss/defstyled Wrapper :div
+ {:margin-top "50px"
+  :background-color "white"
+  :height "100%"})
 
 (rss/defstyled IconImg :img
   {:width "20px"
@@ -37,13 +34,11 @@
    {:on-click on-click}
    [IconImg {:src src}]])
 
-(defn GroupWrap []
-  [:div
-   {:style
-    {:display "flex"
-     :justify-content "space-around"
-     :width "60%";
-     :-webkit-user-select "none"}}])
+(rss/defstyled GroupWrap :div
+  {:display "flex"
+   :justify-content "space-around"
+   :width "60%";
+   :-webkit-user-select "none"})
 
 (rss/defstyled GroupBtn :div
   {:padding "6px 10px"

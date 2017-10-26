@@ -7,7 +7,6 @@
             [app.actions.ui :refer [to-screen]]
             [app.config :refer [config]]
             [app.screens.live :refer [live-board]]
-            [app.screens.markets :refer [markets]]
             [app.screens.settings :refer [settings]]
             [app.screens.portfolio :refer [portfolio]]
             [app.screens.alerts :refer [alerts]]
@@ -26,22 +25,14 @@
  (let [s (-> @router :screen)]
    (condp = s
      :live [live-board]
-     :personal [markets]
-     :settings  [settings]
      :portfolio [portfolio]
+     :settings  [settings]
      :alerts    [alerts])))
 
 (defn root []
  (let [toggle-items ["Live" "Portfolio"]]
    [Container
-    [Header
-      [Icon
-       #(to-screen :portfolio)
-       "icons/user.svg"]
-      [Icon]
-        ; #(to-screen :settings)
-        ; "icons/settings.svg"]
-      toggle-items]
+    [Header toggle-items]
     [routes]]))
 
 (reagent/render

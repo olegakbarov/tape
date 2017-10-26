@@ -62,7 +62,6 @@
                 :favorites nil
                 :volatile nil
                 nil @(r/track all-pairs markets))]
-   (js/console.log pairs)
    (if (every? empty? pairs)
     nil
     [:div

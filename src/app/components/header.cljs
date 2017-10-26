@@ -21,13 +21,12 @@
   :font-size "12px"
   :border-radius "6px 6px 0 0"})
 
-(defn Header [Left Right items]
+(defn Header [items]
   (fn []
-   (js/console.log "Rendered header!")
+   (js/console.log items)
    (let [screen (get-in @router [:screen])]
      [Hdr
       [:div#arrow]
-      Left
       [GroupWrap
         (let [active? #(= screen (-> % .toLowerCase keyword))]
           (doall
@@ -43,6 +42,5 @@
                 :last? (= (inc idx) (count items))
                 :active? (active? text)}
                text]])
-            items)))]
-      Right])))
+            items)))]])))
 
