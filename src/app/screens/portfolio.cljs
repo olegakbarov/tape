@@ -8,9 +8,7 @@
                                     get-crypto-currs]]
             [clojure.string :as s]
             [cljsjs.react-motion]
-            [app.components.ui :refer [Wrapper
-                                       Container
-                                       Icon]]))
+            [app.components.ui :refer [Wrapper]]))
 
 (defn portfolio-list []
   (let [folio (:portfolio @db)]
@@ -37,17 +35,15 @@
      :options (get-market-names)}])
 
 (defn portfolio []
- (let [toggle-items ["Portfolio" "Alerts"]]
-  [Container
-   [Header
-    [Icon
-     #(to-screen :bestprice)
-     "icons/arrow-left.svg"]
-    [Icon
-      #(to-screen :settings)
-      "icons/settings.svg"]
-    toggle-items]
+   ; [Header
+   ;  [Icon
+   ;   #(to-screen :bestprice)
+   ;   "icons/arrow-left.svg"]
+   ;  [Icon
+   ;    #(to-screen :settings)
+   ;    "icons/settings.svg"]
+   ;  toggle-items]
    [Wrapper
      [input-group input-configs]
-     [portfolio-list]]]))
+     [portfolio-list]])
 

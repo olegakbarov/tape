@@ -5,7 +5,7 @@
 
 (defonce router
   (r/atom
-   {:screen :bestprice}))
+   {:screen :live}))
 
 (defonce db
   (r/atom

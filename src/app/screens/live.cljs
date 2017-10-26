@@ -1,4 +1,4 @@
-(ns app.screens.bestprice
+(ns app.screens.live
   (:require-macros [app.macros :refer [profile]])
   (:require [reagent.core :as r]
             [app.db :refer [db]]
@@ -6,19 +6,15 @@
             [app.logic.curr :refer [best-pairs
                                     all-pairs]]
             [app.utils.core :refer [curr-symbol->name]]
-            [app.actions.ui :refer [to-screen]]
             [clojure.string :refer [split]]
-            [app.components.header :refer [Header]]
             [app.motion :refer [Motion
                                 spring
                                 presets]]
             [app.components.colors :refer [green]]
-            [app.components.ui :refer [Wrapper
-                                       Container
-                                       Icon]]
             [cljss.core :refer [defstyles]]
             [cljss.reagent :as rss :include-macros true]
-            [goog.object :as gobj]))
+            [goog.object :as gobj]
+            [app.components.ui :refer [Wrapper]]))
 
 (def open (r/atom false))
 
@@ -136,18 +132,8 @@
      (fn [x]
       (r/create-element Child-comp #js {} x))]]))
 
-(defn bestprice []
-  (let [toggle-items ["Bestprice" "Markets"]]
-   [Container
-    [Header
-      [Icon
-       #(to-screen :portfolio)
-       "icons/user.svg"]
-      [Icon
-        #(to-screen :settings)
-        "icons/settings.svg"]
-      toggle-items]
-    [Wrapper
-     [filter-box]
-     [render-rows]
-     [one-pair-view]]]))
+(defn live-board []
+  [Wrapper
+   [filter-box]
+   [render-rows]
+   [one-pair-view]])
