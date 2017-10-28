@@ -12,6 +12,8 @@
     {
      :ui/detailed-view nil
 
+     :ui/current-filter nil
+
      :settings {:pairs-view :images}
 
      :portfolio []

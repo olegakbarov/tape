@@ -15,7 +15,10 @@
             [cljss.core :refer [defstyles]]
             [cljss.reagent :as rss :include-macros true]
             [goog.object :as gobj]
-            [app.components.ui :refer [Wrapper]]))
+            [app.components.ui :refer [Wrapper]]
+            [app.actions.ui :refer [add-to-favs
+                                    open-detailed-view
+                                    close-detailed-view]]))
 
 (def open (r/atom false))
 
@@ -33,7 +36,8 @@
   [:div.row_wrap
    ^{:key "currency-pair"}
    [:div.left_cell
-    [:div.title currency-pair]
+    [:div.title
+     currency-pair]
     [:div.market market]]
    ^{:key "last-price"}
    [:div.right_cell
@@ -58,17 +62,30 @@
 (defn render-rows []
  (fn []
   (let [markets (:markets @db)
+        favs (:favorites @db)
         pairs (condp = @applied-filter
                 :price @(r/track best-pairs markets)
-                :favorites @(r/track user-favs markets)
+                :favorites @(r/track user-favs markets favs)
                 :volatile nil
                 nil @(r/track all-pairs markets))]
-   (prn pairs)
    [:div
     (for [pair (remove empty? pairs)]
-     ^{:key (str pair)}
-     [:div.row_animation_wrap {:on-click #(reset! open (not @open))}
-      [Row pair]])])))
+     (let [{:keys [market cryptocurrency-pair]} pair]
+       ^{:key (str pair)}
+       [:div.row_animation_wrap {:on-click #(when (nil? (:ui/detailed-view @db))
+                                             (open-detailed-view market cryptocurrency-pair))}
+        [Row pair]]))])))
+
+(defn DetailsContent []
+  (let [market nil
+        currency-pair nil]
+    [:div
+      [:div
+       {:on-click #(add-to-favs [(keyword market) (keyword currency-pair)])}
+       " FAV"]
+      [:div
+       {:on-click #(close-detailed-view)}
+       "Close"]]))
 
 (defn Child
   [{c :children}]
@@ -80,19 +97,20 @@
         :height "320px"
         :background-color "#fff"
         :z-index 99
+        :border-radius "4px 4px 0 0"
         :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
         :-webkit-transform (str "translateY(" y "px)")
-        :border-radius "4px 4px 0 0"
-        :transform (str "translateY(" y "px)")}}]))
+        :transform (str "translateY(" y "px)")}}
+      [DetailsContent]]))
 
 (def Child-comp (r/reactify-component Child))
 
 (defn one-pair-view []
   (fn []
    [:div {:style {:position "absolute" :bottom 0}}
-    [Motion {:style {:y (spring (if @open
-                                     -320
-                                     0))}}
+    [Motion {:style {:y (spring (if (:ui/detailed-view @db)
+                                    -320
+                                    0))}}
      (fn [x]
       (r/create-element Child-comp #js {} x))]]))
 

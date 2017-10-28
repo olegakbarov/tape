@@ -21,7 +21,8 @@
                  [reagent "0.8.0-alpha2" :exclusions [cljsjs/react]]
                  [camel-snake-kebab "0.4.0"]
                  [haslett "0.1.0"]
-                 [datascript "0.16.2"]
+                 [cljs-http "0.1.44"]
+
                  [cljsjs/react "16.0.0-0"]
                  [cljsjs/react-dom "16.0.0-0"]
                  [cljsjs/moment "2.10.6-0"]
