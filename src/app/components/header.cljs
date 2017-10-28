@@ -23,7 +23,6 @@
 
 (defn Header [items]
   (fn []
-   (js/console.log items)
    (let [screen (get-in @router [:screen])]
      [Hdr
       [:div#arrow]

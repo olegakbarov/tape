@@ -97,9 +97,9 @@
                   :ref #(get-ref % idx)
                   :on-focus #(reset! focused-idx idx)
                   :on-blur #(reset! focused-idx nil)
-                  :value (:value (get @store idx))}]]]))
+                  :value (:value (get @store idx))}]]
+               [dropdown idx options node on-select-opt]]))
          cfgs))]
-      ; [dropdown idx options node on-select-opt]
       [:div {:style {:padding "0 10px"}}
         [Button
           {:type "submit"

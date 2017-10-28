@@ -69,3 +69,11 @@
      []
      (keys pairs))))
 
+(defn user-favs []
+  (let [favs (:favorites @db)
+        markets (:markets @db)]
+    (reduce
+     (fn [acc tupl]
+       (conj acc (get-in markets tupl)))
+     []
+     favs)))

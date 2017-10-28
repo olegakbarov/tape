@@ -4,7 +4,8 @@
             [app.db :refer [db]]
             [cljsjs.moment]
             [app.logic.curr :refer [best-pairs
-                                    all-pairs]]
+                                    all-pairs
+                                    user-favs]]
             [app.utils.core :refer [curr-symbol->name]]
             [clojure.string :refer [split]]
             [app.motion :refer [Motion
@@ -59,16 +60,15 @@
   (let [markets (:markets @db)
         pairs (condp = @applied-filter
                 :price @(r/track best-pairs markets)
-                :favorites nil
+                :favorites @(r/track user-favs markets)
                 :volatile nil
                 nil @(r/track all-pairs markets))]
-   (if (every? empty? pairs)
-    nil
-    [:div
-     (for [pair (remove empty? pairs)]
-      ^{:key (str pair)}
-      [:div.row_animation_wrap {:on-click #(reset! open (not @open))}
-       [Row pair]])]))))
+   (prn pairs)
+   [:div
+    (for [pair (remove empty? pairs)]
+     ^{:key (str pair)}
+     [:div.row_animation_wrap {:on-click #(reset! open (not @open))}
+      [Row pair]])])))
 
 (defn Child
   [{c :children}]

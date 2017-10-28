@@ -3,6 +3,7 @@
   (:require [clojure.string :as string :refer [split-lines]]
             [clojure.walk]
             [cljs.core.async :as a :refer [<! >! chan timeout]]
+            [cljs-http.client :as http]
             [haslett.client :as ws]
             [app.db :refer [db]]
             [app.config :refer [config]]
@@ -19,4 +20,10 @@
             cmsg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
          (update-ticker! cmsg))
       (recur)))))
+
+(defn fetch-market-info [market]
+  (a/go
+    (let [endpoint (str (:http-endpoint config) "/data/markets/" market)
+          response (<! (http/get endpoint {:with-credentials? false}))]
+      (:body response))))
 
