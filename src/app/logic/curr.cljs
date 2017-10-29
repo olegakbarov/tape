@@ -2,7 +2,9 @@
   (:require [clojure.walk]
             [app.db :refer [db]]))
 
-(defn get-lowest-prices [markets]
+(defn get-lowest-prices
+  "Returns lowest `:last` prices across all markets"
+  [markets]
   (let [market-items (vals markets)]
     (reduce
      (fn [acc item]
@@ -78,5 +80,4 @@
 
 (defn by-str-query [q]
  (let [markets (:markets @db)]))
-
 

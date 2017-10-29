@@ -8,7 +8,7 @@
             [app.db :refer [db]]
             [app.config :refer [config]]
             [app.actions.tray :refer [set-title!]]
-            [app.db :refer [update-ticker!]]
+            [app.actions.api :refer [update-ticker!]]
             [app.logic.curr :refer [best-pairs]]))
 
 (defn listen-ws! []
@@ -18,12 +18,12 @@
     (a/go-loop []
       (let [msg (<! (:source stream))
             cmsg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
-         (update-ticker! cmsg))
+        (update-ticker! cmsg))
       (recur)))))
 
 (defn fetch-market-info [market]
-  (a/go
-    (let [endpoint (str (:http-endpoint config) "/data/markets/" market)
-          response (<! (http/get endpoint {:with-credentials? false}))]
-      (:body response))))
+ (a/go
+  (let [endpoint (str (:http-endpoint config) "/data/markets/" market)
+        response (<! (http/get endpoint {:with-credentials? false}))]
+    (:body response))))
 

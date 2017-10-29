@@ -13,23 +13,12 @@
                                 presets]]
             [app.components.colors :refer [green]]
             [cljss.core :refer [defstyles]]
-            [cljss.reagent :as rss :include-macros true]
             [goog.object :as gobj]
             [app.components.ui :refer [Wrapper]]
             [app.actions.ui :refer [add-to-favs
                                     open-detailed-view
-                                    close-detailed-view]]))
-
-(def open (r/atom false))
-
-(def applied-filter (r/atom nil))
-
-(defn toggle-filter
-  "k - keyword of filter applied"
-  [k]
-  (reset! applied-filter (if (= k @applied-filter)
-                             nil
-                             k)))
+                                    close-detailed-view
+                                    toggle-filter]]))
 
 (defn Row [pair]
  (let [{:keys [market currency-pair last]} pair]
@@ -44,18 +33,18 @@
     last
     [:div.swing "+ 1.04 (0.002 %)"]]]))
 
-(defn filter-box []
+(defn FilterBox []
   [:div.filter_box
    [:div.filter_item
-    {:class (if (= :favorites @applied-filter) "selected" "")
+    {:class (if (= :favorites (:ui/current-filter @db)) "selected" "")
      :on-click #(toggle-filter :favorites)}
     "favorites"]
    [:div.filter_item
-    {:class (if (= :price @applied-filter) "selected" "")
+    {:class (if (= :price (:ui/current-filter @db)) "selected" "")
      :on-click #(toggle-filter :price)}
     "lowest price"]
    [:div.filter_item
-    {:class (if (= :volatile @applied-filter) "selected" "")
+    {:class (if (= :volatile (:ui/current-filter @db)) "selected" "")
      :on-click #(toggle-filter :volatile)}
     "volatile"]])
 
@@ -63,25 +52,24 @@
  (fn []
   (let [markets (:markets @db)
         favs (:favorites @db)
-        pairs (condp = @applied-filter
+        pairs (condp = (:ui/current-filter @db)
                 :price @(r/track best-pairs markets)
                 :favorites @(r/track user-favs markets favs)
                 :volatile nil
                 nil @(r/track all-pairs markets))]
    [:div
     (for [pair (remove empty? pairs)]
-     (let [{:keys [market cryptocurrency-pair]} pair]
+     (let [{:keys [market currency-pair]} pair]
        ^{:key (str pair)}
        [:div.row_animation_wrap {:on-click #(when (nil? (:ui/detailed-view @db))
-                                             (open-detailed-view market cryptocurrency-pair))}
+                                             (open-detailed-view market currency-pair))}
         [Row pair]]))])))
 
 (defn DetailsContent []
-  (let [market nil
-        currency-pair nil]
+  (let [[market pair] (:ui/detailed-view @db)]
     [:div
       [:div
-       {:on-click #(add-to-favs [(keyword market) (keyword currency-pair)])}
+       {:on-click #(add-to-favs [market pair])}
        " FAV"]
       [:div
        {:on-click #(close-detailed-view)}
@@ -105,7 +93,7 @@
 
 (def Child-comp (r/reactify-component Child))
 
-(defn one-pair-view []
+(defn DetailedView []
   (fn []
    [:div {:style {:position "absolute" :bottom 0}}
     [Motion {:style {:y (spring (if (:ui/detailed-view @db)
@@ -116,6 +104,6 @@
 
 (defn live-board []
   [Wrapper
-   [filter-box]
+   [FilterBox]
    [render-rows]
-   [one-pair-view]])
+   [DetailedView]])
