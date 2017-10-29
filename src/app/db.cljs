@@ -14,8 +14,9 @@
 
      :portfolio []
 
-     :favorites [[:bitfinex :BTC-USD]
-                 [:yobit :BTC-RUB]]
+     :favorites []
+                ;;[[:bitfinex :BTC-USD]
+                ;; [:yobit :BTC-RUB]
 
      :markets {}}))
 

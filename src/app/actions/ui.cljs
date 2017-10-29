@@ -7,6 +7,16 @@
 (defn add-to-favs [tupl]
   (swap! db update-in [:favorites] conj tupl))
 
+(defn remove-from-favs
+  "Accepts [:cex :USD-RUB] vec"
+  [tupl]
+  (swap! db update-in [:favorites]
+    (fn [coll]
+      (remove
+        #(and (= (first %) (first tupl))
+              (= (last %) (last tupl)))
+       coll))))
+
 (defn open-detailed-view [market pair]
   (swap! db assoc-in [:ui/detailed-view] [market pair]))
 
@@ -22,3 +32,4 @@
       #(if (= k (:ui/current-filter @db))
            nil
            k))))
+

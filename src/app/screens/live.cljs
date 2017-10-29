@@ -15,9 +15,8 @@
             [cljss.core :refer [defstyles]]
             [goog.object :as gobj]
             [app.components.ui :refer [Wrapper]]
-            [app.actions.ui :refer [add-to-favs
-                                    open-detailed-view
-                                    close-detailed-view
+            [app.screens.detailed :refer [DetailsContent]]
+            [app.actions.ui :refer [open-detailed-view
                                     toggle-filter]]))
 
 (defn Row [pair]
@@ -62,18 +61,8 @@
      (let [{:keys [market currency-pair]} pair]
        ^{:key (str pair)}
        [:div.row_animation_wrap {:on-click #(when (nil? (:ui/detailed-view @db))
-                                             (open-detailed-view market currency-pair))}
+                                             (open-detailed-view (keyword market) (keyword currency-pair)))}
         [Row pair]]))])))
-
-(defn DetailsContent []
-  (let [[market pair] (:ui/detailed-view @db)]
-    [:div
-      [:div
-       {:on-click #(add-to-favs [market pair])}
-       " FAV"]
-      [:div
-       {:on-click #(close-detailed-view)}
-       "Close"]]))
 
 (defn Child
   [{c :children}]
