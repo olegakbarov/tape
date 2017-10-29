@@ -13,7 +13,7 @@
   (while @t
    (<! (timeout 3000))
    (let [m (:markets @db)
-         btc (js/parseInt (best-pairs m "BTC-USD"))]
+         btc (js/parseInt (best-pairs m :BTC-USD))]
      (set-title! btc)))))
 
 (defn stop-listeners! []
