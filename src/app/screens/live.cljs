@@ -71,7 +71,7 @@
       {:style
        {:position "absolute"
         :width "321px"
-        :height "320px"
+        :height "380px"
         :background-color "#fff"
         :z-index 99
         :border-radius "4px 4px 0 0"
@@ -86,7 +86,7 @@
   (fn []
    [:div {:style {:position "absolute" :bottom 0}}
     [Motion {:style {:y (spring (if (:ui/detailed-view @db)
-                                    -320
+                                    -380
                                     0))}}
      (fn [x]
       (r/create-element Child-comp #js {} x))]]))

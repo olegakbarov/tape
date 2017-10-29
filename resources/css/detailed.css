@@ -1,0 +1,82 @@
+#detailed {
+  padding: 12px;
+}
+
+#detailed > .header {
+  display: flex;
+  justify-content: space-between;
+}
+
+#detailed > .header > .title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+#detailed > .market {
+  font-size: 16px;
+  color: #ccc;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+#detailed > .header > .title > .star {
+  display: inline-block;
+}
+
+.star.faved {
+  background-color: yellow;
+}
+
+#detailed > .header > .title > .star > * {
+  vertical-align: center;
+}
+
+#detailed > .header > .title > .star {
+  margin-left: 6px;
+  width: 16px;
+  height: 16px;
+  background-image: url('../icons/star.svg');
+  background-size: contain;
+  opacity: .7;
+  transition: all .3s ease;
+}
+
+#detailed > .header > .title > .star:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#detailed > .header > .close {
+  width: 25px;
+  height: 25px;
+  background-image: url('../icons/x.svg');
+  opacity: .4;
+  transition: all .3s ease;
+}
+
+#detailed > .header > .close:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#detailed > .title > .volume {
+  font-size: 12px;
+}
+
+#detailed > .prices {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+#detailed > .prices > .item {
+  text-transform: uppercase;
+  text-align: center;
+  width: 25%;
+}
+
+#detailed > .chart {
+  width: 100%;
+  height: 180px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 10px;
+}

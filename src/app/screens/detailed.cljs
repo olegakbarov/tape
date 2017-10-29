@@ -37,23 +37,28 @@
                 timestamp
                 avg last
                 vol
-                vol-cur]} content]
-    [:div
-     [:h1 pair]
-     [:h3 market]
-     [:h4 "High: " high]
-     [:h4 "Low: " low]
-     [:h4 "Buy: " buy]
-     [:h4 "Sell: " sell]
-     [:h4 "Volume: " vol]
-     [:h4 "Average (curr): " vol-cur]
-     (if (fav? favs [(keyword market) pair])
-       [:button
-        {:on-click #(remove-from-favs [(keyword market) (keyword pair)])}
-        "Remove from favorites"]
-       [:button
-        {:on-click #(add-to-favs [(keyword market) pair])}
-        "Add to favorites"])
-     [:button
-      {:on-click #(close-detailed-view)}
-      "Close"]]))
+                vol-cur]} content
+        is-fav? (fav? favs [(keyword market) pair])]
+
+    [:div#detailed
+     [:div.header
+      [:div.title pair
+       [:div.star
+          {:class (if is-fav? "faved" "")
+           :on-click
+            (if is-fav?
+              #(remove-from-favs [(keyword market) (keyword pair)])
+              #(add-to-favs [(keyword market) pair]))}]]
+      [:div.close
+       {:on-click #(close-detailed-view)}]]
+     [:div.market " " market]
+     [:div.prices
+      [:div.item "High"
+       [:div high]]
+      [:div.item "Low"
+       [:div low]]
+      [:div.item "Buy"
+       [:div buy]]
+      [:div.item "Sell"
+       [:div sell]]]
+     [:div.chart]]))
