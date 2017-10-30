@@ -5,19 +5,20 @@
             [cljsjs.moment]
             [app.logic.curr :refer [best-pairs
                                     all-pairs
-                                    user-favs]]
-            [app.utils.core :refer [curr-symbol->name]]
-            [clojure.string :refer [split]]
+                                    user-favs
+                                    by-query]]
             [app.motion :refer [Motion
                                 spring
                                 presets]]
+            [app.utils.core :refer [curr-symbol->name]]
+            [clojure.string :refer [split]]
             [app.components.colors :refer [green]]
             [cljss.core :refer [defstyles]]
             [goog.object :as gobj]
             [app.components.ui :refer [Wrapper]]
             [app.screens.detailed :refer [DetailsContent]]
-            [app.actions.ui :refer [open-detailed-view
-                                    toggle-filter]]))
+            [app.screens.filterbox :refer [FilterBox]]
+            [app.actions.ui :refer [open-detailed-view]]))
 
 (defn Row [pair]
  (let [{:keys [market currency-pair last]} pair]
@@ -32,36 +33,24 @@
     last
     [:div.swing "+ 1.04 (0.002 %)"]]]))
 
-(defn FilterBox []
-  [:div.filter_box
-   [:div.filter_item
-    {:class (if (= :favorites (:ui/current-filter @db)) "selected" "")
-     :on-click #(toggle-filter :favorites)}
-    "favorites"]
-   [:div.filter_item
-    {:class (if (= :price (:ui/current-filter @db)) "selected" "")
-     :on-click #(toggle-filter :price)}
-    "lowest price"]
-   [:div.filter_item
-    {:class (if (= :volatile (:ui/current-filter @db)) "selected" "")
-     :on-click #(toggle-filter :volatile)}
-    "volatile"]])
-
 (defn render-rows []
  (fn []
   (let [markets (:markets @db)
         favs (:favorites @db)
+        q (:ui/filter-q @db)
         pairs (condp = (:ui/current-filter @db)
                 :price @(r/track best-pairs markets)
                 :favorites @(r/track user-favs markets favs)
                 :volatile nil
+                :query @(r/track by-query markets q)
                 nil @(r/track all-pairs markets))]
    [:div
     (for [pair (remove empty? pairs)]
      (let [{:keys [market currency-pair]} pair]
        ^{:key (str pair)}
-       [:div.row_animation_wrap {:on-click #(when (nil? (:ui/detailed-view @db))
-                                             (open-detailed-view (keyword market) (keyword currency-pair)))}
+       [:div.row_animation_wrap
+        {:on-click #(when (nil? (:ui/detailed-view @db))
+                      (open-detailed-view (keyword market) (keyword currency-pair)))}
         [Row pair]]))])))
 
 (defn Child

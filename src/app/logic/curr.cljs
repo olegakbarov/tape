@@ -78,6 +78,9 @@
   []
   favs))
 
-(defn by-str-query [q]
- (let [markets (:markets @db)]))
+(defn by-query [markets q]
+  (->> markets
+       vals
+       (mapcat vals)
+       (filter #(re-find (re-pattern q) (:market %)))))
 

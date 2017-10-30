@@ -12,6 +12,8 @@
 
      :ui/current-filter nil
 
+     :ui/filter-q ""
+
      :portfolio []
 
      :favorites []
