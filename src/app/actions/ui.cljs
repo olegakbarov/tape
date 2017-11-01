@@ -6,17 +6,21 @@
   (swap! router assoc-in [:screen] screen))
 
 (defn add-to-favs [tupl]
-  (swap! db update-in [:user/favorites] conj tupl))
+  (do
+   (swap! db update-in [:user/favorites] conj tupl)
+   (persist-user-currents :favorites (:user/favorites @db))))
 
 (defn remove-from-favs
   "Accepts [:cex :USD-RUB] vec"
   [tupl]
-  (swap! db update-in [:user/favorites]
-    (fn [coll]
-      (remove
-        #(and (= (first %) (first tupl))
-              (= (last %) (last tupl)))
-       coll))))
+  (do
+    (swap! db update-in [:user/favorites]
+      (fn [coll]
+        (remove
+          #(and (= (first %) (first tupl))
+                (= (last %) (last tupl)))
+         coll)))
+    (persist-user-currents :favorites (:user/favorites @db))))
 
 (defn open-detailed-view [market pair]
   (swap! db assoc-in [:ui/detailed-view] [market pair]))
