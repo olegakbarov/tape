@@ -17,7 +17,7 @@
 (enable-console-print!)
 
 (defn init []
- (read-data-file! "portfolio.edn")
+ (read-data-file!)
  (listen-ws!)
  (start-listeners!))
 

@@ -29,7 +29,7 @@
 
 (defn DetailsContent []
   (let [[market pair] (:ui/detailed-view @db)
-        favs (:favorites @db)
+        favs (:user/favorites @db)
         content (get-in @db [:markets market pair])
         {:keys [high low
                 sell buy
