@@ -11,7 +11,7 @@
             [app.components.ui :refer [Wrapper]]))
 
 (defn portfolio-list []
-  (let [folio (:portfolio @db)]
+  (let [folio (:user/portfolio @db)]
    [:div
     (if (> (count folio) 0)
       (for [row folio]

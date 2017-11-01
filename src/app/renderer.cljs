@@ -3,7 +3,7 @@
             [app.db :refer [db router]]
             [app.api :refer [listen-ws!]]
             [app.listeners :refer [start-listeners!]]
-            [app.actions.storage :refer [read-file!]]
+            [app.actions.storage :refer [read-data-file!]]
             [app.actions.ui :refer [to-screen]]
             [app.config :refer [config]]
             [app.screens.live :refer [live-board]]
@@ -17,7 +17,7 @@
 (enable-console-print!)
 
 (defn init []
- (read-file! "portfolio.edn")
+ (read-data-file! "portfolio.edn")
  (listen-ws!)
  (start-listeners!))
 

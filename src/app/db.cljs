@@ -9,16 +9,12 @@
   (r/atom
     {
      :ui/detailed-view nil
-
      :ui/current-filter nil
-
      :ui/filter-q ""
 
-     :portfolio []
-
-     :favorites []
-                ;;[[:bitfinex :BTC-USD]
-                ;; [:yobit :BTC-RUB]
+     :user/portfolio []
+     :user/favorites []
+     :user/settings {}
 
      :markets {}}))
 

@@ -36,7 +36,7 @@
 (defn render-rows []
  (fn []
   (let [markets (:markets @db)
-        favs (:favorites @db)
+        favs (:user/favorites @db)
         q (:ui/filter-q @db)
         pairs (condp = (:ui/current-filter @db)
                 :price @(r/track best-pairs markets)
