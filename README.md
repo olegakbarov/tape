@@ -8,6 +8,12 @@ boot watch dev-build
 electron target/                          # Do not omit the trailing '/'
 ```
 
+### Lint and check
+
+```
+boot check-sources
+```
+
 ### Packaging
 
 [`electron-packager`](https://github.com/maxogden/electron-packager):

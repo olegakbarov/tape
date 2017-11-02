@@ -17,6 +17,7 @@
                  [binaryage/devtools "0.9.4" :scope "test"]
                  [binaryage/dirac "1.2.16" :scope "test"]
                  [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
+                 [tolitius/boot-check "0.1.6"]
                  ;[metosin.forks/reagent "0.6.1-SNAPSHOT"]
                  [reagent "0.8.0-alpha2" :exclusions [cljsjs/react]]
                  [camel-snake-kebab "0.4.0"]
@@ -34,13 +35,22 @@
  '[adzerk.boot-cljs              :refer [cljs]]
  '[adzerk.boot-cljs-repl         :refer [cljs-repl start-repl]]
  '[powerlaces.boot-figreload     :refer [reload]]
- '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]])
+ '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]]
+ '[tolitius.boot-check :as check])
 
 (deftask prod-build []
   (comp (cljs :ids #{"main"}
               :optimizations :simple)
         (cljs :ids #{"renderer"}
               :optimizations :advanced)))
+
+(deftask check-sources []
+  (set-env! :source-paths #{"src"})
+  (comp
+    (check/with-yagni)
+    (check/with-eastwood)
+    (check/with-kibit)
+    (check/with-bikeshed)))
 
 (deftask dev-build []
   (comp
