@@ -40,7 +40,7 @@
 (defn str->amount
   "Validates the input string to acceptable currency form"
   [v]
-  (if (= (count (valid-chars v)) 0)
+  (if (zero? (count (valid-chars v)))
     ""
     (if (= v "00")
       "0"

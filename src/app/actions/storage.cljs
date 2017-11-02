@@ -35,13 +35,12 @@
       (let [raw-file (.readFileSync fs (str p "/portfolio.edn") "utf-8")
             contents (cljs.reader/read-string raw-file)
             {:keys [portfolio settings favorites]} contents]
-       (do
         (update-db :user/portfolio portfolio)
         (update-db :user/favorites favorites)
         (update-db :user/settings  settings)))
       (catch :default e e
         (when (= "ENOENT" (.-code e))
-              (save-data-to-file! default-file))))))
+              (save-data-to-file! default-file)))))
 
 (defn persist-user-currents
   "Saves updated users' state. Accpets :key and _updated_ content"

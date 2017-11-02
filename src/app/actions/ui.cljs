@@ -41,6 +41,4 @@
 (defn update-filter-q [q]
  (do
   (swap! db assoc-in [:ui/filter-q] q)
-  (swap! db assoc-in [:ui/current-filter] (if (= q "")
-                                              nil
-                                              :query))))
+  (swap! db assoc-in [:ui/current-filter] (when-not (= q "") :query))))

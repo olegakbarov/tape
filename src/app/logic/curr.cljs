@@ -44,8 +44,10 @@
 
 
 ;; rename get-all-curr-symbols
-(defn get-all-currs []
-  (into #{}
+(defn get-all-currs
+  "Returns all currencies across all markets"
+  []
+  (set
     (flatten
       (map
        #(flatten (clojure.string/split % "-"))
@@ -61,7 +63,9 @@
    #(some (fn [x] (= x %)) ["USD" "RUB"])
    (get-all-currs)))
 
-(defn currs-by-market [market]
+(defn currs-by-market
+  "Returns currencies available for given market"
+  [market]
   (let [m (:markets @db)
         pairs (get m market)]
     (reduce

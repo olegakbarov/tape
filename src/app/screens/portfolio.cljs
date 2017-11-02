@@ -13,7 +13,7 @@
 (defn portfolio-list []
   (let [folio (:user/portfolio @db)]
    [:div
-    (if (> (count folio) 0)
+    (if (pos? (count folio))
       (for [row folio]
         (let [{:keys [name amount market]} row]
           ^{:key (str name "x" amount "x" market)}
