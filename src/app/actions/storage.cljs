@@ -13,7 +13,7 @@
 (defn- update-db [k data]
  (swap! db assoc k data))
 
-(defn save-data-to-file! [content]
+(defn ->file! [content]
   (let [fs (js/require "fs")
         path (js/require "path")
         p (str (.getPath (.-app remote) "userData") "/portfolio.edn")]
@@ -37,10 +37,10 @@
             {:keys [portfolio settings favorites]} contents]
         (update-db :user/portfolio portfolio)
         (update-db :user/favorites favorites)
-        (update-db :user/settings  settings)))
+        (update-db :user/settings  settings))
       (catch :default e e
         (when (= "ENOENT" (.-code e))
-              (save-data-to-file! default-file)))))
+              (->file! default-file))))))
 
 (defn persist-user-currents
   "Saves updated users' state. Accpets :key and _updated_ content"
@@ -48,7 +48,7 @@
   (let [portfolio (:user/portoflio @db)
         settings (:user/settings @db)
         favorites (:user/favorites @db)]
-    (save-data-to-file!
+    (->file!
      (merge
       {:portfolio portfolio
        :favorites favorites
