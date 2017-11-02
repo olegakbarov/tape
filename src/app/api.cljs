@@ -13,12 +13,14 @@
 
 (defonce retries (atom 0))
 
+(declare create-ws-conn!)
+
 (defn reconnect-ws  [w]
    (if (< @retries 10)
      (.setTimeout js/window
                   (fn []
-                    (.close w))
-                    ; (create-ws-conn!))
+                    (.close w)
+                     (create-ws-conn!))
                   3000)))
         ;; dispatch notif here
 
@@ -34,10 +36,10 @@
 (defn ->open [w e]
  (.send w (pr-str "ping"))
  (heart-beat)
- (js/console.log "ws conn is open" {:msg "conn open"}))
+ (js/console.log "ws conn is open"))
 
 (defn ->close [w e]
- (js/console.log "closing ws conn" {:msg "conn close"})
+ (js/console.log "closing ws conn")
  (reconnect-ws w))
 
 (defn ->error [w e]
