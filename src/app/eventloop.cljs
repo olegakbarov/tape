@@ -1,4 +1,4 @@
-(ns app.listeners
+(ns app.eventloop
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [app.db :refer [db]]
             [app.logic.curr :refer [best-pairs]]
@@ -7,7 +7,7 @@
 
 (def t (atom false))
 
-(defn start-listeners! []
+(defn start-title-updater! []
  (reset! t true)
  (go
   (while @t
@@ -16,6 +16,8 @@
          btc (js/parseInt (best-pairs m :BTC-USD))]
      (set-title! btc)))))
 
-(defn stop-listeners! []
+(defn stop-title-updater! []
   (reset! t false))
 
+; (defstate title-loop :start (start-title-updater!)
+;                      :stop (stop-title-updater!))

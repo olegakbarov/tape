@@ -18,17 +18,15 @@
                  [binaryage/dirac "1.2.16" :scope "test"]
                  [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
                  [tolitius/boot-check "0.1.6"]
-                 ;[metosin.forks/reagent "0.6.1-SNAPSHOT"]
-                 [reagent "0.8.0-alpha2" :exclusions [cljsjs/react]]
                  [camel-snake-kebab "0.4.0"]
                  [haslett "0.1.0"]
                  [cljs-http "0.1.44"]
-
+                 [mount "0.1.11"]
+                 [reagent "0.8.0-alpha2" :exclusions [cljsjs/react]]
                  [cljsjs/react "16.0.0-0"]
                  [cljsjs/react-dom "16.0.0-0"]
                  [cljsjs/moment "2.10.6-0"]
                  [cljsjs/react-motion "0.5.0-0"]
-                 ; [cljsjs/highcharts "5.0.14-0"]
                  [org.roman01la/cljss "1.5.5"]])
 
 (require

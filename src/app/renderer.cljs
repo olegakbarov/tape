@@ -1,8 +1,9 @@
 (ns app.renderer
+  ; (:require-macros [mount.core :as mount :refer [defstate]])
   (:require [reagent.core :as reagent]
             [app.db :refer [db router]]
             [app.api :refer [listen-ws!]]
-            [app.listeners :refer [start-listeners!]]
+            [app.eventloop :refer [start-title-updater!]]
             [app.actions.storage :refer [read-data-file!]]
             [app.actions.ui :refer [to-screen]]
             [app.config :refer [config]]
@@ -13,13 +14,15 @@
             [app.components.header :refer [Header]]
             [app.components.ui :refer [Container
                                        Icon]]))
+; (mount/in-cljc-mode)
+; (mount/start)
 
 (enable-console-print!)
 
 (defn init []
  (read-data-file!)
  (listen-ws!)
- (start-listeners!))
+ (start-title-updater!))
 
 (defn routes []
  (let [s (-> @router :screen)]

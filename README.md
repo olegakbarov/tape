@@ -8,6 +8,11 @@ boot watch dev-build
 electron target/                          # Do not omit the trailing '/'
 ```
 
+```
+boot repl -c
+boot.user=> (start-repl)
+```
+
 ### Lint and check
 
 ```

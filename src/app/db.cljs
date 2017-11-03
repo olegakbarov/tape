@@ -18,3 +18,5 @@
 
      :markets {}}))
 
+(defn- show-db []
+  @db)
