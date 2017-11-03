@@ -9,17 +9,22 @@
             [app.config :refer [config]]
             [app.actions.tray :refer [set-title!]]
             [app.actions.api :refer [ticker->db!]]
-            [app.logic.curr :refer [best-pairs]]))
+            [app.logic.curr :refer [best-pairs]]
+            [mount.core :refer [defstate]]))
+
+(defonce t (atom true))
 
 (defn listen-ws! []
+ (reset! t true)
  (a/go
   (let [endpoint (:ws-endpoint config)
         stream (<! (ws/connect endpoint {:source (chan (a/sliding-buffer 1))}))]
-    (a/go-loop []
+    (when @t
+     (a/go-loop []
       (let [msg (<! (:source stream))
             cmsg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
         (ticker->db! cmsg))
-      (recur)))))
+      (recur))))))
 
 (defn fetch-market-info [market]
  (a/go
@@ -27,3 +32,9 @@
         response (<! (http/get endpoint {:with-credentials? false}))]
     (:body response))))
 
+(defn stop-ws! []
+  (prn "Stopping ws ...")
+  (reset! t false))
+
+(defstate ws-loop :start (listen-ws!)
+                  :stop (stop-ws!))

@@ -34,7 +34,7 @@
  '[adzerk.boot-cljs-repl         :refer [cljs-repl start-repl]]
  '[powerlaces.boot-figreload     :refer [reload]]
  '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]]
- '[tolitius.boot-check :as check])
+ '[tolitius.boot-check           :as    check])
 
 (deftask prod-build []
   (comp (cljs :ids #{"main"}
@@ -51,6 +51,7 @@
     (check/with-bikeshed)))
 
 (deftask dev-build []
+ ; (set-env! :resource-paths #{"resources"})
   (comp
     (speak)
     (cljs-devtools)
@@ -66,7 +67,7 @@
     ;; not the directory our main.js file is in.
     ;; Because of this we need to override the compilers `:asset-path option`
     ;; See http://dev.clojure.org/jira/browse/CLJS-1444 for details.
-    (cljs      :ids #{"main"}
+    (cljs      :ids #{"main" "mount"}
                :compiler-options {:asset-path "target/main.out"
                                   :closure-defines {'app.main/dev? true }})
 
