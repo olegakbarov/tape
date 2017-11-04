@@ -15,8 +15,13 @@
      :user/portfolio []
      :user/favorites []
      :user/settings {}
+     :user/notifs [{:id 1
+                    :market :bitfinex
+                    :pair :BTC-LTC
+                    :change :below
+                    :price "5000"
+                    :active true
+                    :repeat true}]
 
      :markets {}}))
 
-(defn- show-db []
-  @db)

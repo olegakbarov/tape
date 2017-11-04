@@ -1,7 +1,8 @@
 (ns app.actions.storage
   (:require [clojure.walk]
             [app.db :refer [db router]]
-            [cljs.reader :as reader]))
+            [cljs.reader :as reader]
+            [mount.core :refer [defstate]]))
 
 (def electron (js/require "electron"))
 (def remote (.-remote electron))
@@ -13,7 +14,9 @@
 (defn- update-db [k data]
  (swap! db assoc k data))
 
-(defn ->file! [content]
+(defn ->file!
+  "Writes arg to user data file"
+  [content]
   (let [fs (js/require "fs")
         path (js/require "path")
         p (str (.getPath (.-app remote) "userData") "/portfolio.edn")]
@@ -54,3 +57,6 @@
        :favorites favorites
        :settings settings}
       {key content}))))
+
+(defstate user-data :start (read-data-file!))
+
