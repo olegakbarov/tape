@@ -14,17 +14,60 @@
 
 (defonce t (atom false))
 
+(defonce retries (atom 0))
+
+(declare create-ws-conn!)
+
+(defn reconnect-ws  [w]
+   (if (< @retries 10)
+     (.setTimeout js/window
+                  (fn []
+                    (.close w)
+                     (create-ws-conn!))
+                  3000)))
+        ;; dispatch notif here
+
+(defn heart-beat []
+ (.setTimeout js/window
+              heart-beat
+              2000))
+
+(defn ->msg [c e]
+ (a/go
+  (>! c (.-data e))))
+
+(defn ->open [w e]
+ (.send w (pr-str "ping"))
+ (heart-beat)
+ (js/console.log "ws conn is open"))
+
+(defn ->close [w e]
+ (js/console.log "closing ws conn...")
+ (reconnect-ws w))
+
+(defn ->error [w e]
+  (reconnect-ws w))
+
+(defn create-ws-conn! []
+  (let [w (js/WebSocket. (:ws-endpoint config))
+        _ (swap! retries inc)
+        c (chan (a/sliding-buffer 1))]
+    (set! (.-onmessage w) #(->msg c %))
+    (set! (.-onopen w) #(->open w %))
+    (set! (.-onclose w) #(->close w %))
+    (set! (.-onerror w) #(->error w %))
+    c))
+
 (defn listen-ws! []
  (reset! t true)
  (a/go
   (let [endpoint (:ws-endpoint config)
-        stream (<! (ws/connect endpoint {:source (chan (a/sliding-buffer 1))}))]
-     (a/go-loop []
-      (when @t
-       (let [msg (<! (:source stream))
-             cmsg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
-        (ticker->db! cmsg)
-       (recur)))))))
+        stream (create-ws-conn!)]
+    (a/go-loop []
+      (let [msg (<! stream)
+            cmsg (clojure.walk/keywordize-keys (js->clj (js/JSON.parse msg)))]
+        (ticker->db! cmsg))
+      (recur)))))
 
 (defn stop-ws! []
   (prn "Stopping ws ...")
