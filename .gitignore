@@ -3,6 +3,7 @@ target/
 
 .tern-port
 .nrepl-port
+.nrepl-history
 .cljs_rhino_repl/
 
 snippets.*

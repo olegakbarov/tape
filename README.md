@@ -5,7 +5,7 @@ boot watch dev-build
 ```
 
 ```
-electron target/                          # Do not omit the trailing '/'
+electron target/
 ```
 
 ```
