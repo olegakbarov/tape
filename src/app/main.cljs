@@ -57,7 +57,7 @@
                        :fullscreenable false
                        :resizable dev?
                        :transparent true}))
-
+;; sets image
 (defn set-tray! []
  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
   (reset! tray (Tray. p))))
@@ -74,7 +74,7 @@
     (when dev? (.openDevTools @window #js {:mode "undocked"}))
     (.on @window "closed" #(reset! window nil))))
 
-(defn set-title! [e text]
+(defn set-title! [_ text]
   (.setTitle @tray text))
 
 (defn disable-resize! []
@@ -86,8 +86,10 @@
   (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
                                           (.quit app)))
   (.on app "ready" init-browser)
-  (.on app "ready" set-tray!)
-  (.on app "ready" set-tray-event-handlers)
+  (do
+   (.on app "ready" set-tray!)
+   (.on app "ready" #(set-title! _ "0000"))
+   (.on app "ready" set-tray-event-handlers))
   (.on ipc "show-window" show-window)
   (.on ipc "set-title" set-title!)
   ;; TODO
