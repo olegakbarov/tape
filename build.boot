@@ -27,7 +27,8 @@
                  [cljsjs/react-dom "16.0.0-0"]
                  [cljsjs/moment "2.10.6-0"]
                  [cljsjs/react-motion "0.5.0-0"]
-                 [org.roman01la/cljss "1.5.5"]])
+                 [org.roman01la/cljss "1.5.5"]
+                 [cljfmt "0.5.1"]])
 
 (require
  '[adzerk.boot-cljs              :refer [cljs]]

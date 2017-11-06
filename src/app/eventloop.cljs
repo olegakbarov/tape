@@ -3,11 +3,12 @@
   (:require [app.db :refer [db]]
             [app.logic.curr :refer [best-pairs]]
             [app.actions.tray :refer [set-title!]]
-            [app.actions.notifs :refer [add-notif!]]
+            [app.actions.notifs :refer [render-notif!
+                                        notif->archived]]
             [cljs.core.async :as a :refer [<! >! chan timeout]]
             [mount.core :refer [defstate]]))
 
-(def t (atom false))
+(defonce t (atom false))
 
 (defn start-title-loop! []
  (reset! t true)
@@ -37,28 +38,33 @@
 
 (defn dispatch-notif?
  "Compares latest `snapshot` of markets with users'
- notifs and dispatches when conditions met"
+ notifs and dispatches when conditions met
+ ---
+ markets - hashmap
+ notifs - hashmap"
  [markets notifs]
- (map
-  (fn [ntf]
-   ; (let [{:keys [active pair market price change]} ntf
-   ;       p (get-in markets [market pair])]
-    (js/console.log ntf)
-    (when true
-     (add-notif!
-       (str "Title")
-       (str "Text"))))
-  notifs))
+ (doall
+  (map
+   (fn [ntf]
+    (let [{:keys [archived pair market price change id]} ntf
+          p (get-in markets [market pair])]
+     (when-not archived
+      (do
+       (render-notif!
+        (str (name market) " " (name pair) " price " price)
+        (str pair " price crossed " change " with the price of " price))
+       (notif->archived id)))))
+   notifs)))
 
 (defn start-notifs-loop! []
  (reset! n true)
+ (prn "Notifs loop started ...")
  (when (and @n (has-notifs?))
   (go
    (while @n
-    (prn "In notifs loop ...")
     (<! (timeout 3000))
     (let [markets (-> @db :markets)
-          notifs (-> @db :user/notifs)]
+          notifs (-> @db :user/notifs vals)]
      (dispatch-notif? markets notifs))))))
 
 (defn stop-notifs-loop! []
