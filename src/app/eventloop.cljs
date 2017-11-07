@@ -10,7 +10,9 @@
 
 (defonce t (atom false))
 
-(defn start-title-loop! []
+(defn start-title-loop!
+ "Continuosly updates title with latest bitcoin(TODO) price "
+ []
  (reset! t true)
  (go
   (while @t
@@ -27,7 +29,7 @@
   :start (start-title-loop!)
   :stop (stop-title-loop!))
 
-;; --------------
+;; ----------------------------------------------------------------
 
 (defonce n (atom false))
 

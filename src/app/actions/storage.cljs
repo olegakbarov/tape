@@ -11,6 +11,8 @@
                    :favorites []
                    :settings {}})
 
+(def data-file-name "data-file.edn")
+
 (defn- update-db [k data]
  (swap! db assoc k data))
 
@@ -19,7 +21,7 @@
   [content]
   (let [fs (js/require "fs")
         path (js/require "path")
-        p (str (.getPath (.-app remote) "userData") "/portfolio.edn")]
+        p (str (.getPath (.-app remote) "userData") data-file-name )]
    (try
     (.writeFile fs p content
       #(js/console.log "done."))
@@ -35,12 +37,13 @@
   (let [fs (js/require "fs")
         p (.getPath (.-app remote) "userData")]
     (try
-      (let [raw-file (.readFileSync fs (str p "/portfolio.edn") "utf-8")
+      (let [raw-file (.readFileSync fs (str p data-file-name) "utf-8")
             contents (cljs.reader/read-string raw-file)
             {:keys [portfolio settings favorites]} contents]
         (update-db :user/portfolio portfolio)
         (update-db :user/favorites favorites)
-        (update-db :user/settings  settings))
+        (update-db :user/settings  settings)
+        (update-db :user/notifs    notifs))
       (catch :default e e
         (when (= "ENOENT" (.-code e))
               (->file! default-file))))))
@@ -50,12 +53,14 @@
   [key content]
   (let [portfolio (:user/portoflio @db)
         settings (:user/settings @db)
-        favorites (:user/favorites @db)]
+        favorites (:user/favorites @db)
+        notifs (:user/notifs @db)]
     (->file!
      (merge
       {:portfolio portfolio
        :favorites favorites
-       :settings settings}
+       :settings settings
+       :notifs notifs}
       {key content}))))
 
 (defstate user-data :start (read-data-file!))

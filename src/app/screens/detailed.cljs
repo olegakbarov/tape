@@ -1,9 +1,11 @@
 (ns app.screens.detailed
   (:require [reagent.core :as r]
             [app.db :refer [db]]
+            [app.components.chart :refer [Chart]]
             [app.actions.ui :refer [add-to-favs
                                     remove-from-favs
                                     close-detailed-view]]))
+
 (comment
   {:high 3143.5286,
    :sell 3119.8,
@@ -18,14 +20,14 @@
    :vol 304628.34})
 
 (defn fav? [favs tupl]
-  (reduce
-   (fn [acc pair]
-    (if (and (= (first pair) (first tupl))
-             (= (last pair) (last tupl)))
-      true
-      acc))
-   false
-   favs))
+ (reduce
+  (fn [acc pair]
+   (if (and (= (first pair) (first tupl))
+            (= (last pair) (last tupl)))
+     true
+     acc))
+  false
+  favs))
 
 (defn DetailsContent []
   (let [[market pair] (:ui/detailed-view @db)
@@ -61,4 +63,4 @@
        [:div buy]]
       [:div.item "Sell"
        [:div sell]]]
-     [:div.chart]]))
+     [Chart]]))
