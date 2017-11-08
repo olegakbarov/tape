@@ -23,10 +23,12 @@
                  [cljs-http "0.1.44"]
                  [mount "0.1.11"]
                  [reagent "0.8.0-alpha2" :exclusions [cljsjs/react]]
+                 [com.andrewmcveigh/cljs-time "0.5.0"]
                  [cljsjs/react "16.0.0-0"]
                  [cljsjs/react-dom "16.0.0-0"]
                  [cljsjs/moment "2.10.6-0"]
                  [cljsjs/react-motion "0.5.0-0"]
+                 [cljsjs/chartjs "2.6.0-0"]
                  [org.roman01la/cljss "1.5.5"]])
 
 (require

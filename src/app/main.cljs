@@ -88,7 +88,7 @@
   (.on app "ready" init-browser)
   (do
    (.on app "ready" set-tray!)
-   (.on app "ready" #(set-title! _ "0000"))
+   (.on app "ready" #(set-title! nil "0000"))
    (.on app "ready" set-tray-event-handlers))
   (.on ipc "show-window" show-window)
   (.on ipc "set-title" set-title!)

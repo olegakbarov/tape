@@ -63,20 +63,28 @@
   font-size: 12px;
 }
 
-#detailed > .prices {
+#detailed > .prices,
+#detailed > .labels {
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
 }
 
+#detailed > .labels {
+  font-size: 11px;
+  font-color: #ccc;
+  font-weight: bold;
+  text-align: left;
+}
+
+#detailed > .prices.last {
+  margin-bottom: 20px;
+}
+
+#detailed > .labels > .item,
 #detailed > .prices > .item {
   text-transform: uppercase;
   text-align: center;
+  padding: 5px 0 0;
   width: 25%;
 }
 
-#detailed > .chart {
-  width: 100%;
-  height: 180px;
-  border: 1px solid #eaeaea;
-  margin-bottom: 10px;
-}

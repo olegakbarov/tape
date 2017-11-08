@@ -39,7 +39,7 @@
     (try
       (let [raw-file (.readFileSync fs (str p data-file-name) "utf-8")
             contents (cljs.reader/read-string raw-file)
-            {:keys [portfolio settings favorites]} contents]
+            {:keys [portfolio settings favorites notifs]} contents]
         (update-db :user/portfolio portfolio)
         (update-db :user/favorites favorites)
         (update-db :user/settings  settings)

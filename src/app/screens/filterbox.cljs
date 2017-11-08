@@ -5,6 +5,9 @@
                                     update-filter-q]]))
 
 (defn FilterBox []
+  [:div])
+
+(defn FilterBox- []
  (let [q (:ui/filter-q @db)
        f (:ui/current-filter @db)]
   [:div

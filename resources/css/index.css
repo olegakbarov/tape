@@ -1,4 +1,5 @@
 @import url("_colors.css");
+@import url("_frappe.css");
 @import url("common.css");
 @import url("detailed.css");
 @import url("live.css");
@@ -225,22 +226,3 @@ input:checked + label:after {
   left: auto;
   right: 0;
 }
-
-/* --------------- */
-
-/* @keyframes highlight { */
-/*   0%   { */
-/*     background-color: var(--green); */
-/*     opacity: .3; */
-/*   } */
-/*   100% { */
-/*     background-color: white; */
-/*     opacity: 1; */
-/*   } */
-/* } */
-
-/* .row_animation_wrap { */
-/*   animation: 1s ease-out 0s 1 highlight; */
-/* } */
-
-

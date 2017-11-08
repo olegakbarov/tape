@@ -41,7 +41,7 @@
                 vol
                 vol-cur]} content
         is-fav? (fav? favs [(keyword market) pair])]
-
+   [:div
     [:div#detailed
      [:div.header
       [:div.title pair
@@ -54,13 +54,14 @@
       [:div.close
        {:on-click #(close-detailed-view)}]]
      [:div.market " " market]
-     [:div.prices
-      [:div.item "High"
-       [:div high]]
-      [:div.item "Low"
-       [:div low]]
-      [:div.item "Buy"
-       [:div buy]]
-      [:div.item "Sell"
-       [:div sell]]]
-     [Chart]]))
+     [:div.labels
+      [:div.item "High"]
+      [:div.item "Low"]
+      [:div.item "Buy"]
+      [:div.item "Sell"]]
+     [:div.prices.last
+      [:div.item high]
+      [:div.item low]
+      [:div.item buy]
+      [:div.item sell]]]
+    [Chart]]))

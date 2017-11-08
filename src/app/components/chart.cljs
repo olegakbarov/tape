@@ -1,34 +1,33 @@
 (ns app.components.chart
-  (:require [reagent.core :as r]))
+  (:require-macros [app.macros :refer [with-preserved-ctx unless]])
+  (:require [reagent.core :as r]
+            [cljsjs.chartjs]))
 
-(def Frappe (js/require "frappe-charts"))
+(defn show-revenue-chart
+  []
+  (let [context (.getContext (.getElementById js/document "chart") "2d")
+        chart-data {:type "line"
+                    :options {:legend {:display false}
+                              :tooltips {:enabled false}
+                              ; :gridLines {:display false}
+                              :animation 0
+                              :scales {:yAxes [{:ticks {:display false
+                                                        :stepSize 400}}] ;; TODO should calculate dynamically
+                                       :xAxes [{:ticks {:display false
+                                                        :stepSize 3}}]}}
+                    :data {:labels ["0" "2" "4" "6" "8" "10" "12" "14" "16" "18" "20" "22" "24"]
+                           :datasets [{:data [3319 1000 1500 2000 2005 1230 2230 1523 1340 1330 1235 1420 3330]
+                                       :borderColor "#657AF3"
+                                       :fill "none"
+                                       :pointStyle "line"
+                                       :radius 1}]}}]
+      (js/Chart. context (clj->js chart-data))))
 
-(def data
- {:labels [1 2 3 4 5 6 7]
-  :datasets [{:title "aaa"
-              :color "light-blue"
-              :values [10 52 23 54 94 31 22 12 43 22]}]})
-
-(defn Chart [props]
- (let [!ref (atom nil)
-       chart (atom nil)]
+(defn Chart
+  []
   (r/create-class
-   {:display-name "frappe-chart"
-    :component-did-mount
-     #(reset! chart
-        (Frappe.
-          (clj->js
-           {:type "line"
-            :show_dots 0
-            :heatline 1
-            :region_fill 1
-            :data data
-            :title "title"
-            :parent @!ref
-            :height 190
-            :width 250})))
-    :reagent-render
-     (fn []
-      (let [{:keys [data]} props]
-        [:div {:ref (fn [com] (reset! !ref com))}]))})))
+    {:component-did-mount #(show-revenue-chart)
+     :display-name        "chartjs-component"
+     :reagent-render      (fn []
+                           [:canvas {:id "chart" :width "700" :height "380"}])}))
 
