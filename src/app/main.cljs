@@ -56,7 +56,9 @@
                        :frame false
                        :fullscreenable false
                        :resizable dev?
+                       :skipTaskbar true
                        :transparent true}))
+
 ;; sets image
 (defn set-tray! []
  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
@@ -82,9 +84,8 @@
   (.setLayoutZoomLevelLimits webframe 0 0))
 
 (defn init []
-  (.hide (.-dock app))
-  (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
-                                          (.quit app)))
+  (if (= js/process.platform "darwin")
+    (.hide (.-dock app)))
   (.on app "ready" init-browser)
   (do
    (.on app "ready" set-tray!)
