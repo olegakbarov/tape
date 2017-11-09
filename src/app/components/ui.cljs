@@ -37,17 +37,17 @@
 (rss/defstyled GroupWrap :div
   {:display "flex"
    :justify-content "space-around"
-   :width "60%";
-   :-webkit-user-select "none"})
+   :width "80%";
+   :-webkit-user-select "none"
+   :border (str "1px solid " c/blue)
+   :border-radius "4px"})
 
 (rss/defstyled GroupBtn :div
   {:padding "6px 10px"
    :text-align "center"
-   :border "1px solid white"
-   :border-right (with-meta #(if % "none" "1px solid white") :first?)
-   :border-radius (with-meta #(if % "0 4px 4px 0" "4px 0 0 4px") :last?)
-   :text-decoration (with-meta #(if % "underline" "none") :active?)
-   :color c/blue
+   :border-radius "3px"
+   :color (with-meta #(if % "white" c/blue) :active?)
+   :background-color (with-meta #(if % c/blue "white") :active?)
    :&:hover {:cursor "pointer"}})
 
 (defn Checkbox [value on-change]

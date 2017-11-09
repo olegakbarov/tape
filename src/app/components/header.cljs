@@ -19,6 +19,7 @@
   :justify-content "space-around"
   :align-items "center"
   :font-size "12px"
+  :border-bottom "1px solid #eaeaea"
   :border-radius "6px 6px 0 0"})
 
 (defn Header [items]
@@ -37,9 +38,7 @@
                                               keyword))
                     :style {:width "50%"}}
               [GroupBtn
-               {:first? (= idx 0)
-                :last? (= (inc idx) (count items))
-                :active? (active? text)}
+                {:active? (active? text)}
                text]])
             items)))]])))
 

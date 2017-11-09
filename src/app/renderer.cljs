@@ -29,7 +29,7 @@
      :alerts    [alerts])))
 
 (defn root []
- (let [toggle-items ["Live" "Portfolio"]]
+ (let [toggle-items ["Live" "Portfolio" "Alerts" "Settings"]]
    [Container
     [Header toggle-items]
     [routes]]))
