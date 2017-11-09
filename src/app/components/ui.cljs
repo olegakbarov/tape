@@ -46,8 +46,8 @@
    :border "1px solid white"
    :border-right (with-meta #(if % "none" "1px solid white") :first?)
    :border-radius (with-meta #(if % "0 4px 4px 0" "4px 0 0 4px") :last?)
-   :background-color (with-meta #(if % c/white "transparent") :active?)
-   :color (with-meta #(if % c/blue c/white) :active?)
+   :text-decoration (with-meta #(if % "underline" "none") :active?)
+   :color c/blue
    :&:hover {:cursor "pointer"}})
 
 (defn Checkbox [value on-change]
