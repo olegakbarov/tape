@@ -13,7 +13,7 @@
   :position "fixed"
   :top "7px"
   :width "100%"
-  :background-color colors/blue
+  :background-color "white"
   :color colors/white
   :display "flex"
   :justify-content "space-around"

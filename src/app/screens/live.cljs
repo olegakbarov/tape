@@ -30,7 +30,7 @@
     [:div.market market]]
    ^{:key "last-price"}
    [:div.right_cell
-    last
+    [:div.row_animation_wrap last]
     [:div.swing "+ 1.04 (0.002 %)"]]]))
 
 (defn render-rows []
@@ -48,7 +48,7 @@
     (for [pair (remove empty? pairs)]
      (let [{:keys [market currency-pair]} pair]
        ^{:key (str pair)}
-       [:div.row_animation_wrap
+       [:div
         {:on-click #(when (nil? (:ui/detailed-view @db))
                       (open-detailed-view (keyword market) (keyword currency-pair)))}
         [Row pair]]))])))

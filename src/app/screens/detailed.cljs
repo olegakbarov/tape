@@ -45,12 +45,13 @@
     [:div#detailed
      [:div.header
       [:div.title pair
-       [:div.star
+       [:div.fav
           {:class (if is-fav? "faved" "")
            :on-click
             (if is-fav?
               #(remove-from-favs [(keyword market) (keyword pair)])
-              #(add-to-favs [(keyword market) pair]))}]]
+              #(add-to-favs [(keyword market) pair]))}
+        (if is-fav? "saved" "save")]]
       [:div.close
        {:on-click #(close-detailed-view)}]]
      [:div.market " " market]
@@ -60,8 +61,8 @@
       [:div.item "Buy"]
       [:div.item "Sell"]]
      [:div.prices.last
-      [:div.item high]
-      [:div.item low]
-      [:div.item buy]
-      [:div.item sell]]]
+      [:div.item (js/parseInt high)]
+      [:div.item (js/parseInt low)]
+      [:div.item (js/parseInt buy)]
+      [:div.item (js/parseInt sell)]]]
     [Chart]]))

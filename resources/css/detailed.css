@@ -1,49 +1,55 @@
 #detailed {
-  padding: 12px;
+  padding-top: 12px;
 }
 
 #detailed > .header {
   display: flex;
   justify-content: space-between;
+  padding: 0 12px;
 }
 
 #detailed > .header > .title {
   font-size: 20px;
-  margin-bottom: 10px;
+  line-height: 20px;
+  margin-bottom: 5px;
 }
 
 #detailed > .market {
   font-size: 16px;
+  padding: 0 12px;
   color: #ccc;
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
-#detailed > .header > .title > .star {
+#detailed > .header > .title > .fav {
   display: inline-block;
-}
-
-.star.faved {
-  background-color: yellow;
-}
-
-#detailed > .header > .title > .star > * {
-  vertical-align: center;
-}
-
-#detailed > .header > .title > .star {
+  vertical-align: middle;
+  font-size: 9px;
+  line-height: 9px;
   margin-left: 6px;
-  width: 16px;
-  height: 16px;
-  background-image: url('../icons/star.svg');
-  background-size: contain;
-  opacity: .7;
-  transition: all .3s ease;
+  padding: 4px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--green);
+  color: var(--green);
+  width: 50px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .1px;
 }
 
-#detailed > .header > .title > .star:hover {
+#detailed > .header > .title > .fav:hover {
   opacity: 1;
   cursor: pointer;
+}
+
+.fav.faved {
+  background-color: var(--green);
+  color: #fff!important;
+}
+
+#detailed > .header > .title > .fav > * {
+  vertical-align: center;
 }
 
 #detailed > .header > .close {
@@ -66,25 +72,22 @@
 #detailed > .prices,
 #detailed > .labels {
   display: flex;
-  margin-bottom: 3px;
 }
 
 #detailed > .labels {
   font-size: 11px;
-  font-color: #ccc;
   font-weight: bold;
   text-align: left;
 }
 
 #detailed > .prices.last {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 #detailed > .labels > .item,
 #detailed > .prices > .item {
   text-transform: uppercase;
-  text-align: center;
-  padding: 5px 0 0;
+  padding: 4px 0 0 12px;
   width: 25%;
 }
 
