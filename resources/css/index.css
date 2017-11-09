@@ -1,5 +1,4 @@
 @import url("_colors.css");
-@import url("_frappe.css");
 @import url("common.css");
 @import url("detailed.css");
 @import url("live.css");
@@ -37,7 +36,7 @@ body {
   height: 10px;
   width: 10px;
   transform: rotate(45deg);
-  background-color: var(--blue);
+  background-color: white;
 }
 
 #container {
