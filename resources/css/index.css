@@ -179,12 +179,24 @@ h1.assets_title {
 .folio_row > .item > .name {
   font-size: 19px;
   line-height: 21px;
-  font-weight: bold;
+}
+
+.folio_row > .item > .market {
+  font-size: 10px;
+  line-height: 11px;
+  text-transform: uppercase;
 }
 
 .folio_row > .item.amount {
-  font-size: 24px;
-  line-height: 26px;
+  font-size: 17px;
+  line-height: 17px;
+}
+
+.folio_row > .item.amount > .price_change {
+  color: var(--green);
+  display: block;
+  font-size: 12px;
+  line-height: 13px;
 }
 
 

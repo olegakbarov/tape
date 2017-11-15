@@ -12,16 +12,10 @@
      :ui/current-filter nil
      :ui/filter-q ""
 
-     :user/portfolio []
-     :user/favorites []
-     :user/settings {}
-     :user/notifs { 1 {:market :bitfinex
-                       :pair :BTC-LTC
-                       :change :below
-                       :price 5000
-                       :archived false
-                       :repeat true
-                       :id 1}}
+     :user {:portfolio {}
+            :favorites {}
+            :notifs {}
+            :settings {}}
 
      :markets {}}))
 

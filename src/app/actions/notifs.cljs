@@ -1,6 +1,15 @@
 (ns app.actions.notifs
  (:require [app.db :refer [db]]
-           [app.actions.storage :refer [persist-user-currents]]))
+           [app.actions.storage :refer [persist-user-currents!]]))
+
+(comment
+  {:id "uuid-uuid"
+   :market :bitfinex
+   :pair :BTC-LTC
+   :change :below
+   :price 5000
+   :archived false
+   :repeat true})
 
 (defn render-notif! [title text]
  (js/Notification.
@@ -14,11 +23,11 @@
   (do
    (swap! db assoc-in [:user/notfis id]
     (merge ntf {:id id}))
-   (persist-user-currents :notifs (-> @db :user/notifs)))))
+   (persist-user-currents!))))
 
 (defn notif->archived [id]
  (do
   (swap! db update-in [:user/notifs id]
    #(merge % {:archived true}))
-  (persist-user-currents :notifs (-> @db :user/notifs))))
+  (persist-user-currents!)))
 

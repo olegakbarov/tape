@@ -3,7 +3,7 @@
   (:require [reagent.core :as r]
             [cljsjs.chartjs]))
 
-(defn show-revenue-chart
+(defn draw-chart
   []
   (let [context (.getContext (.getElementById js/document "chart") "2d")
         chart-data {:type "line"
@@ -26,7 +26,7 @@
 (defn Chart
   []
   (r/create-class
-    {:component-did-mount #(show-revenue-chart)
+    {:component-did-mount #(draw-chart)
      :display-name        "chartjs-component"
      :reagent-render      (fn []
                            [:canvas {:id "chart" :width "700" :height "380"}])}))

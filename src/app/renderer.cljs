@@ -18,21 +18,21 @@
 (enable-console-print!)
 
 (defn init []
-  (mount/start))
+ (mount/start))
 
 (defn routes []
  (let [s (-> @router :screen)]
-   (condp = s
-     :live [live-board]
-     :portfolio [portfolio]
-     :settings  [settings]
-     :alerts    [alerts])))
+  (condp = s
+   :live [live-board]
+   :portfolio [portfolio]
+   :settings  [settings]
+   :alerts    [alerts])))
 
 (defn root []
  (let [toggle-items ["Live" "Portfolio" "Alerts" "Settings"]]
-   [Container
-    [Header toggle-items]
-    [routes]]))
+  [Container
+   [Header toggle-items]
+   [routes]]))
 
 (reagent/render
   [root]
