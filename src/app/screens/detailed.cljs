@@ -61,8 +61,8 @@
       [:div.item "Buy"]
       [:div.item "Sell"]]
      [:div.prices.last
-      [:div.item (js/parseInt high)]
-      [:div.item (js/parseInt low)]
-      [:div.item (js/parseInt buy)]
-      [:div.item (js/parseInt sell)]]]
+      [:div.item (when high (js/parseInt high))]
+      [:div.item (when low (js/parseInt low))]
+      [:div.item (when buy (js/parseInt buy))]
+      [:div.item (when sell (js/parseInt sell))]]]
     [Chart]]))

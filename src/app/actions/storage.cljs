@@ -39,7 +39,6 @@
     (try
       (let [raw-file (.readFileSync fs (str p data-file-name) "utf-8")
             contents (cljs.reader/read-string raw-file)]
-        (js/console.log contents)
         (update-db :user contents))
       (catch :default e e
         (when (= "ENOENT" (.-code e))

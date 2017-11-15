@@ -3,7 +3,7 @@
             [app.actions.storage :refer [persist-user-currents!]]))
 
 (defn add-item [rec]
- (let [id (random-uuid)]
+ (let [id (.toString (random-uuid))]
   (do
    (swap! db assoc-in [:user :portfolio id] (merge rec {:id id}))
    (persist-user-currents!))))
@@ -16,8 +16,8 @@
   (do
    (swap! db update-in [:user :portfolio id] updated))))
 
-(defn remove-item []
+(defn remove-item [id]
   (do
    (swap! db update-in [:user :portfolio] dissoc id)
-   (persist-user-currents)))
+   (persist-user-currents!)))
 

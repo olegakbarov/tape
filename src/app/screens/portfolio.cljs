@@ -3,26 +3,26 @@
             [app.components.header :refer [Header]]
             [app.components.form :refer [input-group]]
             [app.actions.ui :refer [to-screen]]
+            [app.actions.portfolio :refer [add-item]]
             [app.db :refer [db]]
-            [app.logic.curr :refer [get-market-names
-                                    get-crypto-currs]]
             [clojure.string :as s]
             [cljsjs.react-motion]
-            [app.components.ui :refer [Wrapper]]))
+            [app.components.ui :refer [Wrapper]]
+            [app.logic.curr :refer [get-market-names
+                                    get-crypto-currs]]))
 
 ;; TODO: dont re-render on every ws event
 ;;
 (defn portfolio-list []
- (let [folio (-> @db :user :portfolio)]
-  (js/console.log folio)
+ (let [folio (-> @db :user :portfolio vals)]
   [:div
    (if (pos? (count folio))
     (for [row folio]
-     (let [{:keys [name amount market]} row]
-          ^{:key (str name "x" amount "x" market)}
+     (let [{:keys [currency amount market id]} row]
+          ^{:key id}
       [:div.folio_row
        [:div.item
-        [:div.name name]
+        [:div.name currency]
         [:div.market market]]
        [:div.item.amount
         amount
@@ -38,8 +38,17 @@
    :placeholder "MRKT"
    :options (get-market-names)}])
 
+(defn handle-submit
+ "Packs field names with values from input-form"
+ [result]
+ (let [item (zipmap
+             (map #(-> % :name keyword)
+                 fields)
+             (map :value result))]
+  (add-item item)))
+
 (defn portfolio []
  [Wrapper
-  [input-group fields]
+  [input-group fields handle-submit]
   [portfolio-list]])
 

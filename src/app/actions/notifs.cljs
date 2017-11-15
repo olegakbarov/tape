@@ -19,7 +19,7 @@
 (defn create-notif
  "Adds notif to state and persists it to disk"
  [ntf]
- (let [id (random-uuid)]
+ (let [id (.toString (random-uuid))]
   (do
    (swap! db assoc-in [:user/notfis id]
     (merge ntf {:id id}))

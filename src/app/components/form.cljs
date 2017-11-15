@@ -66,7 +66,7 @@
 
 (defn input-group
   "Generic input component. Takes care of validations and focusing DOM nodes in order"
-  [cfgs]
+  [cfgs on-submit]
   (let [store (r/atom (vec (replicate (count cfgs) {:node nil :value "" :valid false})))
         get-ref #(swap! store assoc-in [%2 :node] %1)
         focused-idx (r/atom 0)
@@ -103,7 +103,7 @@
       [:div {:style {:padding "0 10px"}}
         [Button
           {:type "submit"
-           :on-click #(js/console.log @store)
+           :on-click #(on-submit @store)
            :ref #(reset! submit-ref %)
            :color "#12D823"
            :text "Add"}]]])))
