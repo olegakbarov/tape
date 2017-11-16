@@ -11,7 +11,6 @@
 
 (goog-define dev? true)
 
-(def webframe (.-webFrame electron))
 (def window (atom nil))
 (def tray (atom nil))
 
@@ -39,8 +38,7 @@
 (defn show-window []
   (let [[x y] (get-window-position)]
     (.setPosition @window x y false)
-    (.show @window)
-    (.focus @window)))
+    (.show @window)))
 
 (defn toggle-window []
   (if (.isVisible @window)
@@ -59,7 +57,6 @@
                        :skipTaskbar true
                        :transparent true}))
 
-;; sets image
 (defn set-tray! []
  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
   (reset! tray (Tray. p))))
@@ -79,10 +76,6 @@
 (defn set-title! [_ text]
   (.setTitle @tray text))
 
-(defn disable-resize! []
-  (.setVisualZoomLevelLimits webframe 1 1)
-  (.setLayoutZoomLevelLimits webframe 0 0))
-
 (defn init []
   (if (= js/process.platform "darwin")
     (.hide (.-dock app)))
@@ -93,7 +86,5 @@
    (.on app "ready" set-tray-event-handlers))
   (.on ipc "show-window" show-window)
   (.on ipc "set-title" set-title!)
-  ;; TODO
-  (when-not dev? (disable-resize!))
   (set! *main-cli-fn* (fn [] nil)))
 
