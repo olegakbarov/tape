@@ -8,6 +8,8 @@
             [clojure.string :as s]
             [cljsjs.react-motion]
             [app.components.ui :refer [Wrapper]]
+            [app.actions.portfolio :refer [remove-item
+                                           set-editing-item]]
             [app.logic.curr :refer [get-market-names
                                     get-crypto-currs]]))
 
@@ -21,12 +23,18 @@
      (let [{:keys [currency amount market id]} row]
           ^{:key id}
       [:div.folio_row
-       [:div.item
-        [:div.name currency]
+       [:div.content
+        [:div.amount amount]
+        [:div.title currency]
+        [:div " on "]
         [:div.market market]]
-       [:div.item.amount
-        amount
-        [:span.price_change "+ 0.00 %"]]])))]))
+       [:div.actions
+        [:div.edit
+         {:on-click #(set-editing-item id)}
+         "edit"]
+        [:div.delete
+         {:on-click #(remove-item id)}
+         "delete"]]])))]))
 
 (def fields
  [{:name "amount"

@@ -141,62 +141,80 @@ input.input_item {
   outline: none;
 }
 
-img.folio_plus:hover {
-  cursor: pointer;
-  transition: scale .3s ease;
-}
-
-img.folio_plus:active {
-  transform: scale(.9);
-}
-
-h1.assets_title {
-  padding-left: 12px;
-}
-
 .folio_row {
   display: flex;
   border-top: 1px solid rgba(151, 151, 151, .1);
+  padding: 12px;
 }
 
 .folio_row:last-child {
   border-bottom: 1px solid rgba(151, 151, 151, .1);
 }
 
-.folio_table_header > .item,
-
-.folio_row > .item {
-  width: 50%;
-  padding: 12px;
+.folio_row > .content {
+  width: 60%;
 }
 
-.folio_row > .item.amount {
-  text-align: right;
-  font-size: 24px;
-  line-height: 26px;
+.folio_row > .content > * {
+  display: inline-block;
+  margin-right: 10px;
 }
 
-.folio_row > .item > .name {
+.folio_row > .actions {
+  width: 40%;
+}
+
+.content > .title {
   font-size: 19px;
   line-height: 21px;
 }
 
-.folio_row > .item > .market {
-  font-size: 10px;
-  line-height: 11px;
+.content > .market {
+  font-size: 13px;
+  line-height: 15px;
   text-transform: uppercase;
 }
 
-.folio_row > .item.amount {
+.content > .amount {
   font-size: 17px;
   line-height: 17px;
 }
 
-.folio_row > .item.amount > .price_change {
-  color: var(--green);
-  display: block;
-  font-size: 12px;
-  line-height: 13px;
+.folio_row > .actions > * {
+  display: inline-block;
+}
+
+.actions > .delete,
+.actions > .edit {
+  font-size: 10px;
+  line-height: 10px;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 4px;
+  margin-left: 10px;
+  transition: all .15s ease;
+}
+
+.actions > .edit {
+  color: var(--blue);
+  border: 1px solid var(--blue);
+}
+
+.actions > .edit:hover {
+  color: white;
+  background-color: var(--blue);
+  cursor: pointer;
+}
+
+.actions > .delete {
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+.actions > .delete:hover {
+  color: white;
+  background-color: var(--red);
+  cursor: pointer;
 }
 
 
