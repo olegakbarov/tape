@@ -18,8 +18,7 @@
   {:height "100%"})
 
 (rss/defstyled Wrapper :div
- {:margin-top "50px"
-  :background-color "white"
+ {:background-color "white"
   :height "100%"})
 
 (rss/defstyled IconImg :img

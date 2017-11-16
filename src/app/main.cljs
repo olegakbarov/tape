@@ -1,4 +1,4 @@
-(ns app.main
+  (ns app.main
   (:require [app.config :refer [config]]))
 
 (def electron (js/require "electron"))
@@ -51,11 +51,10 @@
                        :width 321
                        :height 600
                        :show true
-                       :frame false
+                       :titleBarStyle "hidden"
                        :fullscreenable false
                        :resizable dev?
-                       :skipTaskbar true
-                       :transparent true}))
+                       :skipTaskbar true}))
 
 (defn set-tray! []
  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
