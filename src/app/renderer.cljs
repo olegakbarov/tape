@@ -11,9 +11,7 @@
             [app.screens.portfolio :refer [portfolio]]
             [app.screens.alerts :refer [alerts]]
             [app.components.header :refer [Header]]
-            [mount.core :as mount]
-            [app.components.ui :refer [Container
-                                       Icon]]))
+            [mount.core :as mount]))
 
 (enable-console-print!)
 
@@ -29,19 +27,21 @@
 (defn init []
  (mount/start))
 
-(defn routes []
+(defn Routes []
  (let [s (-> @router :screen)]
   (condp = s
-   :live [live-board]
+   :live      [live-board]
    :portfolio [portfolio]
    :settings  [settings]
    :alerts    [alerts])))
 
 (defn root []
  (let [toggle-items ["Live" "Portfolio" "Alerts" "Settings"]]
-  [Container
-   [Header toggle-items]
-   [routes]]))
+  [:div#containter
+   [Header
+    ^{:key "header"}
+    toggle-items]
+   [Routes]]))
 
 (reagent/render
   [root]

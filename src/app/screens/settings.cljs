@@ -3,14 +3,13 @@
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
             [app.components.header :refer [Header]]
-            [app.components.ui :refer [Button
-                                       Wrapper]]))
+            [app.components.ui :refer [Button]]))
 
 (defn settings []
-  [Wrapper
-   [Button
-    {:type "submit"
-     :on-click #(js/console.log "saved!")
-     :color "#12D823"}
-    "Save"]])
+ [:div#wrapper
+  [Button
+   {:type "submit"
+    :on-click #(js/console.log "saved!")
+    :color "#12D823"}
+   "Save"]])
 

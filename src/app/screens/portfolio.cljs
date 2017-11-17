@@ -7,7 +7,6 @@
             [app.db :refer [db]]
             [clojure.string :as s]
             [cljsjs.react-motion]
-            [app.components.ui :refer [Wrapper]]
             [app.actions.portfolio :refer [remove-item
                                            set-editing-item]]
             [app.logic.curr :refer [get-market-names
@@ -56,7 +55,7 @@
   (add-item item)))
 
 (defn portfolio []
- [Wrapper
+ [:div#wrapper
   [input-group fields handle-submit]
   [portfolio-list]])
 

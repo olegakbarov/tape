@@ -13,9 +13,7 @@
             [app.utils.core :refer [curr-symbol->name]]
             [clojure.string :refer [split]]
             [app.components.colors :refer [green]]
-            [cljss.core :refer [defstyles]]
             [goog.object :as gobj]
-            [app.components.ui :refer [Wrapper]]
             [app.screens.detailed :refer [DetailsContent]]
             [app.screens.filterbox :refer [FilterBox]]
             [app.actions.ui :refer [open-detailed-view]]))
@@ -50,24 +48,24 @@
        ^{:key (str pair)}
        [:div
         {:on-click #(when (nil? (:ui/detailed-view @db))
-                      (open-detailed-view (keyword market) (keyword currency-pair)))}
+                     (open-detailed-view (keyword market) (keyword currency-pair)))}
         [Row pair]]))])))
 
 (defn Child
-  [{c :children}]
-  (let [y (gobj/get c "y")]
-     [:div
-      {:style
-       {:position "absolute"
-        :width "321px"
-        :height "320px"
-        :background-color "#fff"
-        :z-index 99
-        :border-radius "4px 4px 0 0"
-        :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
-        :-webkit-transform (str "translateY(" y "px)")
-        :transform (str "translateY(" y "px)")}}
-      [DetailsContent]]))
+ [{c :children}]
+ (let [y (gobj/get c "y")]
+  [:div
+   {:style
+    {:position "absolute"
+     :width "321px"
+     :height "320px"
+     :background-color "#fff"
+     :z-index 99
+     :border-radius "4px 4px 0 0"
+     :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
+     :-webkit-transform (str "translateY(" y "px)")
+     :transform (str "translateY(" y "px)")}}
+   [DetailsContent]]))
 
 (def Child-comp (r/reactify-component Child))
 
@@ -81,7 +79,7 @@
       (r/create-element Child-comp #js {} x))]]))
 
 (defn live-board []
-  [Wrapper
-   [FilterBox]
-   [render-rows]
-   [DetailedView]])
+ [:div#wrapper
+  [FilterBox]
+  [render-rows]
+  [DetailedView]])

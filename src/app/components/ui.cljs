@@ -5,33 +5,24 @@
             [app.components.colors :as c]))
 
 (defn Button [params]
-  (let [{:keys [on-click type ref text color]} params]
-    [:button.button
-     (merge
-      (when color {:style {:background-color color}})
-      {:on-click on-click
-       :ref ref
-       :type type})
-     text]))
-
-(rss/defstyled Container :div
-  {:height "100%"})
-
-(rss/defstyled Wrapper :div
- {:background-color "white"
-  :height "100%"})
-
-(rss/defstyled IconImg :img
-  {:width "20px"
-   :height "20px"
-   :&:hover {:cursor "pointer"}
-   :&:active {:opacity ".5"}
-   :-webkit-user-select "none"})
+ (let [{:keys [on-click type ref text color]} params]
+  [:button.button
+   (merge
+    (when color {:style {:background-color color}})
+    {:on-click on-click
+     :ref ref
+     :type type})
+   text]))
 
 (defn Icon [on-click src]
-  [:div
-   {:on-click on-click}
-   [IconImg {:src src}]])
+ [:img
+  {:src src
+   :on-click on-click
+   :style {:width "20px"
+           :height "20px"
+           ; :&:hover {:cursor "pointer"}
+           ; :&:active {:opacity ".5"}
+           :-webkit-user-select "none"}}])
 
 (rss/defstyled GroupWrap :div
   {:display "flex"
