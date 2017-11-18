@@ -7,6 +7,7 @@
  (fn []
   (let [screen (get-in @router [:screen])]
    [:div#header
+    [:div.title "1.0.0-beta.1"]
     [:ul.group_wrap
      (let [active? #(= screen (-> % .toLowerCase keyword))]
       (doall

@@ -28,7 +28,7 @@
                  [cljsjs/react-dom "16.0.0-0"]
                  [cljsjs/moment "2.10.6-0"]
                  [cljsjs/react-motion "0.5.0-0"]
-                 [cljsjs/chartjs "2.6.0-0"])
+                 [cljsjs/chartjs "2.6.0-0"]])
 
 (require
  '[adzerk.boot-cljs              :refer [cljs]]
