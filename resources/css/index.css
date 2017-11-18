@@ -13,6 +13,10 @@ html {
   -webkit-user-select: none;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 body {
   height: 100%;
   padding: 0;
@@ -21,6 +25,7 @@ body {
   font-size: 11px;
   line-height: 11px;
   letter-spacing: .5px;
+  background-color: #fff;
   color: #000;
   position: relative;
 }
@@ -31,14 +36,14 @@ body {
 }
 
 #wrapper {
-  margin-top: 50px;
+  margin-top: 70px;
 }
 
 /* common */
 
 #header {
   z-index: 100;
-  height: 50px;
+  height: 70px;
   position: fixed;
   display: flex;
   justify-content: space-around;
@@ -93,6 +98,42 @@ span.dynamics.green {
   cursor: pointer;
 }
 
+ul.group_wrap {
+  -webkit-padding-start: 0px;
+  display: flex;
+  width: 80%;
+  -webkit-user-select: none;
+}
+
+li.group_btn {
+  list-style: none;
+  padding: 6px 10px;
+  text-align: center;
+  color: var(--blue);
+  background-color: white;
+  border-top: 1px solid var(--blue);
+  border-bottom: 1px solid var(--blue);
+  border-right: 1px solid var(--blue);
+}
+
+li.group_btn:first-child {
+  border-left: 1px solid var(--blue);
+  border-right: 1px solid var(--blue);
+  border-radius: 4px 0 0 4px;
+}
+
+li.group_btn:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+li.group_btn:hover {
+  cursor: pointer;
+}
+
+.group_btn.active {
+  color: white;
+  background-color: var(--blue);
+}
 
 /*  --------- Profile --------- */
 

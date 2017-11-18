@@ -12,7 +12,6 @@
                                 presets]]
             [app.utils.core :refer [curr-symbol->name]]
             [clojure.string :refer [split]]
-            [app.components.colors :refer [green]]
             [goog.object :as gobj]
             [app.screens.detailed :refer [DetailsContent]]
             [app.screens.filterbox :refer [FilterBox]]

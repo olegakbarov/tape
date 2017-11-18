@@ -45,4 +45,4 @@
 
 (reagent/render
   [root]
-  (js/document.getElementById "container"))
+  (js/document.getElementById "root"))

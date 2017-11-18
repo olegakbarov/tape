@@ -1,11 +1,8 @@
 (ns app.components.ui
-  (:require [reagent.core :as r]
-            [cljss.core :refer [defstyles]]
-            [cljss.reagent :as rss :include-macros true]
-            [app.components.colors :as c]))
+  (:require [reagent.core :as r]))
 
-(defn Button [params]
- (let [{:keys [on-click type ref text color]} params]
+(defn Button [params text]
+ (let [{:keys [on-click type ref color]} params]
   [:button.button
    (merge
     (when color {:style {:background-color color}})
@@ -23,22 +20,6 @@
            ; :&:hover {:cursor "pointer"}
            ; :&:active {:opacity ".5"}
            :-webkit-user-select "none"}}])
-
-(rss/defstyled GroupWrap :div
-  {:display "flex"
-   :justify-content "space-around"
-   :width "80%";
-   :-webkit-user-select "none"
-   :border (str "1px solid " c/blue)
-   :border-radius "4px"})
-
-(rss/defstyled GroupBtn :div
-  {:padding "6px 10px"
-   :text-align "center"
-   :border-radius "3px"
-   :color (with-meta #(if % "white" c/blue) :active?)
-   :background-color (with-meta #(if % c/blue "white") :active?)
-   :&:hover {:cursor "pointer"}})
 
 (defn Checkbox [value on-change]
   ;; generage custom "for"

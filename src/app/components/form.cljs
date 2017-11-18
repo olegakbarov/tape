@@ -105,6 +105,6 @@
           {:type "submit"
            :on-click #(on-submit @store)
            :ref #(reset! submit-ref %)
-           :color "#12D823"
-           :text "Add"}]]])))
+           :color "#12D823"}
+          "Add"]]])))
 
