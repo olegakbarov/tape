@@ -4,11 +4,11 @@
            [clojure.walk]
            [cljs.core.async :as a :refer [<! >! chan timeout]]
            [cljs-http.client :as http]
-           [haslett.client :as ws]
            [app.db :refer [db]]
            [app.config :refer [config]]
            [app.actions.tray :refer [set-title!]]
-           [app.actions.api :refer [evt->db]]
+           [app.actions.api :refer [evt->db
+                                    state->db]]
            [app.logic.curr :refer [best-pairs]]
            [mount.core :refer [defstate]]))
 
@@ -75,6 +75,12 @@
 
 (defstate ws-loop :start (listen-ws!)
                   :stop (stop-ws!))
+
+(defn fetch-state! []
+ (a/go
+  (let [endpoint (str (:http-endpoint config))
+        response (<! (http/get endpoint {:with-credentials? false}))]
+    (state->db (:body response)))))
 
 (defn fetch-market-info [market]
  (a/go

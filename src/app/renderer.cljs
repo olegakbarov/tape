@@ -1,7 +1,8 @@
 (ns app.renderer
   (:require [reagent.core :as reagent]
             [app.db :refer [db router]]
-            [app.api :refer [listen-ws!]]
+            [app.api :refer [listen-ws!
+                             fetch-state!]]
             [app.eventloop :refer [start-title-loop!]]
             [app.actions.storage :refer [read-data-file!]]
             [app.actions.ui :refer [to-screen]]
@@ -30,6 +31,7 @@
 (disable-content-scale!)
 
 (defn init []
+ (fetch-state!)
  (mount/start))
 
 (defn Routes []
