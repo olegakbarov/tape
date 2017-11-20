@@ -1,16 +1,45 @@
 (ns app.actions.api
   (:require [clojure.walk]
-            [camel-snake-kebab.core :refer [->kebab-case]]
             [app.db :refer [db]]))
 
-(defn process-ws-event [t]
- (clojure.walk/keywordize-keys
-  (into {}
-   (for [[k v] t]
-        [(->kebab-case k) v]))))
+(defn format-pair
+ "Accepts vector of {:name 'eos' :symbol 'EOS'}"
+ [v]
+ (let [[f l] v]
+  (keyword
+   (str (:symbol f) "-" (:symbol l)))))
 
-(defn ticker->db! [ticker]
- (let [t (process-ws-event ticker)
-       {:keys [market currency-pair]} t]
-  (swap! db assoc-in [:markets (keyword market) (keyword currency-pair)] t)))
+(defmulti evt->db
+ (fn [msg] (get msg "type")))
+
+(defmethod evt->db "change" [msg]
+ (let [p (-> msg
+             clojure.walk/keywordize-keys
+             :payload
+             clojure.walk/keywordize-keys)
+       pair (format-pair (-> p :currencyPair))
+       market (keyword (-> p :market))
+       res (-> p
+               (dissoc :currencyPair)
+               (assoc :ts (-> p :timestamp))
+               (dissoc :timestamp))]
+  (swap! db assoc-in [:markets market pair :change] res)))
+
+(defmethod evt->db "ticker" [msg]
+ (let [p (-> msg
+             clojure.walk/keywordize-keys
+             :payload
+             clojure.walk/keywordize-keys)
+       pair (format-pair (-> p :currencyPair))
+       market (keyword (-> p :market))
+       res  (-> p
+                (dissoc :currencyPair)
+                (assoc :currency-pair (keyword pair))
+                (assoc :market (keyword (-> p :market))))]
+  (swap! db update-in [:markets market pair]
+    #(merge % res))))
+
+(defmethod evt->db :default [msg]
+ ;; TODO
+ (js/console.log "Unexpected event signature: " msg))
 
