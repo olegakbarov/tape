@@ -7,18 +7,15 @@
                                     all-pairs
                                     user-favs
                                     by-query]]
-            [app.motion :refer [Motion
-                                spring
-                                presets]]
             [app.utils.core :refer [curr-symbol->name]]
             [clojure.string :refer [split]]
-            [goog.object :as gobj]
-            [app.screens.detailed :refer [DetailsContent]]
             [app.screens.filterbox :refer [FilterBox]]
             [app.actions.ui :refer [open-detailed-view]]))
 
 (defn Row [pair]
- (let [{:keys [market currency-pair last]} pair]
+ (let [{:keys [market currency-pair last change]} pair
+       {:keys [percent amount]} change]
+  (js/console.log @db)
   [:div.row_wrap
    ^{:key "currency-pair"}
    [:div.left_cell
@@ -28,7 +25,7 @@
    ^{:key "last-price"}
    [:div.right_cell
     [:div.row_animation_wrap last]
-    [:div.swing "+ 1.04 (0.002 %)"]]]))
+    [:div.swing (str (:amount change) " (" (:percent change) "%) ")]]]))
 
 (defn render-rows []
  (fn []
@@ -44,41 +41,14 @@
    [:div
     (for [pair (remove empty? pairs)]
      (let [{:keys [market currency-pair]} pair]
-       ^{:key (str pair)}
+       ^{:key (str pair market)}
        [:div
         {:on-click #(when (nil? (:ui/detailed-view @db))
                      (open-detailed-view (keyword market) (keyword currency-pair)))}
         [Row pair]]))])))
 
-(defn Child
- [{c :children}]
- (let [y (gobj/get c "y")]
-  [:div
-   {:style
-    {:position "absolute"
-     :width "321px"
-     :height "320px"
-     :background-color "#fff"
-     :z-index 99
-     :border-radius "4px 4px 0 0"
-     :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
-     :-webkit-transform (str "translateY(" y "px)")
-     :transform (str "translateY(" y "px)")}}
-   [DetailsContent]]))
-
-(def Child-comp (r/reactify-component Child))
-
-(defn DetailedView []
-  (fn []
-   [:div {:style {:position "absolute" :bottom 0}}
-    [Motion {:style {:y (spring (if (:ui/detailed-view @db)
-                                    -300
-                                    0))}}
-     (fn [x]
-      (r/create-element Child-comp #js {} x))]]))
 
 (defn live-board []
  [:div#wrapper
-  [FilterBox]
-  [render-rows]
-  [DetailedView]])
+  ; [FilterBox]
+  [render-rows]])

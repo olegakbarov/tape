@@ -14,6 +14,7 @@
                  [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
                  [adzerk/boot-reload "0.4.13" :scope "test"]
                  [powerlaces/boot-figreload "LATEST" :scope "test"]
+                 ; [jeluard/boot-notify "0.2.1" :scope "test"]
                  [binaryage/devtools "0.9.4" :scope "test"]
                  [binaryage/dirac "1.2.16" :scope "test"]
                  [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]

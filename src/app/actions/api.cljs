@@ -2,6 +2,36 @@
   (:require [clojure.walk]
             [app.db :refer [db]]))
 
+;; TODO: change evnt HAS NO MARKET FIELD
+(def c
+ {"type" "change"
+  "payload" {"amount" 3289.8
+             "currencyPair" [{:name "bitcoin"
+                              :symbol "BTC"}
+                             {:name "united-states-dollar"
+                              :symbol "USD"}]
+             :percent 0.1
+             ;; TODO
+             :market "bitfinex"
+             ;; TODO
+             :period "24h"
+             :timestamp 1511105150655846100}})
+
+(def t
+ {"type" "ticker"
+  "payload" {:buy 1.91
+             :currencyPair [{:name "eos"
+                             :symbol "EOS"}
+                            {:name "united-states-dollar"
+                             :symbol "USD"}]
+             "high" 2.07
+             "last" 1.9
+             "low" 1.7962
+             "market" "bitfinex"
+             :sell 1.9004
+             :timestamp 1511105150701287000
+             :vol 11848722.21655232}})
+
 (defn format-pair
  "Accepts vector of {:name 'eos' :symbol 'EOS'}"
  [v]
@@ -23,7 +53,7 @@
                (dissoc :currencyPair)
                (assoc :ts (-> p :timestamp))
                (dissoc :timestamp))]
-  (swap! db assoc-in [:markets market pair :change] res)))
+   (swap! db assoc-in [:markets :bitfinex pair :change] res)))
 
 (defmethod evt->db "ticker" [msg]
  (let [p (-> msg
