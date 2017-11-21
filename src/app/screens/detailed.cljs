@@ -31,38 +31,38 @@
 
 (defn DetailsContent []
   (let [[market pair] (:ui/detailed-view @db)
-        favs (:user/favorites @db)
+        favs (-> @db :user :favorites)
         content (get-in @db [:markets market pair])
         {:keys [high low
                 sell buy
                 currency-pair market
                 timestamp
                 avg last
-                vol
-                vol-cur]} content
-        is-fav? (fav? favs [(keyword market) pair])]
-   [:div
-    [:div#detailed
-     [:div.header
-      [:div.title pair
-       [:div.fav
-          {:class (if is-fav? "faved" "")
-           :on-click
-            (if is-fav?
-              #(remove-from-favs [(keyword market) (keyword pair)])
-              #(add-to-favs [(keyword market) pair]))}
-        (if is-fav? "saved" "save")]]
-      [:div.close
-       {:on-click #(close-detailed-view)}]]
-     [:div.market " " market]
-     [:div.labels
-      [:div.item "High"]
-      [:div.item "Low"]
-      [:div.item "Buy"]
-      [:div.item "Sell"]]
-     [:div.prices.last
-      [:div.item (when high (js/parseInt high))]
-      [:div.item (when low (js/parseInt low))]
-      [:div.item (when buy (js/parseInt buy))]
-      [:div.item (when sell (js/parseInt sell))]]]
-    [Chart]]))
+                vol vol-cur]} content
+        is-fav? (fav? favs [(keyword market) (keyword pair)])]
+   (when (:ui/detailed-view @db))
+     [:div
+      [:div#detailed
+       [:div.header
+        [:div.title pair
+         [:div.fav
+            {:class (if is-fav? "faved" "")
+             :on-click
+              (if is-fav?
+                #(remove-from-favs [(keyword market) (keyword pair)])
+                #(add-to-favs [(keyword market) (keyword pair)]))}
+          (if is-fav? "saved" "save")]]
+        [:div.close
+         {:on-click #(close-detailed-view)}]]
+       [:div.market " " market]
+       [:div.labels
+        [:div.item "High"]
+        [:div.item "Low"]
+        [:div.item "Buy"]
+        [:div.item "Sell"]]
+       [:div.prices.last
+        [:div.item (when high (js/parseInt high))]
+        [:div.item (when low (js/parseInt low))]
+        [:div.item (when buy (js/parseInt buy))]
+        [:div.item (when sell (js/parseInt sell))]]]
+      [Chart]]))

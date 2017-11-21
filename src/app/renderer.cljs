@@ -51,7 +51,7 @@
      :width "321px"
      :height "320px"
      :background-color "#fff"
-     :z-index 99
+     :z-index 999
      :border-radius "4px 4px 0 0"
      :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
      :-webkit-transform (str "translateY(" y "px)")
@@ -64,7 +64,7 @@
   (fn []
    [:div {:style {:position "absolute" :bottom 0}}
     [Motion {:style {:y (spring (if (:ui/detailed-view @db)
-                                    -300
+                                    -360
                                     0))}}
      (fn [x]
       (reagent/create-element Child-comp #js {} x))]]))

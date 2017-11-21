@@ -31,11 +31,12 @@
 (defn read-data-file!
   "File with following signature
    {:portfolio {...}
-    :favorites {...}
+    :favorites [...]
     :settings {...}}"
   []
   (let [fs (js/require "fs")
         p (.getPath (.-app remote) "userData")]
+    (js/console.log p)
     (try
       (let [raw-file (.readFileSync fs (str p data-file-name) "utf-8")
             contents (cljs.reader/read-string raw-file)]
