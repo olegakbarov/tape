@@ -24,7 +24,6 @@
    (swap! db assoc-in [:markets :bitfinex pair :change] res)))
 
 (defn process-ticker [msg]
- (js/console.log msg)
  (let [p (-> msg
              clojure.walk/keywordize-keys
              :payload
@@ -46,12 +45,13 @@
 
 (defn state->db [s]
  (let [{:keys [ticker change]} s]
-  (doseq [item (map identity (concat
-                               (map #(into {} [{"type" "ticker"}
-                                               {:payload %}])
-                                ticker)
-                               (map #(into {} [{"type" "change"}
-                                               {:payload %}])
-                                change)))]
-   (evt->db item))))
+  (do
+   (doseq [item (map identity (map #(into {} [{"type" "ticker"}
+                                              {:payload %}])
+                                ticker))]
+    (evt->db item))
+   (doseq [item (map identity (map #(into {} [{"type" "change"}
+                                              {:payload %}])
+                                change))]
+    (evt->db item)))))
 

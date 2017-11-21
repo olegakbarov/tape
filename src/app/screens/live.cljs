@@ -15,7 +15,6 @@
 (defn Row [pair]
  (let [{:keys [market currency-pair last change]} pair
        {:keys [percent amount]} change]
-  (js/console.log @db)
   [:div.row_wrap
    ^{:key "currency-pair"}
    [:div.left_cell
@@ -25,7 +24,11 @@
    ^{:key "last-price"}
    [:div.right_cell
     [:div.row_animation_wrap last]
-    [:div.swing (str (:amount change) " (" (:percent change) "%) ")]]]))
+    [:div.swing
+     (if (and (not (nil? amount))
+              (not (nil? percent)))
+       (str amount " (" percent "%) ")
+       "n/a")]]]))
 
 (defn render-rows []
  (fn []
