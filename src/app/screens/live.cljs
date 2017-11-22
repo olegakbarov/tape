@@ -23,12 +23,24 @@
     [:div.market market]]
    ^{:key "last-price"}
    [:div.right_cell
-    [:div.row_animation_wrap last]
+    ;; TODO
+    [:span {:class "price_down"}
+      last]
     [:div.swing
      (if (and (not (nil? amount))
               (not (nil? percent)))
        (str amount " (" percent "%) ")
        "n/a")]]]))
+
+;; TODO: handle updates properly
+; (defn Row [pair]
+;  (reagent/create-class
+;   {:reagent-render         #(render-row pair)
+;    :component-did-update   update-comp
+;    :component-did-mount    update-comp
+;    :should-component-update
+;     (fn [this]
+;      (println "next-props" (reagent/props this)))}))
 
 (defn render-rows []
  (fn []

@@ -62,9 +62,13 @@
 
 (defn DetailedView []
   (fn []
-   [:div {:style {:position "absolute" :bottom 0}}
+   [:div {:style {:position "absolute"
+                  :bottom 0
+                  :display (if (:ui/detailed-view @db)
+                               "block"
+                               "none")}}
     [Motion {:style {:y (spring (if (:ui/detailed-view @db)
-                                    -360
+                                    -320
                                     0))}}
      (fn [x]
       (reagent/create-element Child-comp #js {} x))]]))
@@ -72,9 +76,7 @@
 (defn root []
  (let [toggle-items ["Live" "Portfolio" "Alerts" "Settings"]]
   [:div#container
-   [Header
-    ^{:key "header"}
-    toggle-items]
+   [Header toggle-items]
    [Routes]
    [DetailedView]]))
 
