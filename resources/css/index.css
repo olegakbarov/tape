@@ -65,6 +65,7 @@ body {
   line-height: 12px;
   border-bottom: 1px solid #eaeaea;
   border-radius: 6px 6px 0 0;
+  letter-spacing: 0;
 }
 
 #header > .title {
@@ -120,7 +121,6 @@ span.dynamics.green {
 ul.group_wrap {
   -webkit-padding-start: 0px;
   display: flex;
-  width: 80%;
   -webkit-user-select: none;
 }
 
@@ -174,22 +174,37 @@ li.group_btn:hover {
   margin-top: 50px;
 }
 
+.form_wrap {
+  padding: 0 12px;
+}
+
 .add_rec_wrapper {
   display: flex;
-  padding: 15px;
+  flex-direction: column;
   padding-left: 0px;
   position: relative;
 }
 
 .add_rec_input {
-  display: block;
-  width: 33%;
+  display: flex;
+  flex-direction: column;
+  margin: 12px 0;
+}
+
+.add_rec_input > .label {
+  width: 75px;
+  color: #ccc;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.add_rec_input > .field {
+  margin-top: 5px;
 }
 
 input.input_item {
   border: none;
   font-size: 16px;
-  padding: 0px 10px 0 10px;
 }
 
 input.input_item {
@@ -200,6 +215,7 @@ input.input_item {
   display: flex;
   border-top: 1px solid rgba(151, 151, 151, .1);
   padding: 12px;
+  align-items: center;
 }
 
 .folio_row:last-child {
@@ -211,7 +227,6 @@ input.input_item {
 }
 
 .folio_row > .content > * {
-  display: inline-block;
   margin-right: 10px;
 }
 
@@ -219,20 +234,17 @@ input.input_item {
   width: 40%;
 }
 
-.content > .title {
-  font-size: 19px;
-  line-height: 21px;
-}
-
-.content > .market {
-  font-size: 13px;
-  line-height: 15px;
-  text-transform: uppercase;
-}
-
 .content > .amount {
   font-size: 17px;
   line-height: 17px;
+}
+
+.content > .market {
+  margin-top: 3px;
+  font-size: 10px;
+  line-height: 11px;
+  text-transform: uppercase;
+  color: #ccc;
 }
 
 .folio_row > .actions > * {

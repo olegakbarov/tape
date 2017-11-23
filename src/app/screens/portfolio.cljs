@@ -1,19 +1,20 @@
 (ns app.screens.portfolio
-  (:require [reagent.core :as r]
-            [app.components.header :refer [Header]]
-            [app.components.form :refer [input-group]]
-            [app.actions.ui :refer [to-screen]]
-            [app.actions.portfolio :refer [add-item]]
-            [app.db :refer [db]]
-            [clojure.string :as s]
-            [cljsjs.react-motion]
-            [app.actions.portfolio :refer [remove-item
-                                           set-editing-item]]
-            [app.logic.curr :refer [get-market-names
-                                    get-crypto-currs]]))
+ (:require [reagent.core :as r]
+           [app.components.header :refer [Header]]
+           [app.components.form :refer [input-group]]
+           [app.actions.ui :refer [to-screen]]
+           [app.actions.portfolio :refer [add-item]]
+           [app.db :refer [db]]
+           [clojure.string :as s]
+           [cljsjs.react-motion]
+           [app.actions.portfolio :refer [remove-item
+                                          set-editing-item]]
+           [app.logic.curr :refer [get-market-names
+                                   get-crypto-currs]]
+           [app.logic.validation :refer [str->amount
+                                         str->item]]))
 
 ;; TODO: dont re-render on every ws event
-;;
 (defn portfolio-list []
  (let [folio (-> @db :user :portfolio vals)]
   [:div
@@ -23,9 +24,7 @@
           ^{:key id}
       [:div.folio_row
        [:div.content
-        [:div.amount amount]
-        [:div.title currency]
-        [:div " on "]
+        [:div.amount (str amount " " currency)]
         [:div.market market]]
        [:div.actions
         [:div.edit
@@ -37,13 +36,16 @@
 
 (def fields
  [{:name "amount"
-   :placeholder "1000"}
+   :placeholder "1000"
+   :valid-fn str->amount}
   {:name "currency"
    :placeholder "CURR"
-   :options (get-crypto-currs)}
+   :options (get-crypto-currs)
+   :valid-fn str->item}
   {:name "market"
    :placeholder "MRKT"
-   :options (get-market-names)}])
+   :options (get-market-names)
+   :valid-fn str->item}])
 
 (defn handle-submit
  "Packs field names with values from input-form"

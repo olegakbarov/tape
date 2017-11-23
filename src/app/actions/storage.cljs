@@ -24,7 +24,7 @@
         p (str (.getPath (.-app remote) "userData") data-file-name)]
    (try
     (.writeFile fs p content
-      #(js/console.log "done."))
+      #(js/console.log "[log] Persisted to disk"))
     (catch :default e e
       (js/console.log e)))))
 

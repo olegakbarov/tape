@@ -1,8 +1,7 @@
-(ns app.components.form-test
+(ns app.logic.validation-test
   (:require [clojure.string :as s]
-            [cljs.spec.alpha :as spec]
             [clojure.test :refer [is]]
-            [app.components.form :refer [str->amount]]))
+            [app.logic.validation :refer [str->amount]]))
 
 ;; STR->AMOUNT
 
@@ -18,3 +17,4 @@
 
 ;; filters out invalid chars
 (is (= (str->amount "a") ""))
+
