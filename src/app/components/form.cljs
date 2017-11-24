@@ -55,7 +55,7 @@
       (map-indexed
        (fn [idx cfg]
         (let [{:keys [node value]} (get @store idx)
-              {:keys [name options placeholder validation]} cfg]
+              {:keys [name options placeholder valid-fn]} cfg]
           ^{:key name}
           [:div.add_rec_input
            [:div.label (str name ":")]

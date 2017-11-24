@@ -38,6 +38,11 @@
                  valid-chars
                  only-one-dot))))))
 
-;; TODO
-(defn str->item [s coll]
-  s)
+(defn str->item
+ "Accepts string and coll of keywords, filters not starting with string"
+ [s coll]
+ (let [coll' (map name coll)]
+  (filter
+   #(clojure.string/starts-with? % s)
+   coll')))
+
