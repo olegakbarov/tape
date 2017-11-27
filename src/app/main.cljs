@@ -1,5 +1,5 @@
-  (ns app.main
-  (:require [app.config :refer [config]]))
+(ns app.main
+ (:require [app.config :refer [config]]))
 
 (def electron (js/require "electron"))
 (def path (js/require "path"))

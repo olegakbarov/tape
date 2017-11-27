@@ -3,15 +3,29 @@
 
 (def seps #{"." ","})
 
-(defn valid-chars [x]
+(defn- rm-last-char [s]
+ (s/replace s #".$" ""))
+
+(defn rm-trailing-zeroes
+ "Removes trailing zeroes after separator (use on submit!)"
+ [ss]
+ (let [[a b] (s/split ss ".")]
+  (if-not b
+   ss
+   (loop [st ss]
+    (if-not (s/ends-with? st "0")
+     st
+     (recur (rm-last-char st)))))))
+
+(defn- valid-chars [x]
  (apply str (filter #(re-matches #"^[0-9.]" %) x)))
 
-(defn valid-length [v]
+(defn- valid-length [v]
  (if (re-matches #"^[0-9.]{0,15}$" v)
      v
      (subs v 0 15)))
 
-(defn only-one-dot
+(defn- only-one-dot
   "Filters out every special chars except number and one dot (separator)"
   [v]
   (reduce
@@ -39,10 +53,13 @@
                  only-one-dot))))))
 
 (defn str->item
- "Accepts string and coll of keywords, filters not starting with string"
- [s coll]
- (let [coll' (map name coll)]
-  (filter
-   #(clojure.string/starts-with? % s)
-   coll')))
+ "Accepts string and coll of strings, filters out items not starting-with? string"
+ [coll s]
+ (js/console.log coll)
+ (assert (every? string? coll))
+ (if (empty? (filter
+              #(clojure.string/starts-with? % s)
+              coll))
+    (rm-last-char s)
+    s))
 

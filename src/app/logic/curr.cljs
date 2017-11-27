@@ -6,20 +6,20 @@
   "Returns lowest `:last` prices across all markets"
   [markets]
   (let [market-items (vals markets)]
-    (reduce
-     (fn [acc item]
-        (into {}
-         (map
-          (fn [item]
-           (let [[key val] item
-                 acc-pair (get acc key)]
-             (if-not acc-pair
-               (assoc acc key val)
-               (if (< (:last val)
-                      (:last acc-pair))
-                   (assoc acc key val)
-                   acc)))))
-         item))
+   (reduce
+    (fn [acc item]
+     (into {}
+      (map
+       (fn [item]
+        (let [[key val] item
+              acc-pair (get acc key)]
+         (if-not acc-pair
+          (assoc acc key val)
+          (if (< (:last val)
+                 (:last acc-pair))
+              (assoc acc key val)
+              acc))))
+         item)))
      {}
      market-items)))
 
@@ -37,31 +37,33 @@
        (map vals)
        flatten))
 
-(defn get-market-names []
-  (map
-   #(.toUpperCase %)
-   (keys (:markets @db))))
+(def fiats #{"USD" "RUB"})
 
+(defn get-market-names [markets]
+ (->> markets
+      keys
+      (map name)))
 
 ;; rename get-all-curr-symbols
 (defn get-all-currs
   "Returns all currencies across all markets"
-  []
+  [markets]
   (set
-    (flatten
-      (map
-       #(flatten (clojure.string/split % "-"))
-       (->> (:markets @db)
-            vals
-            (map keys)
-            flatten)))))
+   (flatten
+    (map
+     #(flatten (clojure.string/split % "-"))
+     (->> (:markets @db)
+          vals
+          (map keys)
+          flatten
+          (map name))))))
 
 (defn get-crypto-currs
   "TODO: remove hadcoded fiats"
-  []
+  [markets]
   (remove
    #(some (fn [x] (= x %)) ["USD" "RUB"])
-   (get-all-currs)))
+   (get-all-currs markets)))
 
 (defn currs-by-market
   "Returns currencies available for given market"
@@ -83,8 +85,8 @@
   favs))
 
 (defn by-query [markets q]
-  (->> markets
-       vals
-       (mapcat vals)
-       (filter #(re-find (re-pattern q) (:market %)))))
+ (->> markets
+      vals
+      (mapcat vals)
+      (filter #(re-find (re-pattern q) (:market %)))))
 

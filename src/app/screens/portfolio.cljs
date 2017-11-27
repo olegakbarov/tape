@@ -6,7 +6,6 @@
            [app.actions.portfolio :refer [add-item]]
            [app.db :refer [db]]
            [clojure.string :as s]
-           [cljsjs.react-motion]
            [app.actions.portfolio :refer [remove-item
                                           set-editing-item]]
            [app.logic.curr :refer [get-market-names
@@ -24,7 +23,7 @@
           ^{:key id}
       [:div.folio_row
        [:div.content
-        [:div.amount (str amount " " currency)]
+        [:div.amount (str currency ": " amount)]
         [:div.market market]]
        [:div.actions
         [:div.edit
@@ -40,19 +39,17 @@
    :valid-fn str->amount}
   {:name "currency"
    :placeholder "CURR"
-   :options (get-crypto-currs)
-   :valid-fn str->item}
+   :valid-fn (partial str->item (get-crypto-currs (-> @db :markets)))}
   {:name "market"
    :placeholder "MRKT"
-   :options (get-market-names)
-   :valid-fn str->item}])
+   :valid-fn (partial str->item (get-market-names (-> @db :markets)))}])
 
 (defn handle-submit
  "Packs field names with values from input-form"
  [result]
  (let [item (zipmap
              (map #(-> % :name keyword)
-                 fields)
+                  fields)
              (map :value result))]
   (add-item item)))
 
@@ -60,4 +57,9 @@
  [:div#wrapper
   [input-group fields handle-submit]
   [portfolio-list]])
+
+; (def f
+;  (partial str->item  ["a" "b" "c"]))
+
+; (f "bit")
 
