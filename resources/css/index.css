@@ -88,17 +88,21 @@ span.dynamics.green {
 .dropdown {
   margin-top: 10px;
   display: flex;
-  background-color: #f3f3f3;
+  flex-wrap: wrap;
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  border-top: 1px solid #fff;
   top: 30px;
-  padding: 12px;
+  padding: 6px;
   position: absolute;
-  width: 100%;
+  width: 300px;
   z-index: 9999;
+  border-radius: 0 0 6px 6px;
 }
 
 .dropdown > .pill {
   padding: 5px 9px;
-  margin-left: 12px;
+  margin: 3px;
   font-size: 12px;
   line-height: 14px;
   border: 1px solid rgba(151, 151, 151, .3);
@@ -108,10 +112,6 @@ span.dynamics.green {
 
 .dropdown > .pill:hover {
   background-color: #fff;
-}
-
-.dropdown > .pill:first-child {
-  margin-left: 0px;
 }
 
 .dropdown > .pill:hover{
@@ -189,6 +189,7 @@ li.group_btn:hover {
   display: flex;
   flex-direction: column;
   margin: 12px 0;
+  position: relative;
 }
 
 .add_rec_input > .label {

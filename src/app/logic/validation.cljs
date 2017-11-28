@@ -58,7 +58,9 @@
  (js/console.log coll)
  (assert (every? string? coll))
  (if (empty? (filter
-              #(clojure.string/starts-with? % s)
+              #(clojure.string/starts-with?
+                 (.toLowerCase %)
+                 (.toLowerCase s))
               coll))
     (rm-last-char s)
     s))

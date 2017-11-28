@@ -66,9 +66,10 @@
               :ref #(get-ref % idx)
               :on-focus #(reset! focused-idx idx)
               :on-blur #(reset! focused-idx nil)
-              :value (:value (get @store idx))}]]]))
-           ; (when (= idx @focused-idx)
-           ;   [dropdown idx options node on-select-opt])]))
+              :value (:value (get @store idx))}]]
+           (when (and (= idx @focused-idx)
+                      (:options (get cfgs idx)))
+            [dropdown idx options node on-select])]))
        cfgs))]
     [Button
      {:type "submit"

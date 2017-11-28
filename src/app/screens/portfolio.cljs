@@ -17,7 +17,8 @@
 (defn portfolio-list []
  (let [folio (-> @db :user :portfolio vals)]
   [:div
-   (if (pos? (count folio))
+   (if-not (pos? (count folio))
+    "You haven't added any records yet"
     (for [row folio]
      (let [{:keys [currency amount market id]} row]
           ^{:key id}
@@ -37,12 +38,14 @@
  [{:name "amount"
    :placeholder "1000"
    :valid-fn str->amount}
-  {:name "currency"
-   :placeholder "CURR"
-   :valid-fn (partial str->item (get-crypto-currs (-> @db :markets)))}
   {:name "market"
    :placeholder "MRKT"
-   :valid-fn (partial str->item (get-market-names (-> @db :markets)))}])
+   :options (get-market-names (-> @db :markets))
+   :valid-fn (partial str->item (get-market-names (-> @db :markets)))}
+  {:name "currency"
+   :placeholder "CURR"
+   :options (get-crypto-currs (-> @db :markets))
+   :valid-fn (partial str->item (get-crypto-currs (-> @db :markets)))}])
 
 (defn handle-submit
  "Packs field names with values from input-form"
@@ -55,11 +58,6 @@
 
 (defn portfolio []
  [:div#wrapper
-  [input-group fields handle-submit]
-  [portfolio-list]])
-
-; (def f
-;  (partial str->item  ["a" "b" "c"]))
-
-; (f "bit")
+  [portfolio-list]
+  [input-group fields handle-submit]])
 
