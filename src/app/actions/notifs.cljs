@@ -1,7 +1,7 @@
 (ns app.actions.notifs
  (:require [app.db :refer [db]]
-           [app.actions.storage :refer [persist-user-currents!]]))
-
+           [app.actions.storage :refer [persist-user-currents!]]
+           [app.utils.core :refer [generate-uuid]]))
 (comment
   {:id "uuid-uuid"
    :market :bitfinex
@@ -19,7 +19,7 @@
 (defn create-notif
  "Adds notif to state and persists it to disk"
  [ntf]
- (let [id (.toString (random-uuid))]
+ (let [id (generate-uuid)]
   (do
    (swap! db assoc-in [:user/notfis id]
     (merge ntf {:id id}))

@@ -19,6 +19,7 @@
                  [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
                  [tolitius/boot-check "0.1.6"]
                  [cljs-http "0.1.44"]
+                 [compact-uuids "0.2.0"]
                  [mount "0.1.11"]
                  [com.andrewmcveigh/cljs-time "0.5.0"]
                  [reagent "0.8.0-alpha2" :exclusions [cljsjs/react]]
