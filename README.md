@@ -19,6 +19,12 @@ boot.user=> (start-repl)
 boot check-sources
 ```
 
+### Format code
+
+```
+boot fmt --git --mode overwrite --really
+```
+
 ### Packaging
 
 [`electron-packager`](https://github.com/maxogden/electron-packager):

@@ -10,9 +10,6 @@
     (let [{:keys [items value handler]} props]
       (doall
         [:div.dropdown
-          (for [item items]
-            (let [on-click #(reset! value item)]
-              ^{:key item}
-              [:div.pill
-               {:on-click #(handler item)}
-               item]))]))))
+         (for [item items]
+           (let [on-click #(reset! value item)]
+             ^{:key item} [:div.pill {:on-click #(handler item)} item]))]))))

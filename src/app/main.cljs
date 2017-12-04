@@ -1,5 +1,5 @@
 (ns app.main
- (:require [app.config :refer [config]]))
+  (:require [app.config :refer [config]]))
 
 (def electron (js/require "electron"))
 (def path (js/require "path"))
@@ -24,66 +24,66 @@
   at compile time using the `:clojure-defines` compiler option."
   [window]
   (if dev?
-   (.loadURL window (str "file://" js/__dirname "/../../index.html"))
-   (.loadURL window (str "file://" js/__dirname "/index.html"))))
+    (.loadURL window (str "file://" js/__dirname "/../../index.html"))
+    (.loadURL window (str "file://" js/__dirname "/index.html"))))
 
-(defn get-window-position []
+(defn get-window-position
+  []
   (let [window-bounds (.getBounds @window)
         tray-bounds (.getBounds @tray)
-        x (.round js/Math (- (.-x window-bounds)
-                             (+ (/ (get tray-bounds "x") 2))))
-        y (.round js/Math (apply + [10 (.-y tray-bounds) (.-height tray-bounds)]))]
+        x (.round js/Math
+                  (- (.-x window-bounds) (+ (/ (get tray-bounds "x") 2))))
+        y (.round js/Math
+                  (apply + [10 (.-y tray-bounds) (.-height tray-bounds)]))]
     [x y]))
 
-(defn show-window []
+(defn show-window
+  []
   (let [[x y] (get-window-position)]
     (.setPosition @window x y false)
     (.show @window)))
 
-(defn toggle-window []
-  (if (.isVisible @window)
-    (.hide @window)
-    (show-window)))
+(defn toggle-window [] (if (.isVisible @window) (.hide @window) (show-window)))
 
-(defn make-window []
-  (BrowserWindow. #js {:x 763
-                       :y 10
-                       :width 321
-                       :height 600
-                       :show true
-                       :titleBarStyle "hidden"
-                       :fullscreenable false
-                       :resizable dev?
-                       :skipTaskbar true}))
+(defn make-window
+  []
+  (BrowserWindow. #js
+                   {:x 763,
+                    :y 10,
+                    :width 321,
+                    :height 600,
+                    :show true,
+                    :titleBarStyle "hidden",
+                    :fullscreenable false,
+                    :resizable dev?,
+                    :skipTaskbar true}))
 
-(defn set-tray! []
- (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
-  (reset! tray (Tray. p))))
+(defn set-tray!
+  []
+  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
+    (reset! tray (Tray. p))))
 
-(defn set-tray-event-handlers []
-  (do
-    (.on @tray "double-click" toggle-window)
-    (.on @tray "click" toggle-window)))
+(defn set-tray-event-handlers
+  []
+  (do (.on @tray "double-click" toggle-window)
+      (.on @tray "click" toggle-window)))
 
-(defn init-browser []
+(defn init-browser
+  []
   (reset! window (make-window))
-  (do
-    (load-page @window)
-    (when dev? (.openDevTools @window #js {:mode "undocked"}))
-    (.on @window "closed" #(reset! window nil))))
+  (do (load-page @window)
+      (when dev? (.openDevTools @window #js {:mode "undocked"}))
+      (.on @window "closed" #(reset! window nil))))
 
-(defn set-title! [_ text]
-  (.setTitle @tray text))
+(defn set-title! [_ text] (.setTitle @tray text))
 
-(defn init []
-  (if (= js/process.platform "darwin")
-    (.hide (.-dock app)))
+(defn init
+  []
+  (if (= js/process.platform "darwin") (.hide (.-dock app)))
   (.on app "ready" init-browser)
-  (do
-   (.on app "ready" set-tray!)
-   (.on app "ready" #(set-title! nil "0000"))
-   (.on app "ready" set-tray-event-handlers))
+  (do (.on app "ready" set-tray!)
+      (.on app "ready" #(set-title! nil "0000"))
+      (.on app "ready" set-tray-event-handlers))
   (.on ipc "show-window" show-window)
   (.on ipc "set-title" set-title!)
   (set! *main-cli-fn* (fn [] nil)))
-

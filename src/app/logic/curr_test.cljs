@@ -13,7 +13,8 @@
                           :market "bitfinex",
                           :timestamp 1508085038.397682,
                           :currency-pair "BTC-USD",
-                          :last 5511.4, :vol 50536.88303885},
+                          :last 5511.4,
+                          :vol 50536.88303885},
                "LTC-USD" {:high 70.364,
                           :sell 62.98,
                           :buy 62.97,
@@ -56,7 +57,8 @@
                        :market "yobit",
                        :timestamp 1508084957,
                        :currency-pair "LTC-USD",
-                       :last 63.447265, :vol 20034.044},
+                       :last 63.447265,
+                       :vol 20034.044},
             "LTC-RUB" {:high 3802.1879,
                        :sell 3621.6789,
                        :buy 3570.1124,
@@ -92,10 +94,11 @@
                      :vol 38068.48557385}}})
 
 (def empty-markets
-  {"bitfinex" {"BTC-USD" {}, "LTC-USD" {}}, "yobit" {"BTC-RUB" {}, "BTC-USD" {}, "LTC-USD" {}, "LTC-RUB" {}}, "cex" {"BTC-RUB" {}, "BTC-USD" {}}})
+  {"bitfinex" {"BTC-USD" {}, "LTC-USD" {}},
+   "yobit" {"BTC-RUB" {}, "BTC-USD" {}, "LTC-USD" {}, "LTC-RUB" {}},
+   "cex" {"BTC-RUB" {}, "BTC-USD" {}}})
 
 ;; TODO!
 
 ; (best-pairs empty-markets)
 ; (best-pairs markets)
-

@@ -11,5 +11,6 @@ button.button {
 }
 
 button.button:focus {
-  background-color: var(--darkgreen);
+  /* background-color: var(--darkgreen); */
+  background-color: black;
 }

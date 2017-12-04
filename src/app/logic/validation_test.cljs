@@ -12,9 +12,7 @@
 (is (= (str->amount "0..") "0."))
 
 ;; can't be more than 15 chars
-(is (= (str->amount (apply str (repeat 16 1)))
-       (apply str (repeat 15 1))))
+(is (= (str->amount (apply str (repeat 16 1))) (apply str (repeat 15 1))))
 
 ;; filters out invalid chars
 (is (= (str->amount "a") ""))
-
