@@ -21,13 +21,20 @@
             :-webkit-user-select "none"}}])
 
 (defn Checkbox
-  [value on-change]
+  [legend value on-change]
   ;; generage custom "for"
-  [:div
+  [:div.checkbox_wrapper
+   [:div.checkbox_legend legend]
    [:input#tray.checkbox {:type "checkbox" :on-change on-change}]
    [:label {:for "tray"}]])
 
-(defn EmptyList [items]
+(defn EmptyListCompo [items]
   [:div.form_empty_list
     (str "You haven't added any " items " yet")])
+
+(defn InputWrapper [label & children]
+ [:div.input_wrapper
+  [:div.input_label label]
+  children])
+
 

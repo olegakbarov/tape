@@ -44,7 +44,7 @@
   [{c :children}]
   (let [y (gobj/get c "y")]
     [:div
-     {:style {:position "absolute"
+     {:style {:position "fixed"
               :width "321px"
               :height "320px"
               :background-color "#fff"

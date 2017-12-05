@@ -9,7 +9,7 @@
             [app.actions.portfolio :refer [remove-item set-editing-item]]
             [app.logic.curr :refer [get-market-names get-crypto-currs]]
             [app.logic.validation :refer [str->amount str->item]]
-            [app.components.ui :refer [EmptyList]]))
+            [app.components.ui :refer [EmptyListCompo]]))
 
 ;; TODO: dont re-render on every ws event
 (defn portfolio-list
@@ -20,7 +20,7 @@
                   vals)]
     [:div
      (if-not (pos? (count folio))
-       [EmptyList "portfolio items"]
+       [EmptyListCompo "portfolio items"]
        (for [row folio]
          (let [{:keys [currency amount market id]} row]
            ^{:key id}

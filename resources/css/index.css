@@ -163,20 +163,6 @@ li.group_btn:hover {
   margin-bottom: 3px;
 }
 
-/*  --------- Profile --------- */
-
-.profile_wrapper,
-.settings_wrapper {
-  width: 100%;
-  height: 100%;
-  background-color: #657AF3;
-}
-
-.profile_wrapper > .back_arr,
-.settings_wrapper > .back_arr {
-  padding: 20px;
-}
-
 /*  --------- Portfolio --------- */
 
 #portfolio_wrapper {
@@ -184,9 +170,12 @@ li.group_btn:hover {
 }
 
 .form_empty_list {
-  text-align: center;
-  text-transform: uppercase;
   padding: 70px 0;
+  margin: 0 auto;
+  text-align: center;
+  max-width: 60%;
+  text-transform: uppercase;
+  line-height: 1.4em;
   color: #ccc;
 }
 
@@ -215,9 +204,6 @@ li.group_btn:hover {
 input.input_item {
   border: none;
   font-size: 16px;
-}
-
-input.input_item {
   outline: none;
 }
 
@@ -294,9 +280,35 @@ input.input_item {
   cursor: pointer;
 }
 
+.input_label {
+  text-transform: uppercase;
+  color: #ccc;
+}
+
+/* FORM */
+
+.input_wrapper {
+  padding: 7px 0;
+}
+
+.input_label {
+  margin-bottom: 7px;
+}
+
+/* checkbox helpers */
+
+.checkbox_wrapper {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkbox_legend {
+  font-size: 15px;
+}
 
 /* UI switch */
-
 input.checkbox {
   display: none;
   opacity: 0;

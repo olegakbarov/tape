@@ -5,7 +5,9 @@
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
             [app.logic.curr :refer [get-market-names get-crypto-currs]]
-            [app.components.ui :refer [EmptyList]]))
+            [app.components.ui :refer [EmptyListCompo
+                                       InputWrapper
+                                       Checkbox]]))
 
 (defonce curr (r/atom nil))
 (defonce market (r/atom nil))
@@ -35,7 +37,7 @@
       :onChange #(reset! market (aget % "value"))}]))
 
 (defn alerts-list []
-  [EmptyList "alerts"])
+  [EmptyListCompo "alerts"])
 
 (defn add-alert [])
 
@@ -44,10 +46,12 @@
   [:div#wrapper
    [alerts-list]
    [:div.form_wrap
-    [:div.input_wrapper
-     [:div.label "Currency"]
+    [InputWrapper
+     "Market"
+     [select-market]]
+    [InputWrapper
+     "Currency pair"
      [select-curr]]
-    [:div.input_wrapper
-     [:div.label "Market"]
-     [select-market]]]])
+    [Checkbox
+     "Repeat alert"]]])
 
