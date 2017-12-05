@@ -42,17 +42,16 @@
  notifs - hashmap"
   [markets notifs]
   (doall
-    (map (fn [ntf]
-           (let [{:keys [archived pair market price change id]} ntf
-                 p (get-in markets [market pair])]
-             (when-not archived
-               (do (render-notif!
-                     (str (name market) " " (name pair) " price " price)
-                     (str pair
-                          " price crossed " change
-                          " with the price of " price))
-                   (notif->archived id)))))
-      notifs)))
+   (map
+    (fn [ntf]
+      (let [{:keys [archived pair market price change id]} ntf
+            p (get-in markets [market pair])]
+        (when-not archived
+          (do (render-notif!
+               (str (name market) " " (name pair) " price " price)
+               (str pair " price crossed " change " with the price of " price))
+              (notif->archived id)))))
+    notifs)))
 
 (defn start-notifs-loop!
   []

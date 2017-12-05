@@ -6,21 +6,19 @@
   "Returns lowest `:last` prices across all markets"
   [markets]
   (let [market-items (vals markets)]
-    (reduce
-      (fn [acc item]
-        (into {}
-              (map
-                (fn [item]
-                  (let [[key val] item
-                        acc-pair (get acc key)]
-                    (if-not acc-pair
-                      (assoc acc key val)
-                      (if (< (:last val) (:last acc-pair))
-                        (assoc acc key val)
-                        acc))))
-                item)))
-      {}
-      market-items)))
+    (reduce (fn [acc item]
+              (into {}
+                    (map (fn [item]
+                           (let [[key val] item
+                                 acc-pair (get acc key)]
+                             (if-not acc-pair
+                               (assoc acc key val)
+                               (if (< (:last val) (:last acc-pair))
+                                 (assoc acc key val)
+                                 acc))))
+                         item)))
+            {}
+            market-items)))
 
 (defn best-pairs
   "Returns pairs with lowest prices across "
@@ -48,11 +46,11 @@
   "Returns all currencies across all markets"
   [markets]
   (set (flatten (map #(flatten (clojure.string/split % "-"))
-                  (->> (:markets @db)
-                       vals
-                       (map keys)
-                       flatten
-                       (map name))))))
+                     (->> (:markets @db)
+                          vals
+                          (map keys)
+                          flatten
+                          (map name))))))
 
 (defn get-crypto-currs
   "TODO: remove hadcoded fiats"
@@ -65,8 +63,8 @@
   (let [m (:markets @db)
         pairs (get m market)]
     (reduce (fn [acc item] (flatten (conj acc (clojure.string/split item "-"))))
-      []
-      (keys pairs))))
+            []
+            (keys pairs))))
 
 (defn user-favs
   [markets favs]

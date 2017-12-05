@@ -25,7 +25,7 @@
              #(vec (filter (fn [pair]
                              (when (and (= (first pair) (first tupl))
                                         (= (last pair) (last tupl)))))
-                     %)))
+                           %)))
       (persist-user-currents!)))
 
 (defn toggle-filter

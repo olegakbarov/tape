@@ -1,4 +1,5 @@
 @import url("_colors.css");
+@import url("select.css");
 @import url("common.css");
 @import url("detailed.css");
 @import url("live.css");
@@ -154,6 +155,14 @@ li.group_btn:hover {
   background-color: var(--blue);
 }
 
+.label {
+  width: 75px;
+  color: #ccc;
+  font-size: 11px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
 /*  --------- Profile --------- */
 
 .profile_wrapper,
@@ -174,6 +183,13 @@ li.group_btn:hover {
   margin-top: 50px;
 }
 
+.form_empty_list {
+  text-align: center;
+  text-transform: uppercase;
+  padding: 70px 0;
+  color: #ccc;
+}
+
 .form_wrap {
   padding: 0 12px;
 }
@@ -190,13 +206,6 @@ li.group_btn:hover {
   flex-direction: column;
   margin: 12px 0;
   position: relative;
-}
-
-.add_rec_input > .label {
-  width: 75px;
-  color: #ccc;
-  font-size: 11px;
-  text-transform: uppercase;
 }
 
 .add_rec_input > .field {
@@ -323,3 +332,4 @@ input:checked + label:after {
   left: auto;
   right: 0;
 }
+

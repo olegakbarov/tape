@@ -19,8 +19,9 @@
                             :market))
         res (-> p
                 (dissoc :currencyPair)
-                (assoc :ts (-> p
-                               :timestamp))
+                (assoc :ts
+                       (-> p
+                           :timestamp))
                 (dissoc :timestamp))]
     ;; TODO! remove hardcode
     (swap! db assoc-in [:markets :bitfinex pair :change] res)))
@@ -38,8 +39,9 @@
         res (-> p
                 (dissoc :currencyPair)
                 (assoc :currency-pair (keyword pair))
-                (assoc :market (keyword (-> p
-                                            :market))))]
+                (assoc :market
+                       (keyword (-> p
+                                    :market))))]
     (swap! db update-in [:markets market pair] #(merge % res))))
 
 (defn evt->db
@@ -52,10 +54,11 @@
 (defn state->db
   [s]
   (let [{:keys [ticker change]} s]
-    (do
-      (doseq [item (map identity
-                     (map #(into {} [{"type" "ticker"} {:payload %}]) ticker))]
-        (evt->db item))
-      (doseq [item (map identity
-                     (map #(into {} [{"type" "change"} {:payload %}]) change))]
-        (evt->db item)))))
+    (do (doseq [item (map identity
+                          (map #(into {} [{"type" "ticker"} {:payload %}])
+                               ticker))]
+          (evt->db item))
+        (doseq [item (map identity
+                          (map #(into {} [{"type" "change"} {:payload %}])
+                               change))]
+          (evt->db item)))))

@@ -21,11 +21,10 @@
 (defn- only-one-dot
   "Filters out every special chars except number and one dot (separator)"
   [v]
-  (reduce (fn [acc ch]
-            (if (and (clojure.string/includes? acc ".") (= ch "."))
-              acc
-              (str acc ch)))
-    (s/split v "")))
+  (reduce
+   (fn [acc ch]
+     (if (and (clojure.string/includes? acc ".") (= ch ".")) acc (str acc ch)))
+   (s/split v "")))
 
 (defn str->amount
   "Validates the input string to acceptable currency form"
@@ -50,6 +49,6 @@
   (assert (every? string? coll))
   (if (empty? (filter #(clojure.string/starts-with? (.toLowerCase %)
                                                     (.toLowerCase s))
-                coll))
+                      coll))
     (rm-last-char s)
     s))

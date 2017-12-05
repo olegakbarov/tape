@@ -52,7 +52,8 @@
               :border-radius "4px 4px 0 0"
               :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
               :-webkit-transform (str "translateY(" y "px)")
-              :transform (str "translateY(" y "px)")}} [DetailsContent]]))
+              :transform (str "translateY(" y "px)")}}
+     [DetailsContent]]))
 
 (def Child-comp (reagent/reactify-component Child))
 
@@ -62,7 +63,8 @@
           {:style {:position "absolute"
                    :bottom 0
                    :display (if (:ui/detailed-view @db) "block" "none")}}
-          [Motion {:style {:y (spring (if (:ui/detailed-view @db) -320 0))}}
+          [Motion
+           {:style {:y (spring (if (:ui/detailed-view @db) -320 0))}}
            (fn [x] (reagent/create-element Child-comp #js {} x))]]))
 
 (defn root

@@ -8,7 +8,8 @@
             [clojure.string :as s]
             [app.actions.portfolio :refer [remove-item set-editing-item]]
             [app.logic.curr :refer [get-market-names get-crypto-currs]]
-            [app.logic.validation :refer [str->amount str->item]]))
+            [app.logic.validation :refer [str->amount str->item]]
+            [app.components.ui :refer [EmptyList]]))
 
 ;; TODO: dont re-render on every ws event
 (defn portfolio-list
@@ -19,14 +20,16 @@
                   vals)]
     [:div
      (if-not (pos? (count folio))
-       "You haven't added any records yet"
+       [EmptyList "portfolio items"]
        (for [row folio]
          (let [{:keys [currency amount market id]} row]
            ^{:key id}
            [:div.folio_row
-            [:div.content [:div.amount (str currency ": " amount)]
+            [:div.content
+             [:div.amount (str currency ": " amount)]
              [:div.market market]]
-            [:div.actions [:div.edit {:on-click #(set-editing-item id)} "edit"]
+            [:div.actions
+             [:div.edit {:on-click #(set-editing-item id)} "edit"]
              [:div.delete {:on-click #(remove-item id)} "delete"]]])))]))
 
 (def fields
@@ -52,10 +55,12 @@
   (let [item (zipmap (map #(-> %
                                :name
                                keyword)
-                       fields)
+                          fields)
                      (map :value result))]
     (add-item item)))
 
 (defn portfolio
   []
   [:div#wrapper [portfolio-list] [input-group fields handle-submit]])
+
+

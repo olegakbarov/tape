@@ -11,8 +11,8 @@
   []
   (reduce (fn [acc [key val]]
             (conj acc {:name key :pairs-num (count (keys val))}))
-    []
-    (:markets @db)))
+          []
+          (:markets @db)))
 
 (defn generate-uuid
   "Creates more compact and less ambigous uuid"

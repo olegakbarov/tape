@@ -17,7 +17,8 @@
      ^{:key "currency-pair"}
      [:div.left_cell [:div.title currency-pair] [:div.market market]]
      ^{:key "last-price"}
-     [:div.right_cell ;; TODO
+     [:div.right_cell
+      ;; TODO
       [:span {:class "price_down"} last]
       [:div.swing
        (if (and (not (nil? amount)) (not (nil? percent)))
@@ -59,5 +60,6 @@
 
 (defn live-board
   []
-  [:div#wrapper ; [FilterBox]
+  [:div#wrapper
+   ; [FilterBox]
    [render-rows]])

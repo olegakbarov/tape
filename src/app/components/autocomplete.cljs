@@ -29,34 +29,35 @@
 (defn- autocomplete-hide-completions
   [state]
   (swap!
-    state
-    merge
-    {:display-completions false :selected-index -1 :update-filter-text true}))
+   state
+   merge
+   {:display-completions false :selected-index -1 :update-filter-text true}))
 
 (defn- autocomplete-entry
   [_ _]
   (reagent/create-class
-    {:component-did-update (fn [this [_ _ was-selected? _]]
-                             (let [[_ _ is-selected? _] (reagent/argv this)]
-                               (when (and is-selected? (not was-selected?))
-                                 (.-scrollIntoView (reagent/dom-node this)))))
-     :reagent-render (fn [content selected?]
-                       [:div
-                        {:class (str "autocomplete-completion-entry "
-                                     (if selected? "selected"))} content])}))
+   {:component-did-update (fn [this [_ _ was-selected? _]]
+                            (let [[_ _ is-selected? _] (reagent/argv this)]
+                              (when (and is-selected? (not was-selected?))
+                                (.-scrollIntoView (reagent/dom-node this)))))
+    :reagent-render
+    (fn [content selected?] [:div
+                             {:class (str "autocomplete-completion-entry "
+                                          (if selected? "selected"))}
+                             content])}))
 
 (defn autocomplete-completions
   [_ _]
   (reagent/create-class
-    {:reagent-render
-       (fn [completions state]
-         (let [selected-index (:selected-index @state)]
-           [:div.autocomplete-completions
-            (if (empty? completions)
-              [:div.autocomplete-no-results "No Matching Values"]
-              (doall
-                (for [[ii completion] (number-elements completions)]
-                  #^{:key completion} [autocomplete-entry completion (= ii selected-index)])))]))}))
+   {:reagent-render
+    (fn [completions state]
+      (let [selected-index (:selected-index @state)]
+        [:div.autocomplete-completions
+         (if (empty? completions)
+           [:div.autocomplete-no-results "No Matching Values"]
+           (doall
+            (for [[ii completion] (number-elements completions)]
+              #^{:key completion} [autocomplete-entry completion (= ii selected-index)])))]))}))
 
 (defn accept-text
   [state new-text]
@@ -82,9 +83,9 @@
   [state key-event]
   (when (not (= "Enter" (.-key key-event)))
     (swap!
-      state
-      merge
-      {:display-completions true :update-filter-text true :selected-index -1})))
+     state
+     merge
+     {:display-completions true :update-filter-text true :selected-index -1})))
 
 (defn input-field
   [{:keys [get-completions placeholder on-enter]}]
@@ -102,7 +103,7 @@
            :placeholder placeholder
            :onBlur #(swap! state assoc :display-completions false)
            :onKeyDown
-             #(autocomplete-handle-keydown completions state on-enter %)
+           #(autocomplete-handle-keydown completions state on-enter %)
            :onKeyPress #(autocomplete-handle-keypress state %)
            :onChange #(accept-text state (.. % -target -value))}]
          (when (:display-completions @state)
