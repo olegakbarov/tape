@@ -16,7 +16,7 @@
           (doall (map-indexed (fn [idx text]
                                 ^{:key text}
                                 [:li.group_btn
-                                 {:class (if (active? text) "active" ""),
+                                 {:class (if (active? text) "active" "")
                                   :on-click #(to-screen (-> text
                                                             .toLowerCase
                                                             keyword))} text])

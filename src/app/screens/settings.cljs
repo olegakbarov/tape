@@ -9,5 +9,5 @@
   []
   [:div#wrapper
    [Button
-    {:type "submit", :on-click #(js/console.log "saved!"), :color "#12D823"}
+    {:type "submit" :on-click #(js/console.log "saved!") :color "#12D823"}
     "Save"]])

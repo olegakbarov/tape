@@ -23,7 +23,7 @@
 
 (defn- create-initial-state
   [cfgs]
-  (atom (vec (replicate (count cfgs) {:node nil, :value "", :valid false}))))
+  (atom (vec (replicate (count cfgs) {:node nil :value "" :valid false}))))
 
 (defn- on-change
   [e idx store cfgs]
@@ -68,12 +68,12 @@
                      [:div.add_rec_input [:div.label (str name ":")]
                       [:div.field
                        [:input.input_item
-                        {:type "text",
-                         :autoFocus (= idx 0),
-                         :on-change #(on-change % idx store cfgs),
-                         :ref #(get-ref % idx),
-                         :on-focus #(reset! focused-idx idx),
-                         :on-blur #(reset! focused-idx nil),
+                        {:type "text"
+                         :autoFocus (= idx 0)
+                         :on-change #(on-change % idx store cfgs)
+                         :ref #(get-ref % idx)
+                         :on-focus #(reset! focused-idx idx)
+                         :on-blur #(reset! focused-idx nil)
                          :value (:value (get @store idx))}]]
                       (when (and (= idx @focused-idx)
                                  (:get-options-fn (get cfgs idx)))
@@ -81,7 +81,7 @@
                          store])]))
                  cfgs))]
             [Button
-             {:type "submit",
-              :on-click submit-fn,
-              :ref #(reset! submit-ref %),
+             {:type "submit"
+              :on-click submit-fn
+              :ref #(reset! submit-ref %)
               :color "#12D823"} "Add"]])))

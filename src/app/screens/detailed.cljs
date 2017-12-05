@@ -5,16 +5,16 @@
             [app.actions.ui :refer
              [add-to-favs remove-from-favs close-detailed-view]]))
 
-(comment {:high 3143.5286,
-          :sell 3119.8,
-          :buy 3081.6715,
-          :vol-cur 98.522881,
-          :low 3048.4535,
-          :avg 3095.991,
-          :market "yobit",
-          :timestamp 1509279292,
-          :currency-pair "LTC-RUB",
-          :last 3070,
+(comment {:high 3143.5286
+          :sell 3119.8
+          :buy 3081.6715
+          :vol-cur 98.522881
+          :low 3048.4535
+          :avg 3095.991
+          :market "yobit"
+          :timestamp 1509279292
+          :currency-pair "LTC-RUB"
+          :last 3070
           :vol 304628.34})
 
 (defn fav?
@@ -43,7 +43,7 @@
       [:div.header
        [:div.title pair
         [:div.fav
-         {:class (if is-fav? "faved" ""),
+         {:class (if is-fav? "faved" "")
           :on-click (if is-fav?
                       #(remove-from-favs [(keyword market) (keyword pair)])
                       #(add-to-favs [(keyword market) (keyword pair)]))}

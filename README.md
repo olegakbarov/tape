@@ -22,7 +22,7 @@ boot check-sources
 ### Format code
 
 ```
-boot fmt --git --mode overwrite --really
+boot fmt --git --mode overwrite --really --options '{:map {:comma? false}}'
 ```
 
 ### Packaging

@@ -44,14 +44,14 @@
   [{c :children}]
   (let [y (gobj/get c "y")]
     [:div
-     {:style {:position "absolute",
-              :width "321px",
-              :height "320px",
-              :background-color "#fff",
-              :z-index 999,
-              :border-radius "4px 4px 0 0",
-              :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)",
-              :-webkit-transform (str "translateY(" y "px)"),
+     {:style {:position "absolute"
+              :width "321px"
+              :height "320px"
+              :background-color "#fff"
+              :z-index 999
+              :border-radius "4px 4px 0 0"
+              :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
+              :-webkit-transform (str "translateY(" y "px)")
               :transform (str "translateY(" y "px)")}} [DetailsContent]]))
 
 (def Child-comp (reagent/reactify-component Child))
@@ -59,8 +59,8 @@
 (defn DetailedView
   []
   (fn [] [:div
-          {:style {:position "absolute",
-                   :bottom 0,
+          {:style {:position "absolute"
+                   :bottom 0
                    :display (if (:ui/detailed-view @db) "block" "none")}}
           [Motion {:style {:y (spring (if (:ui/detailed-view @db) -320 0))}}
            (fn [x] (reagent/create-element Child-comp #js {} x))]]))

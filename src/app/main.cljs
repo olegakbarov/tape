@@ -48,14 +48,14 @@
 (defn make-window
   []
   (BrowserWindow. #js
-                   {:x 763,
-                    :y 10,
-                    :width 321,
-                    :height 600,
-                    :show true,
-                    :titleBarStyle "hidden",
-                    :fullscreenable false,
-                    :resizable dev?,
+                   {:x 763
+                    :y 10
+                    :width 321
+                    :height 600
+                    :show true
+                    :titleBarStyle "hidden"
+                    :fullscreenable false
+                    :resizable dev?
                     :skipTaskbar true}))
 
 (defn set-tray!

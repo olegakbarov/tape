@@ -30,18 +30,18 @@
              [:div.delete {:on-click #(remove-item id)} "delete"]]])))]))
 
 (def fields
-  [{:name "amount", :placeholder "1000", :valid-fn str->amount}
-   {:name "market",
-    :placeholder "MRKT",
+  [{:name "amount" :placeholder "1000" :valid-fn str->amount}
+   {:name "market"
+    :placeholder "MRKT"
     :get-options-fn #(get-market-names (-> @db
-                                           :markets)),
+                                           :markets))
     :valid-fn (partial str->item
                        (get-market-names (-> @db
                                              :markets)))}
-   {:name "currency",
-    :placeholder "CURR",
+   {:name "currency"
+    :placeholder "CURR"
     :get-options-fn #(get-crypto-currs (-> @db
-                                           :markets)),
+                                           :markets))
     :valid-fn (partial str->item
                        (get-crypto-currs (-> @db
                                              :markets)))}])

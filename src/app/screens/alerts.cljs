@@ -10,18 +10,13 @@
 
 (defonce value (r/atom nil))
 
-; (def cn
-;  (js/require "classNames"))
-
-; (aset js/window "classNames" cn)
-
 (defn select-ui
   []
   [:> js/window.Select
-   {:value @value,
+   {:value @value
     :options #js
-              [#js {:value "a", :label "alpha"} #js {:value "b", :label "beta"}
-               #js {:value "c", :label "gamma"}],
+              [#js {:value "a" :label "alpha"} #js {:value "b" :label "beta"}
+               #js {:value "c" :label "gamma"}]
     :onChange #(reset! value (aget % "value"))}])
 
 (defn alerts [] [:div#wrapper [select-ui]])

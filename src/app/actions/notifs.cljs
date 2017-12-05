@@ -2,12 +2,12 @@
   (:require [app.db :refer [db]]
             [app.actions.storage :refer [persist-user-currents!]]
             [app.utils.core :refer [generate-uuid]]))
-(comment {:id "uuid-uuid",
-          :market :bitfinex,
-          :pair :BTC-LTC,
-          :change :below,
-          :price 5000,
-          :archived false,
+(comment {:id "uuid-uuid"
+          :market :bitfinex
+          :pair :BTC-LTC
+          :change :below
+          :price 5000
+          :archived false
           :repeat true})
 
 (defn render-notif!

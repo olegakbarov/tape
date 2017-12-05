@@ -14,9 +14,9 @@
   [state completions index]
   (swap! state
          merge
-         {:selected-index index,
-          :update-filter-text false,
-          :current-text (nth completions index),
+         {:selected-index index
+          :update-filter-text false
+          :current-text (nth completions index)
           :display-completions true}))
 
 (defn- autocomplete-navigate
@@ -31,7 +31,7 @@
   (swap!
     state
     merge
-    {:display-completions false, :selected-index -1, :update-filter-text true}))
+    {:display-completions false :selected-index -1 :update-filter-text true}))
 
 (defn- autocomplete-entry
   [_ _]
@@ -39,7 +39,7 @@
     {:component-did-update (fn [this [_ _ was-selected? _]]
                              (let [[_ _ is-selected? _] (reagent/argv this)]
                                (when (and is-selected? (not was-selected?))
-                                 (.-scrollIntoView (reagent/dom-node this))))),
+                                 (.-scrollIntoView (reagent/dom-node this)))))
      :reagent-render (fn [content selected?]
                        [:div
                         {:class (str "autocomplete-completion-entry "
@@ -81,30 +81,29 @@
 (defn- autocomplete-handle-keypress
   [state key-event]
   (when (not (= "Enter" (.-key key-event)))
-    (swap! state
-           merge
-           {:display-completions true,
-            :update-filter-text true,
-            :selected-index -1})))
+    (swap!
+      state
+      merge
+      {:display-completions true :update-filter-text true :selected-index -1})))
 
 (defn input-field
   [{:keys [get-completions placeholder on-enter]}]
-  (let [state (reagent/atom {:display-completions false,
-                             :current-text "",
-                             :filter-text "",
-                             :selected-index -1,
+  (let [state (reagent/atom {:display-completions false
+                             :current-text ""
+                             :filter-text ""
+                             :selected-index -1
                              :update-filter-text true})]
     (fn []
       (let [completions (filter-completions (get-completions)
                                             (:filter-text @state))]
         [:div.autocomplete
          [:input
-          {:value (:current-text @state),
-           :placeholder placeholder,
-           :onBlur #(swap! state assoc :display-completions false),
+          {:value (:current-text @state)
+           :placeholder placeholder
+           :onBlur #(swap! state assoc :display-completions false)
            :onKeyDown
-             #(autocomplete-handle-keydown completions state on-enter %),
-           :onKeyPress #(autocomplete-handle-keypress state %),
+             #(autocomplete-handle-keydown completions state on-enter %)
+           :onKeyPress #(autocomplete-handle-keypress state %)
            :onChange #(accept-text state (.. % -target -value))}]
          (when (:display-completions @state)
            [autocomplete-completions completions state])]))))
