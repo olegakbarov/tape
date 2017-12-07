@@ -9,7 +9,8 @@
             [app.actions.portfolio :refer [remove-item set-editing-item]]
             [app.logic.curr :refer [get-market-names get-crypto-currs]]
             [app.logic.validation :refer [str->amount str->item]]
-            [app.components.ui :refer [EmptyListCompo]]))
+            [app.components.ui :refer [EmptyListCompo]]
+            [app.actions.form :refer [update-portfolio-form]]))
 
 ;; TODO: dont re-render on every ws event
 (defn portfolio-list
@@ -32,35 +33,35 @@
              [:div.edit {:on-click #(set-editing-item id)} "edit"]
              [:div.delete {:on-click #(remove-item id)} "delete"]]])))]))
 
-(def fields
-  [{:name "amount" :placeholder "1000" :valid-fn str->amount}
-   {:name "market"
-    :placeholder "MRKT"
-    :get-options-fn #(get-market-names (-> @db
-                                           :markets))
-    :valid-fn (partial str->item
-                       (get-market-names (-> @db
-                                             :markets)))}
-   {:name "currency"
-    :placeholder "CURR"
-    :get-options-fn #(get-crypto-currs (-> @db
-                                           :markets))
-    :valid-fn (partial str->item
-                       (get-crypto-currs (-> @db
-                                             :markets)))}])
+; (def fields
+;   [{:name "amount" :placeholder "1000" :valid-fn str->amount}
+;    {:name "market"
+;     :placeholder "MRKT"
+;     :get-options-fn #(get-market-names (-> @db
+;                                            :markets))
+;     :valid-fn (partial str->item
+;                        (get-market-names (-> @db
+;                                              :markets)))}
+;    {:name "currency"
+;     :placeholder "CURR"
+;     :get-options-fn #(get-crypto-currs (-> @db
+;                                            :markets))
+;     :valid-fn (partial str->item
+;                        (get-crypto-currs (-> @db
+;                                              :markets)))}])
+
+;; remove trailing zeroes from 'amount
+; (let [item (zipmap (map #(-> %
+;                              :name
+;                              keyword)
+;                         fields)
+;                    (map :value result))]
 
 (defn handle-submit
   "Packs field names with values from input-form"
-  [result]
-  (let [item (zipmap (map #(-> %
-                               :name
-                               keyword)
-                          fields)
-                     (map :value result))]
-    (add-item item)))
-
-(defn portfolio
   []
-  [:div#wrapper [portfolio-list] [input-group fields handle-submit]])
+  (let [form
+        (-> @db
+            :form/portfolio)]))
 
-
+(defn portfolio [] [:div#wrapper [portfolio-list]])

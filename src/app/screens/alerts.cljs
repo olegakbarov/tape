@@ -4,54 +4,61 @@
             [cljsjs.react-select]
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
-            [app.logic.curr :refer [get-market-names get-crypto-currs]]
-            [app.components.ui :refer [EmptyListCompo
-                                       InputWrapper
-                                       Checkbox]]))
+            [app.actions.form :refer [update-alert-form]]
+            [app.logic.curr :refer [get-market-names get-all-pair-names]]
+            [app.components.ui
+             :refer
+             [EmptyListCompo InputWrapper Checkbox AmountInput]]))
 
-(defonce curr (r/atom nil))
-(defonce market (r/atom nil))
-
-(defn select-curr
+(defn select-pair
   []
-  (let [opts (get-crypto-currs (-> @db
-                                   :markets))]
+  (let [m (-> @db
+              :markets)
+        v (-> @db
+              :form/alerts
+              :currency)
+        opts (get-all-pair-names m)
+        on-change #(update-alert-form
+                    :currency
+                    (if % (aget % "value") (update-alert-form :currency "")))]
     [:>
      js/window.Select
-     {:value @curr
-      :options (clj->js (map
-                         #(zipmap [:value :label] [% %])
-                         opts))
-      :onChange #(reset! curr (aget % "value"))}]))
+     {:value v
+      :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
+      :onChange on-change}]))
 
 (defn select-market
   []
-  (let [opts (get-market-names (-> @db
-                                   :markets))]
+  (let [m (-> @db
+              :markets)
+        v (-> @db
+              :form/alerts
+              :market)
+        opts (get-market-names m)
+        on-change #(update-alert-form
+                    :market
+                    (if % (aget % "value") (update-alert-form :market "")))]
     [:>
      js/window.Select
-     {:value @market
-      :options (clj->js (map
-                         #(zipmap [:value :label] [% %])
-                         opts))
-      :onChange #(reset! market (aget % "value"))}]))
+     {:value v
+      :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
+      :onChange on-change}]))
 
-(defn alerts-list []
-  [EmptyListCompo "alerts"])
+(defn alerts-list [] [EmptyListCompo "alerts"])
 
 (defn add-alert [])
 
 (defn alerts
   []
-  [:div#wrapper
-   [alerts-list]
-   [:div.form_wrap
-    [InputWrapper
-     "Market"
-     [select-market]]
-    [InputWrapper
-     "Currency pair"
-     [select-curr]]
-    [Checkbox
-     "Repeat alert"]]])
-
+  (let [form (-> @db
+                 :form/alerts)]
+    (fn []
+      [:div#wrapper
+       [alerts-list]
+       [:div.form_wrap
+        [InputWrapper "Market" [select-market]]
+        [InputWrapper "Currency pair" [select-pair]]
+        [AmountInput
+         {:value (-> form
+                     :amount)}]
+        [Checkbox "Repeat alert"]]])))

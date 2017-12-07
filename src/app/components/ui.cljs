@@ -28,13 +28,19 @@
    [:input#tray.checkbox {:type "checkbox" :on-change on-change}]
    [:label {:for "tray"}]])
 
-(defn EmptyListCompo [items]
-  [:div.form_empty_list
-    (str "You haven't added any " items " yet")])
+(defn EmptyListCompo
+  [items]
+  [:div.form_empty_list (str "You haven't added any " items " yet")])
 
-(defn InputWrapper [label & children]
- [:div.input_wrapper
-  [:div.input_label label]
-  children])
+(defn InputWrapper
+  "Wraps the input and provides label"
+  [label & children]
+  [:div.input_wrapper [:div.input_label label] children])
 
-
+(defn AmountInput
+  "Input for currency amount"
+  [props]
+  (let [{:keys [value auto-focus on-change]} props]
+    ^{:key "amount-input"}
+    [:input.input_item
+     {:type "text" :autoFocus auto-focus :on-change on-change :value value}]))

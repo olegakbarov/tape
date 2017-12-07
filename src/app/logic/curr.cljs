@@ -52,6 +52,16 @@
                           flatten
                           (map name))))))
 
+(defn get-all-pair-names
+  "Returns unique currency pairs"
+  [markets]
+  (->> markets
+       vals
+       (map keys)
+       flatten
+       (map name)
+       set))
+
 (defn get-crypto-currs
   "TODO: remove hadcoded fiats"
   [markets]

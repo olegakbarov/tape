@@ -62,9 +62,7 @@
        (cljs-devtools)
        (dirac)
        (cljs-repl :ids #{"renderer"})
-       (reload :ids #{"renderer"}
-                :ws-host "localhost"
-                :target-path "target")
+       (reload :ids #{"renderer"} :ws-host "localhost" :target-path "target")
        (cljs :ids #{"renderer"}
              :compiler-options {:parallel-build true
                                 :npm-deps {:classnames "1.1.0"}})
