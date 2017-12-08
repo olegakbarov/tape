@@ -1,7 +1,6 @@
 (ns app.screens.portfolio
   (:require [reagent.core :as r]
             [app.components.header :refer [Header]]
-            [app.components.form :refer [input-group]]
             [app.actions.ui :refer [to-screen]]
             [app.actions.portfolio :refer [add-item]]
             [app.db :refer [db]]
@@ -32,30 +31,6 @@
             [:div.actions
              [:div.edit {:on-click #(set-editing-item id)} "edit"]
              [:div.delete {:on-click #(remove-item id)} "delete"]]])))]))
-
-; (def fields
-;   [{:name "amount" :placeholder "1000" :valid-fn str->amount}
-;    {:name "market"
-;     :placeholder "MRKT"
-;     :get-options-fn #(get-market-names (-> @db
-;                                            :markets))
-;     :valid-fn (partial str->item
-;                        (get-market-names (-> @db
-;                                              :markets)))}
-;    {:name "currency"
-;     :placeholder "CURR"
-;     :get-options-fn #(get-crypto-currs (-> @db
-;                                            :markets))
-;     :valid-fn (partial str->item
-;                        (get-crypto-currs (-> @db
-;                                              :markets)))}])
-
-;; remove trailing zeroes from 'amount
-; (let [item (zipmap (map #(-> %
-;                              :name
-;                              keyword)
-;                         fields)
-;                    (map :value result))]
 
 (defn handle-submit
   "Packs field names with values from input-form"

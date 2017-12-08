@@ -3,7 +3,7 @@
   (:require [app.db :refer [db]]
             [app.logic.curr :refer [best-pairs]]
             [app.actions.tray :refer [set-title!]]
-            [app.actions.notifs :refer [render-notif! notif->archived]]
+            [app.actions.alerts :refer [render-alert! alert->archived]]
             [cljs.core.async :as a :refer [<! >! chan timeout]]
             [mount.core :refer [defstate]]
             [klang.core :refer-macros [info! warn! erro! crit! fata! trac!]]))
@@ -31,7 +31,7 @@
 (defn has-notifs?
   []
   (pos? (-> @db
-            :user/notifs
+            :user/alerts
             count)))
 
 (defn dispatch-notif?
@@ -47,10 +47,10 @@
       (let [{:keys [archived pair market price change id]} ntf
             p (get-in markets [market pair])]
         (when-not archived
-          (do (render-notif!
+          (do (render-alert!
                (str (name market) " " (name pair) " price " price)
                (str pair " price crossed " change " with the price of " price))
-              (notif->archived id)))))
+              (alert->archived id)))))
     notifs)))
 
 (defn start-notifs-loop!

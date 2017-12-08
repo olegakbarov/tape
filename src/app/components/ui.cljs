@@ -3,7 +3,7 @@
 
 (defn Button
   [params text]
-  (let [{:keys [on-click type ref color]} params]
+  (let [{:keys [on-click type ref disabled color]} params]
     [:button.button
      (merge (when color {:style {:background-color color}})
             {:on-click on-click :ref ref :type type})
@@ -36,11 +36,3 @@
   "Wraps the input and provides label"
   [label & children]
   [:div.input_wrapper [:div.input_label label] children])
-
-(defn AmountInput
-  "Input for currency amount"
-  [props]
-  (let [{:keys [value auto-focus on-change]} props]
-    ^{:key "amount-input"}
-    [:input.input_item
-     {:type "text" :autoFocus auto-focus :on-change on-change :value value}]))

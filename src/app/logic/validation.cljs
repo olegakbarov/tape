@@ -1,5 +1,6 @@
 (ns app.logic.validation
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s]
+            [klang.core :refer-macros [info! warn! erro! crit! fata! trac!]]))
 
 (def seps #{"." ","})
 
@@ -42,10 +43,20 @@
               valid-chars
               only-one-dot))))))
 
+(defn validate-alert
+  ;; TODO test it
+  "Validates alert item for non-emptyness"
+  [alert]
+  (assert (every? string? (vals alert)))
+  (as-> alert a
+    (if (s/blank? (:market a)) false a)
+    (if (s/blank? (:pair a)) false a)
+    (if (s/blank? (:amount a)) false a)
+    (if (s/blank? (:repeat a)) false a)))
+
 (defn str->item
   "Accepts string and coll of strings, filters out items not starting-with? string"
   [coll s]
-  (js/console.log coll)
   (assert (every? string? coll))
   (if (empty? (filter #(clojure.string/starts-with? (.toLowerCase %)
                                                     (.toLowerCase s))

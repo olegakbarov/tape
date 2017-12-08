@@ -58,7 +58,7 @@
  dev-build
  []
  ; (set-env! :resource-paths #{"resources"})
- (comp ; (speak)
+ (comp (speak)
        (cljs-devtools)
        (dirac)
        (cljs-repl :ids #{"renderer"})
