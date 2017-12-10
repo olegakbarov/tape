@@ -117,10 +117,16 @@
       [:div#wrapper
        [alerts-list]
        [:div.form_wrap
-        [InputWrapper "Market" [select-market]]
-        [InputWrapper "Currency pair" [select-pair]]
+        [InputWrapper
+         "Market"
+         [select-market {:key "market"}]]
+        [InputWrapper
+         "Currency pair"
+         [select-pair {:key "pair"}]]
         [CurrInput on-change]
-        [InputWrapper "Repeat alert" [select-repeat]]
+        [InputWrapper
+         "Repeat alert"
+         [select-repeat {:key "pair"}]]
         [:div.input_wrapper
          [Button
           {:on-click on-submit

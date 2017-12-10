@@ -1,5 +1,6 @@
 (ns app.components.ui
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [clojure.string :as s]))
 
 (defn Button
   [params text]
@@ -35,4 +36,5 @@
 (defn InputWrapper
   "Wraps the input and provides label"
   [label & children]
-  [:div.input_wrapper [:div.input_label label] children])
+  [:div.input_wrapper
+   [:div.input_label label] children])

@@ -7,7 +7,7 @@
 
 (defn settings
   []
-  [:div#wrapper
-   [Button
-    {:type "submit" :on-click #(js/console.log "saved!") :color "#12D823"}
-    "Save"]])
+  [:div#wrapper])
+   ; [Button
+   ;  {:type "submit" :on-click #(js/console.log "saved!")}
+   ;  "Save"]])
