@@ -54,6 +54,17 @@
     (if (s/blank? (:amount a)) false a)
     (if (s/blank? (:repeat a)) false a)))
 
+(defn validate-portfolio-record
+  ;; TODO test it
+  "Validates portfolio record item for non-emptyness"
+  [rec]
+  (assert (every? string? (vals rec)))
+  (js/console.log rec)
+  (as-> rec r
+    (if (s/blank? (:market r)) false r)
+    (if (s/blank? (:currency r)) false r)
+    (if (s/blank? (:amount r)) false r)))
+
 (defn str->item
   "Accepts string and coll of strings, filters out items not starting-with? string"
   [coll s]

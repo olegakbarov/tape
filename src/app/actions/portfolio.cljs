@@ -1,21 +1,31 @@
 (ns app.actions.portfolio
   (:require [app.db :refer [db]]
-            [app.actions.storage :refer [persist-user-currents!]]))
+            [app.actions.storage :refer [persist-user-currents!]]
+            [app.utils.core :refer [generate-uuid]]))
 
-; (defn add-item
-;   [rec]
-;   (let [id (.toString (random-uuid))]
-;     (do (swap! db assoc-in [:user :portfolio id] (merge rec {:id id}))
-;         (persist-user-currents!))))
+(defn create-portfolio-record
+  "Adds notif to state and persists it to disk"
+  [a]
+  (let [id (generate-uuid)]
+    (do (swap! db
+               assoc-in
+               [:user :portfolio id]
+               (merge a
+                      {:id id
+                       :market (-> a
+                                   :market
+                                   keyword)
+                       :currency (-> a
+                                     :currency
+                                     keyword)}))
+        (persist-user-currents!))))
 
-; (defn set-editing-item [id] (swap! db assoc-in [:ui/portfolio-editing] id))
+(defn update-portfolio-record
+  [updated]
+  (let [{:keys [id]} updated]
+    (do (swap! db update-in [:user :portfolio id] updated))))
 
-; (defn edit-item
-;   [updated]
-;   (let [{:keys [id]} updated]
-;     (do (swap! db update-in [:user :portfolio id] updated))))
-
-; (defn remove-item
-;   [id]
-;   (do (swap! db update-in [:user :portfolio] dissoc id)
-;       (persist-user-currents!)))
+(defn remove-portfolio-record
+  [id]
+  (do (swap! db update-in [:user :portfolio] dissoc id)
+      (persist-user-currents!)))

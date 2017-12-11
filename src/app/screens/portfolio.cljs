@@ -6,9 +6,10 @@
    [app.actions.ui :refer [to-screen]]
    [app.db :refer [db]]
    [app.logic.curr :refer [get-market-names get-crypto-currs]]
-   [app.logic.validation :refer [str->amount str->item]]
+   [app.logic.validation :refer [str->amount validate-portfolio-record]]
    [cljsjs.react-select]
    [app.actions.form :refer [update-portfolio-form clear-portfolio-form]]
+   [app.actions.portfolio :refer [create-portfolio-record]]
    [app.components.ui
     :refer
     [EmptyListCompo InputWrapper Checkbox Button CurrInput]]))
@@ -28,7 +29,7 @@
            ^{:key id}
            [:div.folio_row
             [:div.content
-             [:div.amount (str currency ": " amount)]
+             [:div.amount (str (name currency) " " amount)]
              [:div.market market]]
             [:div.actions [:div.edit "edit"] [:div.delete "delete"]]])))]))
 
@@ -61,19 +62,13 @@
         opts (get-crypto-currs m)
         on-change #(update-portfolio-form
                     :currency
-                    (if % (aget % "value") (update-portfolio-form :currency "")))]
+                    (if % (aget % "value")
+                          (update-portfolio-form :currency "")))]
     [:>
      js/window.Select
      {:value v
       :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
       :onChange on-change}]))
-
-(defn on-submit
-  "Packs field names with values from input-form and saves them"
-  []
-  (let [form
-        (-> @db
-            :form/portfolio)]))
 
 (defn portfolio
   []
@@ -81,7 +76,11 @@
                     (let [v (-> e
                                 .-target
                                 .-value)]
-                      (update-portfolio-form :amount (str->amount v))))]
+                      (update-portfolio-form :amount (str->amount v))))
+        on-submit #(when-let [a (validate-portfolio-record (-> @db
+                                                               :form/portfolio))]
+                    (do (clear-portfolio-form)
+                        (create-portfolio-record a)))]
     (fn []
       [:div#wrapper
         [portfolio-list]
