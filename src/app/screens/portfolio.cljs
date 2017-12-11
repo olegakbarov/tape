@@ -1,15 +1,17 @@
 (ns app.screens.portfolio
-  (:require [reagent.core :as r]
-            [app.components.header :refer [Header]]
-            [app.actions.ui :refer [to-screen]]
-            [app.actions.portfolio :refer [add-item]]
-            [app.db :refer [db]]
-            [clojure.string :as s]
-            [app.actions.portfolio :refer [remove-item set-editing-item]]
-            [app.logic.curr :refer [get-market-names get-crypto-currs]]
-            [app.logic.validation :refer [str->amount str->item]]
-            [app.components.ui :refer [EmptyListCompo]]
-            [app.actions.form :refer [update-portfolio-form]]))
+  (:require
+   [clojure.string :as s]
+   [reagent.core :as r]
+   [app.components.header :refer [Header]]
+   [app.actions.ui :refer [to-screen]]
+   [app.db :refer [db]]
+   [app.logic.curr :refer [get-market-names get-crypto-currs]]
+   [app.logic.validation :refer [str->amount str->item]]
+   [cljsjs.react-select]
+   [app.actions.form :refer [update-portfolio-form clear-portfolio-form]]
+   [app.components.ui
+    :refer
+    [EmptyListCompo InputWrapper Checkbox Button CurrInput]]))
 
 ;; TODO: dont re-render on every ws event
 (defn portfolio-list
@@ -28,15 +30,70 @@
             [:div.content
              [:div.amount (str currency ": " amount)]
              [:div.market market]]
-            [:div.actions
-             [:div.edit {:on-click #(set-editing-item id)} "edit"]
-             [:div.delete {:on-click #(remove-item id)} "delete"]]])))]))
+            [:div.actions [:div.edit "edit"] [:div.delete "delete"]]])))]))
 
-(defn handle-submit
-  "Packs field names with values from input-form"
+(defn select-market
+  []
+  (let [m (-> @db
+              :markets)
+        v (-> @db
+              :form/portfolio
+              :market)
+        opts (get-market-names m)
+        on-change #(update-portfolio-form
+                    :market
+                    (if % (aget % "value") (update-portfolio-form :market "")))]
+    (js/console.log v)
+    [:>
+     js/window.Select
+     {:value v
+      :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
+      :onChange on-change}]))
+
+(defn select-curr
+  []
+  ;; TODO: only currency available on selected market
+  (let [m (-> @db
+              :markets)
+        v (-> @db
+              :form/portfolio
+              :currency)
+        opts (get-crypto-currs m)
+        on-change #(update-portfolio-form
+                    :currency
+                    (if % (aget % "value") (update-portfolio-form :currency "")))]
+    [:>
+     js/window.Select
+     {:value v
+      :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
+      :onChange on-change}]))
+
+(defn on-submit
+  "Packs field names with values from input-form and saves them"
   []
   (let [form
         (-> @db
             :form/portfolio)]))
 
-(defn portfolio [] [:div#wrapper [portfolio-list]])
+(defn portfolio
+  []
+  (let [on-change (fn [e]
+                    (let [v (-> e
+                                .-target
+                                .-value)]
+                      (update-portfolio-form :amount (str->amount v))))]
+    (fn []
+      [:div#wrapper
+        [portfolio-list]
+        [:div.form_wrap
+         [InputWrapper "Market" [select-market {:key "market"}]]
+         [InputWrapper "Currency" [select-curr {:key "currency"}]]
+         [CurrInput on-change :form/portfolio]
+         [:div.input_wrapper
+          [Button
+           {:on-click on-submit
+            :type "submit"
+            :ref nil
+            :disabled false
+            :color "#000"}
+           "Add"]]]])))

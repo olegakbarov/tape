@@ -5,9 +5,7 @@
             [app.components.header :refer [Header]]
             [app.components.ui :refer [Button]]))
 
-(defn settings
-  []
-  [:div#wrapper])
-   ; [Button
-   ;  {:type "submit" :on-click #(js/console.log "saved!")}
-   ;  "Save"]])
+(defn settings [] [:div#wrapper])
+; [Button
+;  {:type "submit" :on-click #(js/console.log "saved!")}
+;  "Save"]])

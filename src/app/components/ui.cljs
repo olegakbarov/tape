@@ -1,6 +1,7 @@
 (ns app.components.ui
   (:require [reagent.core :as r]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [app.db :refer [db]]))
 
 (defn Button
   [params text]
@@ -36,5 +37,19 @@
 (defn InputWrapper
   "Wraps the input and provides label"
   [label & children]
-  [:div.input_wrapper
-   [:div.input_label label] children])
+  [:div.input_wrapper [:div.input_label label] children])
+
+(defn CurrInput
+  "Generic text/number input"
+  [on-change cursor]
+  (fn []
+    [:div.input_wrapper
+     [:div.input_label "Amount"]
+     [:input.input_item
+      {:type "text"
+       :autoFocus false
+       :onChange on-change
+       :value (-> @db
+                  cursor
+                  :amount)}]]))
+

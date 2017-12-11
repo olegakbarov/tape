@@ -1,15 +1,16 @@
 (ns app.screens.alerts
-  (:require
-   [reagent.core :as r]
-   [clojure.string :as s]
-   [cljsjs.react-select]
-   [app.actions.ui :refer [to-screen]]
-   [app.db :refer [db]]
-   [app.actions.form :refer [update-alert-form clear-alert-form]]
-   [app.logic.curr :refer [get-market-names get-all-pair-names]]
-   [app.logic.validation :refer [str->amount validate-alert]]
-   [app.actions.alerts :refer [create-alert]]
-   [app.components.ui :refer [EmptyListCompo InputWrapper Checkbox Button]]))
+  (:require [reagent.core :as r]
+            [clojure.string :as s]
+            [cljsjs.react-select]
+            [app.actions.ui :refer [to-screen]]
+            [app.db :refer [db]]
+            [app.actions.form :refer [update-alert-form clear-alert-form]]
+            [app.logic.curr :refer [get-market-names get-all-pair-names]]
+            [app.logic.validation :refer [str->amount validate-alert]]
+            [app.actions.alerts :refer [create-alert]]
+            [app.components.ui
+             :refer
+             [EmptyListCompo InputWrapper Checkbox Button CurrInput]]))
 
 (defn select-pair
   []
@@ -60,19 +61,6 @@
       :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
       :onChange on-change}]))
 
-(defn CurrInput
-  [on-change]
-  (fn []
-    [:div.input_wrapper
-     [:div.input_label "Amount"]
-     [:input.input_item
-      {:type "text"
-       :autoFocus false
-       :onChange on-change
-       :value (-> @db
-                  :form/alert
-                  :amount)}]]))
-
 (defn alert-items
   []
   (fn []
@@ -117,16 +105,10 @@
       [:div#wrapper
        [alerts-list]
        [:div.form_wrap
-        [InputWrapper
-         "Market"
-         [select-market {:key "market"}]]
-        [InputWrapper
-         "Currency pair"
-         [select-pair {:key "pair"}]]
-        [CurrInput on-change]
-        [InputWrapper
-         "Repeat alert"
-         [select-repeat {:key "pair"}]]
+        [InputWrapper "Market" [select-market {:key "market"}]]
+        [InputWrapper "Currency pair" [select-pair {:key "pair"}]]
+        [CurrInput on-change :form/alert]
+        [InputWrapper "Repeat alert" [select-repeat {:key "pair"}]]
         [:div.input_wrapper
          [Button
           {:on-click on-submit
