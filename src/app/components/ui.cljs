@@ -3,6 +3,13 @@
             [clojure.string :as s]
             [app.db :refer [db]]))
 
+(defn Spinner
+  []
+  [:div.orbit-spinner
+   (for [i [1 2 3]]
+    ^{:key i}
+    [:div.orbit])])
+
 (defn Button
   [params text]
   (let [{:keys [on-click type ref disabled color]} params]
