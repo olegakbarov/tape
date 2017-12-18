@@ -1,13 +1,38 @@
 (ns app.screens.live
-  (:require-macros [app.macros :refer [profile]])
+  (:require-macros [app.macros :refer [profile]]
+                   [klang.core :refer [info! warn! erro! crit! fata! trac!]])
   (:require [reagent.core :as r]
+            [clojure.string :as s]
             [app.db :refer [db]]
             [cljsjs.moment]
             [app.logic.curr :refer [best-pairs all-pairs user-favs by-query]]
             [app.utils.core :refer [curr-symbol->name]]
             [clojure.string :refer [split]]
-            [app.screens.filterbox :refer [FilterBox]]
-            [app.actions.ui :refer [open-detailed-view]]))
+            [app.actions.ui :refer [toggle-filter update-filter-q open-detailed-view]]
+            [app.components.ui :refer [InputWrapper TextInput]]
+            [cljsjs.react-select]))
+
+;; TODO: handle updates properly
+; (defn Row [pair]
+;  (reagent/create-class
+;   {:reagent-render         #(render-row pair)
+;    :component-did-update   update-comp
+;    :component-did-mount    update-comp
+;    :should-component-update
+;     (fn [this]
+;      (println "next-props" (reagent/props this)))}))
+
+
+(defn keyword<->str [v]
+  (if (string? v)
+      (-> v
+          (s/replace " " "")
+          .toLowerCase
+          keyword)
+      (condp = v
+               :bestprice "Best price"
+               :favorites "Favorites"
+               nil (erro! (str "Not a string/keyword " v)))))
 
 (defn Row
   [pair]
@@ -25,16 +50,6 @@
          (str amount " (" percent "%) ")
          "n/a")]]]))
 
-;; TODO: handle updates properly
-; (defn Row [pair]
-;  (reagent/create-class
-;   {:reagent-render         #(render-row pair)
-;    :component-did-update   update-comp
-;    :component-did-mount    update-comp
-;    :should-component-update
-;     (fn [this]
-;      (println "next-props" (reagent/props this)))}))
-
 (defn render-rows
   []
   (fn []
@@ -42,7 +57,7 @@
           favs (:user/favorites @db)
           q (:ui/filter-q @db)
           pairs (condp = (:ui/current-filter @db)
-                  :price @(r/track best-pairs markets)
+                  :bestprice @(r/track best-pairs markets)
                   :favorites @(r/track user-favs markets favs)
                   :volatile nil
                   :query @(r/track by-query markets q)
@@ -57,9 +72,37 @@
                                              (keyword currency-pair)))}
             [Row pair]]))])))
 
+(defn select-q
+  []
+  (let [opts ["Favorites" "Best price"]
+        v (-> @db :ui/current-filter)
+        on-change #(if % (toggle-filter (keyword<->str (aget % "value"))))]
+    [:>
+     js/window.Select
+     {:value (keyword<->str v)
+      :onChange on-change
+      :options (clj->js (map #(zipmap [:value :label]
+                                      [% %])
+                          opts))}]))
+
+(defn filter-box
+  []
+  (let [q (:ui/filter-q @db)
+        f (:ui/current-filter @db)
+        on-change #(update-filter-q (-> %
+                                        .-target
+                                        .-value))]
+    (fn []
+      [:div.form_wrap
+       [TextInput
+        {:on-change on-change
+         :value #(-> @db :ui/filter-q)
+         :label "search"}]
+       [InputWrapper "Filter"
+        [select-q {:key "filter"}]]])))
 
 (defn live-board
   []
   [:div#wrapper
-   ; [FilterBox]
+   [filter-box]
    [render-rows]])

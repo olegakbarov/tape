@@ -1,22 +1,3 @@
-.filter_box {
-  padding: 8px;
-  display: flex;
-}
-
-.filter_item {
-  font-size: 10px;
-  padding: 4px 6px 5px 6px;
-  margin-left: 4px;
-  border: 1px solid black;
-  border-radius: 50px;
-  text-transform: uppercase;
-}
-
-.filter_item.selected {
-  background-color: black;
-  color: white;
-}
-
 @keyframes highlight_green {
   0% {
     background-color: var(--green);

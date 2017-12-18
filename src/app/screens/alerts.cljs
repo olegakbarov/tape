@@ -10,7 +10,7 @@
             [app.actions.alerts :refer [create-alert]]
             [app.components.ui
              :refer
-             [EmptyListCompo InputWrapper Checkbox Button CurrInput]]))
+             [EmptyListCompo InputWrapper Checkbox Button TextInput]]))
 
 (defn select-pair
   []
@@ -107,7 +107,9 @@
        [:div.form_wrap
         [InputWrapper "Market" [select-market {:key "market"}]]
         [InputWrapper "Currency pair" [select-pair {:key "pair"}]]
-        [CurrInput on-change :form/alert]
+        [TextInput
+         {:on-change on-change
+          :value #(-> @db :form/alert :amount)}]
         [InputWrapper "Repeat alert" [select-repeat {:key "pair"}]]
         [:div.input_wrapper
          [Button

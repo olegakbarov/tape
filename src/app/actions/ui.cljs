@@ -29,17 +29,17 @@
       (persist-user-currents!)))
 
 (defn toggle-filter
-  "k - keyword of applied filter"
-  [k]
+  [filter-str]
+  (js/console.log filter-str)
   (do (swap! db assoc :ui/detailed-view nil)
       (swap! db
              update-in
              [:ui/current-filter]
-             #(if (= k (:ui/current-filter @db)) nil k))))
+             #(if (= filter-str (:ui/current-filter @db))
+                  nil
+                  filter-str))))
 
 (defn update-filter-q
   [q]
-  (do (swap! db assoc-in [:ui/filter-q] q)
-      (swap! db assoc-in [:ui/current-filter] (when-not (= q "") :query))))
+  (swap! db assoc-in [:ui/filter-q] q))
 
-(vec '(:a :b))

@@ -12,7 +12,7 @@
    [app.actions.portfolio :refer [create-portfolio-record]]
    [app.components.ui
     :refer
-    [EmptyListCompo InputWrapper Checkbox Button CurrInput]]))
+    [EmptyListCompo InputWrapper Checkbox Button TextInput]]))
 
 ;; TODO: dont re-render on every ws event
 (defn portfolio-list
@@ -87,7 +87,9 @@
         [:div.form_wrap
          [InputWrapper "Market" [select-market {:key "market"}]]
          [InputWrapper "Currency" [select-curr {:key "currency"}]]
-         [CurrInput on-change :form/portfolio]
+         [TextInput
+          {:on-change on-change
+           :value #(-> @db :form/portfolio :amount)}]
          [:div.input_wrapper
           [Button
            {:on-click on-submit
