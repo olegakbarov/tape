@@ -3,12 +3,7 @@
             [clojure.string :as s]
             [app.db :refer [db]]))
 
-(defn Spinner
-  []
-  [:div.orbit-spinner
-   (for [i [1 2 3]]
-    ^{:key i}
-    [:div.orbit])])
+(defn Spinner [] [:div.orbit-spinner (for [i [1 2 3]] ^{:key i} [:div.orbit])])
 
 (defn Button
   [params text]
@@ -23,8 +18,7 @@
   ;; generage custom "for"
   [:div.checkbox_wrapper
    [:div.checkbox_legend legend]
-   [:input#tray.checkbox {:type "checkbox"
-                          :on-change on-change}]
+   [:input#tray.checkbox {:type "checkbox" :on-change on-change}]
    [:label {:for "tray"}]])
 
 (defn EmptyListCompo
@@ -41,12 +35,8 @@
   [cfg]
   ;; TODO: spec it
   (fn []
-   (let [{:keys [on-change value label]} cfg]
-    [:div.input_wrapper
-     (when label [:div.input_label label])
-     [:input.input_item
-      {:type "text"
-       :autoFocus false
-       :onChange on-change
-       :value (value)}]])))
-
+    (let [{:keys [on-change value label]} cfg]
+      [:div.input_wrapper
+       (when label [:div.input_label label])
+       [:input.input_item
+        {:type "text" :autoFocus false :onChange on-change :value (value)}]])))

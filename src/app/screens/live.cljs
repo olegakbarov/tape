@@ -1,16 +1,17 @@
 (ns app.screens.live
   (:require-macros [app.macros :refer [profile]]
                    [klang.core :refer [info! warn! erro! crit! fata! trac!]])
-  (:require [reagent.core :as r]
-            [clojure.string :as s]
-            [app.db :refer [db]]
-            [cljsjs.moment]
-            [app.logic.curr :refer [best-pairs all-pairs user-favs by-query]]
-            [app.utils.core :refer [curr-symbol->name]]
-            [clojure.string :refer [split]]
-            [app.actions.ui :refer [toggle-filter update-filter-q open-detailed-view]]
-            [app.components.ui :refer [InputWrapper TextInput]]
-            [cljsjs.react-select]))
+  (:require
+   [reagent.core :as r]
+   [clojure.string :as s]
+   [app.db :refer [db]]
+   [cljsjs.moment]
+   [app.logic.curr :refer [best-pairs all-pairs user-favs by-query]]
+   [app.utils.core :refer [curr-symbol->name]]
+   [clojure.string :refer [split]]
+   [app.actions.ui :refer [toggle-filter update-filter-q open-detailed-view]]
+   [app.components.ui :refer [InputWrapper TextInput]]
+   [cljsjs.react-select]))
 
 ;; TODO: handle updates properly
 ; (defn Row [pair]
@@ -22,17 +23,17 @@
 ;     (fn [this]
 ;      (println "next-props" (reagent/props this)))}))
 
-
-(defn keyword<->str [v]
+(defn keyword<->str
+  [v]
   (if (string? v)
-      (-> v
-          (s/replace " " "")
-          .toLowerCase
-          keyword)
-      (condp = v
-               :bestprice "Best price"
-               :favorites "Favorites"
-               nil (erro! (str "Not a string/keyword " v)))))
+    (-> v
+        (s/replace " " "")
+        .toLowerCase
+        keyword)
+    (condp = v
+      :bestprice "Best price"
+      :favorites "Favorites"
+      nil (erro! (str "Not a string/keyword " v)))))
 
 (defn Row
   [pair]
@@ -54,12 +55,15 @@
   []
   (fn []
     (let [markets (:markets @db)
-          favs (:user/favorites @db)
+          favs (-> @db
+                   :user
+                   :favorites)
           q (:ui/filter-q @db)
           pairs (condp = (:ui/current-filter @db)
                   :bestprice @(r/track best-pairs markets)
                   :favorites @(r/track user-favs markets favs)
                   :volatile nil
+                  ;; // TODO think about query resets
                   :query @(r/track by-query markets q)
                   nil @(r/track all-pairs markets))]
       [:div
@@ -75,15 +79,14 @@
 (defn select-q
   []
   (let [opts ["Favorites" "Best price"]
-        v (-> @db :ui/current-filter)
+        v (-> @db
+              :ui/current-filter)
         on-change #(if % (toggle-filter (keyword<->str (aget % "value"))))]
     [:>
      js/window.Select
      {:value (keyword<->str v)
       :onChange on-change
-      :options (clj->js (map #(zipmap [:value :label]
-                                      [% %])
-                          opts))}]))
+      :options (clj->js (map #(zipmap [:value :label] [% %]) opts))}]))
 
 (defn filter-box
   []
@@ -92,17 +95,12 @@
         on-change #(update-filter-q (-> %
                                         .-target
                                         .-value))]
-    (fn []
-      [:div.form_wrap
-       [TextInput
-        {:on-change on-change
-         :value #(-> @db :ui/filter-q)
-         :label "search"}]
-       [InputWrapper "Filter"
-        [select-q {:key "filter"}]]])))
+    (fn [] [:div.form_wrap
+            [TextInput
+             {:on-change on-change
+              :value #(-> @db
+                          :ui/filter-q)
+              :label "search"}]
+            [InputWrapper "Filter" [select-q {:key "filter"}]]])))
 
-(defn live-board
-  []
-  [:div#wrapper
-   [filter-box]
-   [render-rows]])
+(defn live-board [] [:div#wrapper [filter-box] [render-rows]])

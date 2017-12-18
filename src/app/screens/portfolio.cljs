@@ -60,10 +60,10 @@
               :form/portfolio
               :currency)
         opts (get-crypto-currs m)
-        on-change #(update-portfolio-form
-                    :currency
-                    (if % (aget % "value")
-                          (update-portfolio-form :currency "")))]
+        on-change
+        #(update-portfolio-form
+          :currency
+          (if % (aget % "value") (update-portfolio-form :currency "")))]
     [:>
      js/window.Select
      {:value v
@@ -77,24 +77,26 @@
                                 .-target
                                 .-value)]
                       (update-portfolio-form :amount (str->amount v))))
-        on-submit #(when-let [a (validate-portfolio-record (-> @db
-                                                               :form/portfolio))]
-                    (do (clear-portfolio-form)
-                        (create-portfolio-record a)))]
+        on-submit #(when-let [a (validate-portfolio-record (->
+                                                             @db
+                                                             :form/portfolio))]
+                    (do (clear-portfolio-form) (create-portfolio-record a)))]
     (fn []
       [:div#wrapper
-        [portfolio-list]
-        [:div.form_wrap
-         [InputWrapper "Market" [select-market {:key "market"}]]
-         [InputWrapper "Currency" [select-curr {:key "currency"}]]
-         [TextInput
-          {:on-change on-change
-           :value #(-> @db :form/portfolio :amount)}]
-         [:div.input_wrapper
-          [Button
-           {:on-click on-submit
-            :type "submit"
-            :ref nil
-            :disabled false
-            :color "#000"}
-           "Add"]]]])))
+       [portfolio-list]
+       [:div.form_wrap
+        [InputWrapper "Market" [select-market {:key "market"}]]
+        [InputWrapper "Currency" [select-curr {:key "currency"}]]
+        [TextInput
+         {:on-change on-change
+          :value #(-> @db
+                      :form/portfolio
+                      :amount)}]
+        [:div.input_wrapper
+         [Button
+          {:on-click on-submit
+           :type "submit"
+           :ref nil
+           :disabled false
+           :color "#000"}
+          "Add"]]]])))

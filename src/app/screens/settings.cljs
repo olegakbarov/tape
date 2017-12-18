@@ -5,7 +5,9 @@
             [app.components.header :refer [Header]]
             [app.components.ui :refer [Button Spinner]]))
 
-(defn settings [] [:div#wrapper]
+(defn settings
+  []
+  [:div#wrapper]
   [:div
    {:style {:display "flex"
             :align-items "center"

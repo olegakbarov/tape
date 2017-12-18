@@ -109,7 +109,9 @@
         [InputWrapper "Currency pair" [select-pair {:key "pair"}]]
         [TextInput
          {:on-change on-change
-          :value #(-> @db :form/alert :amount)}]
+          :value #(-> @db
+                      :form/alert
+                      :amount)}]
         [InputWrapper "Repeat alert" [select-repeat {:key "pair"}]]
         [:div.input_wrapper
          [Button

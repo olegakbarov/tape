@@ -35,11 +35,6 @@
       (swap! db
              update-in
              [:ui/current-filter]
-             #(if (= filter-str (:ui/current-filter @db))
-                  nil
-                  filter-str))))
+             #(if (= filter-str (:ui/current-filter @db)) nil filter-str))))
 
-(defn update-filter-q
-  [q]
-  (swap! db assoc-in [:ui/filter-q] q))
-
+(defn update-filter-q [q] (swap! db assoc-in [:ui/filter-q] q))
