@@ -27,11 +27,16 @@
        (for [row folio]
          (let [{:keys [currency amount market id]} row]
            ^{:key id}
-           [:div.folio_row
-            [:div.content
-             [:div.amount (str (name currency) " " amount)]
+           [:div.row_wrap
+            ^{:key "currency"}
+            [:div.left_cell
+             [:div.title (str (name currency) " " amount)]
              [:div.market market]]
-            [:div.actions [:div.edit "edit"] [:div.delete "delete"]]])))]))
+            ^{:key "last-ctrls"}
+            [:div.right_cell
+             [:div.actions
+              [:div.edit "edit"]
+              [:div.delete "delete"]]]])))]))
 
 (defn select-market
   []
@@ -44,7 +49,6 @@
         on-change #(update-portfolio-form
                     :market
                     (if % (aget % "value") (update-portfolio-form :market "")))]
-    (js/console.log v)
     [:>
      js/window.Select
      {:value v

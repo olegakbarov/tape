@@ -211,44 +211,9 @@ input.input_item {
   width: 100%;
 }
 
-.folio_row {
+.right_cell > .actions {
   display: flex;
-  border-top: 1px solid rgba(151, 151, 151, .1);
-  padding: 12px;
-  align-items: center;
-}
-
-.folio_row:last-child {
-  border-bottom: 1px solid rgba(151, 151, 151, .1);
-}
-
-.folio_row > .content {
-  width: 60%;
-}
-
-.folio_row > .content > * {
-  margin-right: 10px;
-}
-
-.folio_row > .actions {
-  width: 40%;
-}
-
-.content > .amount {
-  font-size: 17px;
-  line-height: 17px;
-}
-
-.content > .market {
-  margin-top: 3px;
-  font-size: 10px;
-  line-height: 11px;
-  text-transform: uppercase;
-  color: #ccc;
-}
-
-.folio_row > .actions > * {
-  display: inline-block;
+  justify-content: flex-end;
 }
 
 .actions > .delete,
