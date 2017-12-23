@@ -91,7 +91,8 @@
          {:on-change on-change
           :value #(-> @db
                       :form/portfolio
-                      :amount)}]
+                      :amount)
+          :label "amount"}]
         [:div.input_wrapper
          [Button
           {:on-click on-submit

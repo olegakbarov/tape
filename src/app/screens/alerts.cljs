@@ -109,6 +109,7 @@
         [InputWrapper "Currency pair" [select-pair {:key "pair"}]]
         [TextInput
          {:on-change on-change
+          :label "amount"
           :value #(-> @db
                       :form/alert
                       :amount)}]

@@ -8,7 +8,7 @@
 (def electron (js/require "electron"))
 (def remote (.-remote electron))
 
-(def default-file {:portfolio [] :favorites [] :settings {}})
+(def default-file {:portfolio [] :favorites {} :settings {}})
 
 (def data-file-name "/data-file.edn")
 
@@ -26,7 +26,7 @@
 (defn read-data-file!
   "File with following signature
    {:portfolio {...}
-    :favorites [...]
+    :favorites {...}
     :settings {...}}"
   []
   (let [fs (js/require "fs")

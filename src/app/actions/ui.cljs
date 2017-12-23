@@ -30,7 +30,6 @@
 
 (defn toggle-filter
   [filter-str]
-  (js/console.log filter-str)
   (do (swap! db assoc :ui/detailed-view nil)
       (swap! db
              update-in

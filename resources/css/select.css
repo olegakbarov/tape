@@ -234,6 +234,7 @@
   height: 0;
   width: 0;
   position: relative;
+  vertical-align: middle;
 }
 .Select-control > *:last-child {
   padding-right: 5px;
