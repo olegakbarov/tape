@@ -9,10 +9,18 @@
    [app.logic.validation :refer [str->amount validate-portfolio-record]]
    [cljsjs.react-select]
    [app.actions.form :refer [update-portfolio-form clear-portfolio-form]]
-   [app.actions.portfolio :refer [create-portfolio-record]]
+   [app.actions.portfolio
+    :refer
+    [create-portfolio-record remove-portfolio-record get-total-worth]]
    [app.components.ui
     :refer
     [EmptyListCompo InputWrapper Checkbox Button TextInput]]))
+
+(defn total-worth
+  []
+  (fn []
+    (let [w (.toFixed (get-total-worth) 2)]
+      (if (> w 0) [:div.total_worth (str "$ " w)] [:div]))))
 
 ;; TODO: dont re-render on every ws event
 (defn portfolio-list
@@ -34,7 +42,11 @@
              [:div.market market]]
             ^{:key "last-ctrls"}
             [:div.right_cell
-             [:div.actions [:div.edit "edit"] [:div.delete "delete"]]]])))]))
+             [:div.actions
+              [:div.edit {:on-click #(js/console.log "nimp")} "edit"]
+              [:div.delete
+               {:on-click #(remove-portfolio-record id)}
+               "delete"]]]])))]))
 
 (defn select-market
   []
@@ -85,6 +97,7 @@
                     (do (clear-portfolio-form) (create-portfolio-record a)))]
     (fn []
       [:div#wrapper
+       [total-worth]
        [portfolio-list]
        [:div.form_wrap
         [InputWrapper "Market" [select-market {:key "market"}]]

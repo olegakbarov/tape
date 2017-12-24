@@ -29,3 +29,26 @@
   [id]
   (do (swap! db update-in [:user :portfolio] dissoc id)
       (persist-user-currents!)))
+
+(defn- to-dollar
+  "Returns dollar price of curr on this market"
+  [amount curr market]
+  ;; TODO handle case where altcoin doesn't have dollar value (if any)
+  (let [pair (keyword (str (name curr) "-USD"))]
+    (* amount
+       (-> @db
+           :markets
+           market
+           pair
+           :last))))
+
+(defn get-total-worth
+  []
+  (let [folio (-> @db
+                  :user
+                  :portfolio)]
+    (reduce (fn [acc [id item]]
+              (let [{:keys [amount currency market]} item]
+                (+ acc (to-dollar (js/parseFloat amount) currency market))))
+            0
+            folio)))

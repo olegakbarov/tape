@@ -170,6 +170,13 @@ li.group_btn:hover {
   margin-top: 50px;
 }
 
+.total_worth {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  padding: 50px 0;
+}
+
 .form_empty_list {
   padding: 70px 0;
   margin: 0 auto;

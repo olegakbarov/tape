@@ -6,7 +6,9 @@
    [clojure.string :as s]
    [app.db :refer [db]]
    [cljsjs.moment]
-   [app.logic.curr :refer [best-pairs all-pairs user-favs by-query pairs-by-query]]
+   [app.logic.curr
+    :refer
+    [best-pairs all-pairs user-favs by-query pairs-by-query]]
    [app.utils.core :refer [curr-symbol->name]]
    [clojure.string :refer [split]]
    [app.actions.ui :refer [toggle-filter update-filter-q open-detailed-view]]
