@@ -78,7 +78,9 @@
 
 (defn user-favs
   [markets favs]
-  (reduce (fn [acc tupl] (conj acc (get-in markets tupl))) [] favs))
+  (if (empty? markets)
+      []
+      (reduce (fn [acc tupl] (conj acc (get-in markets tupl))) [] favs)))
 
 (defn by-query
   [markets q]
@@ -86,3 +88,12 @@
        vals
        (mapcat vals)
        (filter #(re-find (re-pattern q) (:market %)))))
+
+(defn pairs-by-query
+  "Returns paris collection only with items where :market or :currency-pair fields matches the substring `q`"
+  [pairs q]
+  (let [lc #(.toLowerCase %)]
+    (filter #(or (re-find (re-pattern (lc q)) (lc (-> % :market name)))
+                 (re-find (re-pattern (lc q)) (lc (-> % :currency-pair name))))
+      pairs)))
+

@@ -34,9 +34,7 @@
              [:div.market market]]
             ^{:key "last-ctrls"}
             [:div.right_cell
-             [:div.actions
-              [:div.edit "edit"]
-              [:div.delete "delete"]]]])))]))
+             [:div.actions [:div.edit "edit"] [:div.delete "delete"]]]])))]))
 
 (defn select-market
   []

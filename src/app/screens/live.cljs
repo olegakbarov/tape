@@ -6,7 +6,7 @@
    [clojure.string :as s]
    [app.db :refer [db]]
    [cljsjs.moment]
-   [app.logic.curr :refer [best-pairs all-pairs user-favs by-query]]
+   [app.logic.curr :refer [best-pairs all-pairs user-favs by-query pairs-by-query]]
    [app.utils.core :refer [curr-symbol->name]]
    [clojure.string :refer [split]]
    [app.actions.ui :refer [toggle-filter update-filter-q open-detailed-view]]
@@ -63,11 +63,10 @@
                   :bestprice @(r/track best-pairs markets)
                   :favorites @(r/track user-favs markets favs)
                   :volatile nil
-                  ;; // TODO think about query resets
-                  :query @(r/track by-query markets q)
-                  nil @(r/track all-pairs markets))]
+                  nil @(r/track all-pairs markets))
+          filtered (pairs-by-query pairs q)]
       [:div
-       (for [pair (remove empty? pairs)]
+       (for [pair filtered]
          (let [{:keys [market currency-pair]} pair]
            ^{:key (str pair market)}
            [:div
