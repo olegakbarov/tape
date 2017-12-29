@@ -21,12 +21,12 @@
 (def electron (js/require "electron"))
 (def webcontents (.-webFrame electron))
 
-(defn disable-content-scale!
-  []
-  (.setVisualZoomLevelLimits webcontents 1 1)
-  (.setLayoutZoomLevelLimits webcontents 0 0))
+; (defn disable-content-scale!
+;   []
+;   (.setVisualZoomLevelLimits webcontents 1 1)
+;   (.setLayoutZoomLevelLimits webcontents 0 0))
 
-(disable-content-scale!)
+; (disable-content-scale!)
 
 (defn init [] (fetch-state!) (mount/start))
 
