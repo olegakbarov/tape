@@ -71,7 +71,7 @@ boot fmt --git --mode overwrite --really --options '{:style :community :map {:co
 
 ## Deploy and packaging
 
-This is not implemented yet. We are looking for you feedback and help (especially from windows
+This is not implemented yet. We are looking for you feedback and help (especially from windows folks)
 
 ### Packaging
 
