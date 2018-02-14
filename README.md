@@ -30,7 +30,7 @@ TODO
 
 ### Development
 
-To start working in development mode you got to have and `boot`, and `electron` installed on your machine. This tutorial doesn't assume you use any particular text editor, so if you use Vim or Emacs and looking for advanced REPL features YMMV.
+To start working in development mode you got to have and `boot`, and `electron` installed on your machine. You also need to run `npm i` to get JavaScript some dependencies.
 
 In first tab run:
 
@@ -38,7 +38,7 @@ In first tab run:
 boot watch dev-build
 ```
 
-After compilation of ClojureScript is complete, in second tab run:
+After compilation of ClojureScript is complete, in second(!) tab run:
 
 ```
 electron target/
@@ -81,10 +81,3 @@ We probably go with [`electron-packager`](https://github.com/maxogden/electron-p
 electron-packager target/ APP_NAME --platform=darwin --arch=x64 --version=VERSION
 ```
 
-### Roadmap
-
-1. Top priority is adding more markets, but this is a [backend task](https://github.com/cryptounicorns/trade)
-
-2. Chart feature missing at the moment, but we are definitely looking to get it as soon as possible
-
-3. Migrate towards [re-frame](https://github.com/Day8/re-frame). At the inception it seemed like overkill, but as project matures, seems like we should have some more idiomatic code.
