@@ -1,0 +1,16 @@
+language: clojure
+sudo: false
+jdk:
+  - oraclejdk8
+install:
+  - wget -O boot https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
+  - chmod 755 boot
+  - ./boot -V
+  - export PATH=~/bin:$PATH
+script: make
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.boot/cache/bin
+    - $HOME/.boot/cache/lib
+    - $HOME/bin
