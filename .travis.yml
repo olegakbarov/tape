@@ -1,12 +1,17 @@
 language: clojure
 sudo: false
 jdk:
-  - oraclejdk8
+  - openjdk8
 install:
-  - wget -O boot https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
-  - chmod 755 boot
-  - ./boot -V
+  - wget -O boot-installer https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
+  - chmod 755 boot-installer
+  - ./boot-installer -V | sed 's|^BOOT_|export BOOT_|g' > boot-env
+  - source boot-env
+  - mkdir ~/bin
   - export PATH=~/bin:$PATH
+  - echo '#!/usr/bin/env bash -e' > ~/bin/boot
+  - echo 'exec java -jar ~/.boot/cache/bin/'$BOOT_VERSION'/boot.jar $@' >> ~/bin/boot
+  - chmod 755 ~/bin/boot
 script: make
 cache:
   directories:
