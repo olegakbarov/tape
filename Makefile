@@ -2,32 +2,23 @@
 
 include boot.properties
 
-boot_installer_url := https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
 version            := $(shell jq -r .version package.json)
-path               := $(PWD)/bin:$(PWD)/node_modules/.bin:$(PATH)
-electron_version   ?= 0.31.2
+path               := $(PATH):$(PWD)/bin:$(PWD)/node_modules/.bin
 env                ?= dev
 
 export PATH=$(path)
 
-.PHONY: boot
-boot:
-	@if [ ! -e ~/.boot/cache/bin/$(BOOT_VERSION)/boot.jar ]; \
-	then                                                     \
-		echo "Boot is installing..." 1>&2                \
-		&& curl -Ls $(boot_installer_url)                \
-			> boot-install                           \
-		&& chmod          +x boot-install                \
-		&& ./boot-install > /dev/null                    \
-		&& rm             -f boot-install                \
-		;                                                \
-	else                                                     \
-		echo "Boot already installed" 1>&2               \
-		;                                                \
-	fi
+.PHONY: all
+all: build
+
+.PHONY: fmt
+fmt:
+	boot fmt                       \
+		--git --mode overwrite \
+		--really --options '{:style :community :map {:comma? false} :vector {:wrap? false}}'
 
 .PHONY: dependencies
-dependencies: boot
+dependencies:
 	npm install
 
 .PHONY: build
@@ -37,5 +28,4 @@ build: dependencies
 		target/ MyApp                          \
 		--platform=$(OSTYPE)                   \
 		--arch=x64                             \
-		--electron-version=$(electron_version) \
 		--overwrite

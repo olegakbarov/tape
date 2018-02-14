@@ -1,0 +1,34 @@
+{
+    "mounts": {
+        "rw": [
+            ["~/projects/cache", "~"],
+            "~/.emacs.d",
+            "~/shell.nix",
+            "~/.Xauthority",
+            "/tmp",
+            "."
+        ],
+        "ro": [
+            "~/PROXY.env",
+            "~/.bashrc",
+            "~/.profile",
+            "~/.config/fish",
+            "~/.config/xonsh",
+            "~/.xonshrc",
+            "~/.gitconfig"
+        ]
+    },
+    "environment": {
+        "PATH":     "$HOME/.local/bin:/usr/bin:/bin:$PATH",
+        "NIX_PATH": "$NIX_PATH",
+        "TERM":     "screen-256color",
+        "DISPLAY":  "$DISPLAY"
+    },
+    "arguments": {
+        "bwrap": [
+            "--die-with-parent",
+            "--unshare-cgroup",
+            "--unshare-ipc"
+        ]
+    }
+}
