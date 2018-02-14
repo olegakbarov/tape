@@ -2,33 +2,30 @@
   (:require [reagent.core :as reagent]
             [app.db :refer [db router]]
             [app.api :refer [listen-ws! fetch-state!]]
-            [app.eventloop :refer [start-title-loop!]]
+            [app.eventloop :refer [start-title-loop! start-offline-watch-loop!]]
             [app.actions.storage :refer [read-data-file!]]
             [app.actions.ui :refer [to-screen]]
+            [app.actions.ntf :refer [ntf-gone-offline ntf-gone-online]]
             [app.config :refer [config]]
             [app.screens.live :refer [live-board]]
             [app.screens.settings :refer [settings]]
             [app.screens.portfolio :refer [portfolio]]
             [app.screens.alerts :refer [alerts]]
-            [app.screens.detailed :refer [DetailsContent]]
+            [app.screens.detailed :refer [pair-detailed]]
             [app.components.header :refer [Header]]
+            [app.motion :refer [Motion spring presets]]
             [mount.core :as mount]
-            [goog.object :as gobj]
-            [app.motion :refer [Motion spring presets]]))
+            [goog.object :as gobj]))
 
 (enable-console-print!)
 
-(def electron (js/require "electron"))
-(def webcontents (.-webFrame electron))
+(defn init
+  []
+  (fetch-state!)
+  (start-offline-watch-loop! ntf-gone-online ntf-gone-offline)
+  (mount/start))
 
-; (defn disable-content-scale!
-;   []
-;   (.setVisualZoomLevelLimits webcontents 1 1)
-;   (.setLayoutZoomLevelLimits webcontents 0 0))
-
-; (disable-content-scale!)
-
-(defn init [] (fetch-state!) (mount/start))
+(def height 400)
 
 (defn Routes
   []
@@ -40,22 +37,22 @@
       :settings [settings]
       :alerts [alerts])))
 
-(defn Child
+(defn view
   [{c :children}]
   (let [y (gobj/get c "y")]
     [:div
      {:style {:position "fixed"
               :width "321px"
-              :height "320px"
+              :height (str height "px")
               :background-color "#fff"
               :z-index 999
               :border-radius "4px 4px 0 0"
               :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
               :-webkit-transform (str "translateY(" y "px)")
               :transform (str "translateY(" y "px)")}}
-     [DetailsContent]]))
+     [pair-detailed]]))
 
-(def Child-comp (reagent/reactify-component Child))
+(def animated-comp (reagent/reactify-component view))
 
 (defn DetailedView
   []
@@ -64,12 +61,9 @@
                    :bottom 0
                    :display (if (:ui/detailed-view @db) "block" "none")}}
           [Motion
-           {:style {:y (spring (if (:ui/detailed-view @db) -320 0))}}
-           (fn [x] (reagent/create-element Child-comp #js {} x))]]))
+           {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+           (fn [x] (reagent/create-element animated-comp #js {} x))]]))
 
-(defn root
-  []
-  (let [toggle-items ["Live" "Portfolio" "Alerts" "Settings"]]
-    [:div#container [Header toggle-items] [Routes] [DetailedView]]))
+(defn root [] [:div#container [Header] [Routes] [DetailedView]])
 
 (reagent/render [root] (js/document.getElementById "root"))

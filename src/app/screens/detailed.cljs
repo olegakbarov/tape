@@ -3,7 +3,8 @@
    [reagent.core :as r]
    [app.db :refer [db]]
    [app.components.chart :refer [Chart]]
-   [app.actions.ui :refer [add-to-favs remove-from-favs close-detailed-view]]))
+   [app.actions.ui :refer [add-to-favs remove-from-favs close-detailed-view]]
+   [app.logic.ui :refer [get-chart-points]]))
 
 (comment {:high 3143.5286
           :sell 3119.8
@@ -26,7 +27,7 @@
           false
           favs))
 
-(defn DetailsContent
+(defn pair-detailed
   []
   (let [[market pair] (:ui/detailed-view @db)
         favs (-> @db
@@ -45,29 +46,26 @@
                 vol
                 vol-cur]}
         content
-        is-fav? (fav? favs [(keyword market) (keyword pair)])]
-    (when (:ui/detailed-view @db))
-    [:div
-     [:div#detailed
-      [:div.header
-       [:div.title
-        pair
-        [:div.fav
-         {:class (if is-fav? "faved" "")
-          :on-click (if is-fav?
-                      #(remove-from-favs [(keyword market) (keyword pair)])
-                      #(add-to-favs [(keyword market) (keyword pair)]))}
-         (if is-fav? "saved" "save")]]
-       [:div.close {:on-click #(close-detailed-view)}]]
-      [:div.market " " market]
-      [:div.labels
-       [:div.item "High"]
-       [:div.item "Low"]
-       [:div.item "Buy"]
-       [:div.item "Sell"]]
-      [:div.prices.last
-       [:div.item (when high (js/parseInt high))]
-       [:div.item (when low (js/parseInt low))]
-       [:div.item (when buy (js/parseInt buy))]
-       [:div.item (when sell (js/parseInt sell))]]]
-     [Chart]]))
+        is-fav? (fav? favs [market pair])
+        points @(r/track get-chart-points market pair)]
+    (when (:ui/detailed-view @db)
+      [:div#detailed
+       [:div.header
+        [:div.title
+         pair
+         [:div.fav
+          {:class (if is-fav? "faved" "")
+           :on-click (if is-fav?
+                       #(remove-from-favs [(keyword market) (keyword pair)])
+                       #(add-to-favs [(keyword market) (keyword pair)]))}
+          (if is-fav? "saved" "save")]]
+        [:div.close {:on-click #(close-detailed-view)}]]
+       [:div.market " " market]
+       [:div.labels
+        (for [i ["High" "Low" "Buy" "Sell"]] ^{:key i} [:div.item i])]
+       [:div.prices.last
+        (for [i [high low buy sell]]
+          ^{:key (* 1000 (.random js/Math i))}
+          ;; nothing to be proud about here
+          [:div.item (js/parseInt i)])]
+       (when points [Chart points])])))

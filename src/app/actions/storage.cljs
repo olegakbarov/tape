@@ -8,7 +8,7 @@
 (def electron (js/require "electron"))
 (def remote (.-remote electron))
 
-(def default-file {:portfolio [] :favorites {} :settings {}})
+(def default-file {:portfolio {} :favorites {} :settings {}})
 
 (def data-file-name "/data-file.edn")
 
@@ -31,7 +31,7 @@
   []
   (let [fs (js/require "fs")
         p (.getPath (.-app remote) "userData")]
-    (js/console.log p)
+    ; (js/console.log p)
     (try (let [raw-file (.readFileSync fs (str p data-file-name) "utf-8")
                contents (cljs.reader/read-string raw-file)]
            (update-db :user contents))

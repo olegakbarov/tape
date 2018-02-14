@@ -50,7 +50,7 @@
       [:span {:class "price_down"} last]
       [:div.swing
        (if (and (not (nil? amount)) (not (nil? percent)))
-         (str amount " (" percent "%) ")
+         (str amount " (" percent "%)")
          "n/a")]]]))
 
 (defn render-rows

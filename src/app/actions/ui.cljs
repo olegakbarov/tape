@@ -1,9 +1,11 @@
 (ns app.actions.ui
   (:require [app.db :refer [db router]]
-            [app.actions.storage :refer [persist-user-currents!]]))
+            [app.actions.storage :refer [persist-user-currents!]]
+            [app.api :refer [fetch-chart-data!]]))
 
 (defn open-detailed-view
   [market pair]
+  (fetch-chart-data! (name market) (name pair))
   (swap! db assoc-in [:ui/detailed-view] [market pair]))
 
 (defn close-detailed-view [] (swap! db assoc-in [:ui/detailed-view] nil))

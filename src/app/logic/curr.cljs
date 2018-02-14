@@ -21,7 +21,7 @@
             market-items)))
 
 (defn best-pairs
-  "Returns pairs with lowest prices across "
+  "Returns pairs with lowest prices across all markets"
   ([markets] (remove empty? (vals (get-lowest-prices markets))))
   ([markets pair-name] (:sell (get (get-lowest-prices markets) pair-name))))
 
@@ -91,6 +91,7 @@
 
 (defn pairs-by-query
   "Returns paris collection only with items where :market or :currency-pair fields matches the substring `q`"
+  ;; TODO fails with special chars (eg \)
   [pairs q]
   (let [lc #(.toLowerCase %)]
     (filter #(or (re-find (re-pattern (lc q))

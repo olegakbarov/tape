@@ -1,6 +1,6 @@
 (ns app.actions.api
   (:require [clojure.walk]
-            [app.db :refer [db]]))
+            [app.db :refer [db chart-data]]))
 
 (defn format-pair
   "Accepts vector of {:name 'eos' :symbol 'EOS'}"
@@ -62,3 +62,14 @@
                           (map #(into {} [{"type" "change"} {:payload %}])
                                change))]
           (evt->db item)))))
+
+(defn chart-data->db
+  [s]
+  (let [k (clojure.walk/keywordize-keys s)
+        {:keys [points marketName currencyPair]} k
+        pts' (into [] (remove nil? points))]
+    (js/console.log pts')
+    (swap! chart-data
+           assoc-in
+           [(keyword marketName) (keyword currencyPair)]
+           pts')))

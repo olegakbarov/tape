@@ -18,6 +18,7 @@
   "homepage": "https://github.com/cryptounicorns/desktop#readme",
   "dependencies": {
     "electron": "^1.7.9",
-    "electron-packager": "^8.7.2"
+    "electron-packager": "^8.7.2",
+    "highcharts": "^6.0.6"
   }
 }

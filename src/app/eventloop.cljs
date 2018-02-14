@@ -69,4 +69,10 @@
 
 (defn stop-notifs-loop! [] (reset! n false) (info! "Stopped notifs loop."))
 
+(defn start-offline-watch-loop!
+  [online-cb offline-cb]
+  (.addEventListener js/window "offline" #(offline-cb))
+  (.addEventListener js/window "online" #(online-cb)))
+
+
 (defstate notifs-loop :start (start-notifs-loop!) :stop (stop-notifs-loop!))

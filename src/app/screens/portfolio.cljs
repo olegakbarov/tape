@@ -43,10 +43,10 @@
             ^{:key "last-ctrls"}
             [:div.right_cell
              [:div.actions
-              [:div.edit {:on-click #(js/console.log "nimp")} "edit"]
+              ; [:div.edit {:on-click #(js/console.log "nimp")} "edit"]
               [:div.delete
                {:on-click #(remove-portfolio-record id)}
-               "delete"]]]])))]))
+               "del"]]]])))]))
 
 (defn select-market
   []

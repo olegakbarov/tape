@@ -59,7 +59,7 @@
   "Validates portfolio record item for non-emptyness"
   [rec]
   (assert (every? string? (vals rec)))
-  (js/console.log rec)
+  ; (js/console.log rec)
   (as-> rec r
     (if (s/blank? (:market r)) false r)
     (if (s/blank? (:currency r)) false r)

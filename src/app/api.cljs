@@ -7,7 +7,7 @@
             [app.db :refer [db]]
             [app.config :refer [config]]
             [app.actions.tray :refer [set-title!]]
-            [app.actions.api :refer [evt->db state->db]]
+            [app.actions.api :refer [evt->db state->db chart-data->db]]
             [app.logic.curr :refer [best-pairs]]
             [mount.core :refer [defstate]]))
 
@@ -65,12 +65,27 @@
 
 (defn fetch-state!
   []
-  (a/go (let [endpoint (str (:http-endpoint config))
+  (a/go (let [endpoint (str (:http-endpoint config) "/tickers-changes")
               response (<! (http/get endpoint {:with-credentials? false}))]
           (state->db (:body response)))))
 
 (defn fetch-market-info
   [market]
-  (a/go (let [endpoint (str (:http-endpoint config) "/data/markets/" market)
+  (a/go (let [endpoint (str (:http-endpoint config) "/tickers-changes/" market)
               response (<! (http/get endpoint {:with-credentials? false}))]
+          ;; save to db
           (:body response))))
+
+; https://cryptounicorns.io/api/v1/markets/bitfinex/tickers/EOS-BTC/Last
+(defn fetch-chart-data!
+  [market pair]
+  ;; validate params
+  (a/go (let [endpoint (str (:http-endpoint config)
+                            "/markets/"
+                            market
+                            "/tickers/"
+                            pair
+                            "/last")
+              response (<! (http/get endpoint {:with-credentials? false}))]
+          (chart-data->db (-> response
+                              :body)))))

@@ -31,10 +31,10 @@
                        :pair (-> a
                                  :pair
                                  keyword)}))
-        (js/console.log a)
+        ; (js/console.log a)
         (persist-user-currents!))))
 
 (defn alert->archived
   [id]
-  (do (swap! db update-in [:user :notifs id] #(merge % {:archived true}))
+  (do (swap! db update-in [:user :alerts id] #(merge % {:archived true}))
       (persist-user-currents!)))

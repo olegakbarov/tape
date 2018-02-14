@@ -23,10 +23,12 @@
 .row_wrap {
   display: flex;
   padding: 10px 0;
+  transition: all .1s ease-in;
 }
 
 .row_wrap:hover {
   background-color: rgba(151, 151, 151, .05);
+  transform: scale(1.01);
   cursor: pointer;
 }
 

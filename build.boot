@@ -5,6 +5,7 @@
  :resource-paths #{"resources"}
  :dependencies
  '[[org.clojure/clojure "1.9.0-alpha16"]
+   ; [org.clojure/clojurescript "0.0-2719"]
    [org.clojure/clojurescript "1.9.946"]
    [org.clojure/tools.nrepl "0.2.13" :scope "test"]
    [org.clojure/test.check "0.9.0" :scope "test"]
@@ -15,7 +16,7 @@
    [adzerk/boot-reload "0.4.13" :scope "test"]
    [boot-deps "0.1.9" :scope "test"]
    [boot-fmt/boot-fmt "0.1.7" :scope "test"]
-   [powerlaces/boot-figreload "LATEST" :scope "test"]
+   [powerlaces/boot-figreload "0.5.14" :scope "test"]
    [binaryage/devtools "0.9.4" :scope "test"]
    [binaryage/dirac "1.2.16" :scope "test"]
    [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
@@ -32,7 +33,9 @@
    [cljsjs/react-dom "16.0.0-0"]
    [cljsjs/moment "2.10.6-0"]
    [cljsjs/react-motion "0.5.0-0"]
-   [cljsjs/chartjs "2.6.0-0"]])
+   [cljsjs/chartjs "2.6.0-0"]
+   [cljsjs/highstock "5.0.14-0"]
+   [cljsjs/highcharts-css "5.0.10-0"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
