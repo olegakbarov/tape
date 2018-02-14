@@ -7,7 +7,7 @@ install:
   - chmod 755 boot-installer
   - ./boot-installer -V | sed 's|^BOOT_|export BOOT_|g' > boot-env
   - source boot-env
-  - mkdir ~/bin
+  - mkdir -p ~/bin
   - export PATH=~/bin:$PATH
   - echo '#!/usr/bin/env bash -e' > ~/bin/boot
   - echo 'exec java -jar ~/.boot/cache/bin/'$BOOT_VERSION'/boot.jar $@' >> ~/bin/boot
