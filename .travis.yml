@@ -1,0 +1,22 @@
+language: clojure
+sudo: false
+jdk:
+  - openjdk8
+install:
+  - wget -O boot-installer https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
+  - chmod 755 boot-installer
+  - ./boot-installer -V | sed 's|^BOOT_|export BOOT_|g' > boot-env
+  - source boot-env
+  - mkdir -p ~/bin
+  - export PATH=~/bin:$PATH
+  - echo '#!/usr/bin/env bash' > ~/bin/boot
+  - echo 'set -e' >> ~/bin/boot
+  - echo 'exec java -jar ~/.boot/cache/bin/'$BOOT_VERSION'/boot.jar $@' >> ~/bin/boot
+  - chmod 755 ~/bin/boot
+script: make
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.boot/cache/bin
+    - $HOME/.boot/cache/lib
+    - $HOME/bin

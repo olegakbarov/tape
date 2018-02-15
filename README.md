@@ -6,6 +6,8 @@
 
 ### Cryptounicorns Desktop
 
+[![Build Status](https://travis-ci.org/cryptounicorns/desktop.svg)](https://travis-ci.org/cryptounicorns/desktop)
+
 Cryptounicorns Desktop is a cryptocurrency price tracking app. It is designed to work with multiple (possibly a lot) exchanges, allowing you to gain instights about price fluctuations at rapid pace. Long-term goal is to make approachable interface for vast majority of exchange markets.
 
 ### API

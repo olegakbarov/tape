@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-set -e
-set -x
-
-source $(git rev-parse --show-toplevel)/boot.properties
-
-java -jar ~/.boot/cache/bin/$BOOT_VERSION/boot.jar "$@"
