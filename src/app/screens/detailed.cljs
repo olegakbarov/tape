@@ -1,10 +1,11 @@
 (ns app.screens.detailed
-  (:require
-   [reagent.core :as r]
-   [app.db :refer [db]]
-   [app.components.chart :refer [Chart]]
-   [app.actions.ui :refer [add-to-favs remove-from-favs close-detailed-view]]
-   [app.logic.ui :refer [get-chart-points]]))
+  (:require [reagent.core :as r]
+            [app.db :refer [db]]
+            [app.components.chart :refer [Chart]]
+            [app.actions.ui :refer [add-to-favs
+                                    remove-from-favs
+                                    close-detailed-view]]
+            [app.logic.ui :refer [get-chart-points]]))
 
 (comment {:high 3143.5286
           :sell 3119.8

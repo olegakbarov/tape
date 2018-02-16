@@ -19,19 +19,17 @@
   "Adds notif to state and persists it to disk"
   [a]
   (let [id (generate-uuid)]
-    (do (swap! db
-               assoc-in
-               [:user :alerts id]
-               (merge a
-                      {:id id
-                       :archived false
-                       :market (-> a
-                                   :market
-                                   keyword)
-                       :pair (-> a
-                                 :pair
-                                 keyword)}))
-        ; (js/console.log a)
+    (do (swap! db assoc-in
+          [:user :alerts id]
+          (merge a
+                 {:id id
+                  :archived false
+                  :market (-> a
+                              :market
+                              keyword)
+                  :pair (-> a
+                            :pair
+                            keyword)}))
         (persist-user-currents!))))
 
 (defn alert->archived

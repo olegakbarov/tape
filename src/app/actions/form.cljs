@@ -8,10 +8,9 @@
 
 (defn clear-alert-form
   []
-  (swap! db
-         update-in
-         [:form/alert]
-         (fn [a] (zipmap (keys a) (repeat (count (keys a)) "")))))
+  (swap! db update-in
+    [:form/alert]
+    (fn [a] (zipmap (keys a) (repeat (count (keys a)) "")))))
 
 (defn update-portfolio-form
   [k v]
@@ -20,7 +19,6 @@
 
 (defn clear-portfolio-form
   []
-  (swap! db
-         update-in
-         [:form/portfolio]
-         (fn [a] (zipmap (keys a) (repeat (count (keys a)) "")))))
+  (swap! db update-in
+    [:form/portfolio]
+    (fn [a] (zipmap (keys a) (repeat (count (keys a)) "")))))

@@ -21,21 +21,19 @@
 
 (defn remove-from-favs
   [tupl]
-  (do (swap! db
-             update-in
-             [:user :favorites]
-             #(vec (filter (fn [pair]
-                             (when (and (= (first pair) (first tupl))
-                                        (= (last pair) (last tupl)))))
-                           %)))
+  (do (swap! db update-in
+        [:user :favorites]
+        #(vec (filter (fn [pair]
+                        (when (and (= (first pair) (first tupl))
+                                   (= (last pair) (last tupl)))))
+                      %)))
       (persist-user-currents!)))
 
 (defn toggle-filter
   [filter-str]
   (do (swap! db assoc :ui/detailed-view nil)
-      (swap! db
-             update-in
-             [:ui/current-filter]
-             #(if (= filter-str (:ui/current-filter @db)) nil filter-str))))
+      (swap! db update-in
+        [:ui/current-filter]
+        #(if (= filter-str (:ui/current-filter @db)) nil filter-str))))
 
 (defn update-filter-q [q] (swap! db assoc-in [:ui/filter-q] q))

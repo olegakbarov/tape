@@ -2,7 +2,8 @@
   (:require [clojure.test.check :as tc]
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop :include-macros true]
-            [cljs.spec.alpha :as s]))
+            [cljs.spec.alpha :as s]
+            [cljs.spec.test.alpha :as ts]))
 
 (s/def ::fiat-symbols #{:RUB :USD})
 
@@ -33,11 +34,6 @@
 
 (comment (s/exercise boolean?) (s/exercise string?) (s/exercise int?))
 
-; (s/fdef add
-;   {:args []
-;    :ret number?
-;    :fn})
-
 (gen/sample (s/gen ::curr-symbols))
 
 (s/def ::btc-price
@@ -52,5 +48,53 @@
 
 (gen/sample (s/gen ::btc-price))
 (gen/sample (s/gen ::big-even))
-
 (gen/sample gen/char)
+
+
+;; from https://groups.google.com/forum/#!topic/clojure/fti0eJdPQJ8
+(defmacro only-keys
+  [& {:keys [req req-un opt opt-un] :as args}]
+  `(s/merge (s/keys ~@(apply concat (vec args)))
+            (s/map-of ~(set (concat req
+                                    (map (comp keyword name) req-un)
+                                    opt
+                                    (map (comp keyword name) opt-un)))
+                      any?)))
+
+(macroexpand only-keys)
+
+(s/def ::alert-id (s/and string? #(> (count %) 10)))
+
+(s/def ::alert (only-keys :opt-un [::alert-id]))
+; :market
+; :pair
+; :amount
+; :archived
+; :repeat]))
+
+(gen/sample (s/gen ::alert))
+;; org.mozilla.javascript.JavaScriptException: Error: Unable to construct gen
+;; at: [] for: :app.constants.domain/alert
+;; (.cljs_rhino_repl/goog/../cljs/spec/alpha.js
+
+
+(s/valid? {:id "df"} ::alert)
+;; false
+
+(s/describe ::alert)
+
+(s/exercise ::alert-id)
+
+
+;; fdef
+;;
+(ts/instrument)
+
+(defn add [a b] (+ a b))
+
+(s/fdef add
+ :args (s/cat :a number?
+              :b number?)
+ :ret number?)
+
+(add 1 "a")

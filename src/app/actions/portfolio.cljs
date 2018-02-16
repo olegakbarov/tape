@@ -7,17 +7,16 @@
   "Adds notif to state and persists it to disk"
   [a]
   (let [id (generate-uuid)]
-    (do (swap! db
-               assoc-in
-               [:user :portfolio id]
-               (merge a
-                      {:id id
-                       :market (-> a
-                                   :market
-                                   keyword)
-                       :currency (-> a
-                                     :currency
-                                     keyword)}))
+    (do (swap! db assoc-in
+          [:user :portfolio id]
+          (merge a
+                 {:id id
+                  :market (-> a
+                              :market
+                              keyword)
+                  :currency (-> a
+                                :currency
+                                keyword)}))
         (persist-user-currents!))))
 
 (defn update-portfolio-record

@@ -68,8 +68,6 @@
   (let [k (clojure.walk/keywordize-keys s)
         {:keys [points marketName currencyPair]} k
         pts' (into [] (remove nil? points))]
-    (js/console.log pts')
-    (swap! chart-data
-           assoc-in
-           [(keyword marketName) (keyword currencyPair)]
-           pts')))
+    (swap! chart-data assoc-in
+      [(keyword marketName) (keyword currencyPair)]
+      pts')))

@@ -1,19 +1,22 @@
 (ns app.screens.live
   (:require-macros [app.macros :refer [profile]]
                    [klang.core :refer [info! warn! erro! crit! fata! trac!]])
-  (:require
-   [reagent.core :as r]
-   [clojure.string :as s]
-   [app.db :refer [db]]
-   [cljsjs.moment]
-   [app.logic.curr
-    :refer
-    [best-pairs all-pairs user-favs by-query pairs-by-query]]
-   [app.utils.core :refer [curr-symbol->name]]
-   [clojure.string :refer [split]]
-   [app.actions.ui :refer [toggle-filter update-filter-q open-detailed-view]]
-   [app.components.ui :refer [InputWrapper TextInput]]
-   [cljsjs.react-select]))
+  (:require [reagent.core :as r]
+            [clojure.string :as s]
+            [app.db :refer [db]]
+            [cljsjs.moment]
+            [app.logic.curr :refer [best-pairs
+                                    all-pairs
+                                    user-favs
+                                    by-query
+                                    pairs-by-query]]
+            [app.utils.core :refer [curr-symbol->name]]
+            [clojure.string :refer [split]]
+            [app.actions.ui :refer [toggle-filter
+                                    update-filter-q
+                                    open-detailed-view]]
+            [app.components.ui :refer [InputWrapper TextInput]]
+            [cljsjs.react-select]))
 
 ;; TODO: handle updates properly
 ; (defn Row [pair]
