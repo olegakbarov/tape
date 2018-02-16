@@ -1,5 +1,8 @@
 (ns app.components.ntf
-  (:require [app.db :refer [db]]))
+  (:require [reagent.core :as reagent]
+            [app.db :refer [db]]
+            [app.motion :refer [Motion spring presets]]
+            [goog.object :as gobj]))
 
 (def height 30)
 
@@ -35,8 +38,7 @@
               :bottom 0
               :height (str height "px")
               :width "100%"
-              :z-index 100
-              :display (if (:ui/ntf @db) "block" "none")}}
+              :z-index 100}}
      [Motion
       {:style {:y (spring (if (:ui/ntf @db) height 0))}}
       (fn [x] (reagent/create-element animated-comp #js {} x))]]))

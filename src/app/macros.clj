@@ -16,4 +16,6 @@
        (.restore ctx#)
        rc#)))
 
-(defmacro unless [condition & body] `(when (not ~condition) ~@body))
+(defmacro unless
+  [condition & body]
+  `(when (not ~condition) ~@body))

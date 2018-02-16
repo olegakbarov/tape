@@ -21,7 +21,10 @@
                    btc (js/parseInt (best-pairs m :BTC-USD))]
                (set-title! btc)))))
 
-(defn stop-title-loop! [] (info! "Stopping title loop...") (reset! t false))
+(defn stop-title-loop!
+  []
+  (info! "Stopping title loop...")
+  (reset! t false))
 
 (defstate title-loop :start (start-title-loop!) :stop (stop-title-loop!))
 

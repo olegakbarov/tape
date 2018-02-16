@@ -66,9 +66,7 @@
        (dirac)
        (cljs-repl :ids #{"renderer"})
        (reload :ids #{"renderer"} :ws-host "localhost" :target-path "target")
-       (cljs :ids #{"renderer"}
-             :compiler-options {:parallel-build true
-                                :npm-deps {:classnames "1.1.0"}})
+       (cljs :ids #{"renderer"} :compiler-options {:parallel-build true})
        ;; path.resolve(".") which is used in CLJS's node shim
        ;; returns the directory `electron` was invoked in and
        ;; not the directory our main.js file is in.

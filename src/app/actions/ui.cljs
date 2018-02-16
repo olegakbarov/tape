@@ -12,7 +12,8 @@
 
 (defn to-screen
   [screen]
-  (do (close-detailed-view) (swap! router assoc-in [:screen] screen)))
+  (do (close-detailed-view)
+      (swap! router assoc-in [:screen] screen)))
 
 (defn add-to-favs
   [tupl]

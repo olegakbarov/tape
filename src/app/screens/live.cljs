@@ -107,4 +107,7 @@
               :label "search"}]
             [InputWrapper "Filter" [select-q {:key "filter"}]]])))
 
-(defn live-board [] [:div#wrapper [filter-box] [render-rows]])
+(defn live-board []
+  [:div#wrapper
+   [filter-box]
+   [render-rows]])

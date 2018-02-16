@@ -3,7 +3,7 @@
             [app.db :refer [db router]]
             [app.actions.ui :refer [to-screen]]
             [app.motion :refer [Motion spring presets]]
-            [app.components.header :refer [ntf]]
+            [app.components.ntf :refer [ntf]]
             [goog.object :as gobj]))
 
 (defn nav
@@ -36,5 +36,7 @@
                  :height "100%"
                  :position "absolute"
                  :z-index "101"}}]
-       [:div {:style {:z-index 101}} [:div.title "1.0.0-beta.1"] [nav]]
+       [:div {:style {:z-index 101}}
+        [:div.title "1.0.0-beta.1"]
+        [nav]]
        [ntf]])))

@@ -51,7 +51,7 @@
                    {:x 763
                     :y 10
                     :width 321
-                    :height 600
+                    :height 800
                     :show true
                     :titleBarStyle "hidden"
                     :fullscreenable false
