@@ -64,6 +64,13 @@
            {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
            (fn [x] (reagent/create-element animated-comp #js {} x))]]))
 
-(defn root [] [:div#container [Header] [Routes] [DetailedView]])
+(defn root
+  []
+  [:div#container
+   [Header]
+   [Routes]
+   [DetailedView]])
 
-(reagent/render [root] (js/document.getElementById "root"))
+(reagent/render
+  [root]
+  (js/document.getElementById "root"))

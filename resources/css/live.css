@@ -27,8 +27,7 @@
 }
 
 .row_wrap:hover {
-  background-color: rgba(151, 151, 151, .05);
-  transform: scale(1.01);
+  background-color: rgba(0, 126, 255, 0.04);
   cursor: pointer;
 }
 

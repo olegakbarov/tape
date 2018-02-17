@@ -46,10 +46,11 @@
         {:keys [percent amount]} change]
     [:div.row_wrap
      ^{:key "currency-pair"}
-     [:div.left_cell [:div.title currency-pair] [:div.market market]]
+     [:div.left_cell
+      [:div.title currency-pair]
+      [:div.market market]]
      ^{:key "last-price"}
      [:div.right_cell
-      ;; TODO
       [:span {:class "price_down"} last]
       [:div.swing
        (if (and (not (nil? amount)) (not (nil? percent)))
@@ -67,17 +68,19 @@
           pairs (condp = (:ui/current-filter @db)
                   :bestprice @(r/track best-pairs markets)
                   :favorites @(r/track user-favs markets favs)
-                  :volatile nil
                   nil @(r/track all-pairs markets))
+          [dt-m dt-p] (-> @db :ui/detailed-view)
           filtered (pairs-by-query pairs q)]
       [:div
        (for [pair filtered]
-         (let [{:keys [market currency-pair]} pair]
+         (let [{:keys [market currency-pair]} pair
+               [kw-m kw-p] (mapv keyword [market currency-pair])]
            ^{:key (str pair market)}
            [:div
-            {:on-click #(when (nil? (:ui/detailed-view @db))
-                         (open-detailed-view (keyword market)
-                                             (keyword currency-pair)))}
+            {:on-click #(open-detailed-view kw-m kw-p)
+             :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
+                                           "rgba(0, 126, 255, 0.04)"
+                                           "transparent")}}
             [Row pair]]))])))
 
 (defn select-q

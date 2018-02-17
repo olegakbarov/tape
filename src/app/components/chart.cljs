@@ -6,9 +6,8 @@
 
 (defn chart-config
   [data]
-  {; :loading {:hideDuration 100
-   ;           :showDuration 100}
-   :credits false
+  {:credits false
+   :plotOptions {:series {:animation false}}
    :rangeSelector {:selected 1
                    :buttons [{:type "day" :count 1 :text "1d"}
                              {:type "day" :count 7 :text "1w"}
@@ -44,4 +43,5 @@
    {:component-did-mount (render-stock-fn data)
     :component-did-update (render-stock-fn data)
     :reagent-render
-    (fn [data] data [:div.chart {:style {:width "320px" :height "320px"}}])}))
+    (fn [data]
+      [:div.chart {:style {:width "320px" :height "320px"}}])}))
