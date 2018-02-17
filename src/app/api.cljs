@@ -72,12 +72,6 @@
               response (<! (http/get endpoint {:with-credentials? false}))]
           (state->db (:body response)))))
 
-; (defn fetch-market-info
-;   [market]
-;   (a/go (let [endpoint (str (:http-endpoint config) "/tickers-changes/" market)
-;               response (<! (http/get endpoint {:with-credentials? false}))]
-;           (:body response))))
-
 ; https://cryptounicorns.io/api/v1/markets/bitfinex/tickers/eos-btc/last
 (defn fetch-chart-data!
   [market pair]

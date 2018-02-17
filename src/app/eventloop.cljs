@@ -77,5 +77,4 @@
   (.addEventListener js/window "offline" #(offline-cb))
   (.addEventListener js/window "online" #(online-cb)))
 
-
 (defstate notifs-loop :start (start-notifs-loop!) :stop (stop-notifs-loop!))

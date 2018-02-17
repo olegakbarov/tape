@@ -30,8 +30,6 @@
 
 (take 5 (s/exercise ::curr-symbols))
 
-(s/valid? ::curr-symbols)
-
 (comment (s/exercise boolean?) (s/exercise string?) (s/exercise int?))
 
 (gen/sample (s/gen ::curr-symbols))
@@ -60,8 +58,6 @@
                                     opt
                                     (map (comp keyword name) opt-un)))
                       any?)))
-
-(macroexpand only-keys)
 
 (s/def ::alert-id (s/and string? #(> (count %) 10)))
 

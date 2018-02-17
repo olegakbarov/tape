@@ -48,8 +48,8 @@
 (defn make-window
   []
   (BrowserWindow. #js
-                   {:x 763
-                    :y 10
+                   {:x 900
+                    :y 30
                     :width 321
                     :height 800
                     :show true

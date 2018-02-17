@@ -12,7 +12,6 @@
 
 (defn ntf-gone-online
   []
-  (let [n {:color "#12D823"
-           ;; green
+  (let [n {:color "#12D823" ;; green
            :text "Connected."}]
     (do (swap! db assoc-in [:ui/ntf] n) (js/setTimeout #(clear-ntf) 3000))))
