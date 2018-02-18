@@ -26,9 +26,6 @@ ws://%API_ROOT%/api/v1/tickers-changes/stream
 http://%API_ROOT%/api/v1/tickers-changes
 ```
 
-##### Price changes API
-
-TODO
 
 ### Development
 
@@ -55,20 +52,14 @@ boot.user=> (start-repl)
 
 ## Code style
 
-### Lint and check
-
-This is more like reference, not requirement.
+### Lint and check and format code
 
 ```
 boot check-sources
 ```
 
-### Format code
-
-This runs as pre-commit hook.
-
 ```
-boot fmt --git --mode overwrite --really --options '{:style :community :map {:comma? false} :vector {:wrap? false}}'
+make fmt
 ```
 
 ## Deploy and packaging
