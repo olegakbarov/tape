@@ -21,10 +21,7 @@
                    btc (js/parseInt (best-pairs m :BTC-USD))]
                (set-title! btc)))))
 
-(defn stop-title-loop!
-  []
-  (info! "Stopping title loop...")
-  (reset! t false))
+(defn stop-title-loop! [] (info! "Stopping title loop...") (reset! t false))
 
 (defstate title-loop :start (start-title-loop!) :stop (stop-title-loop!))
 
@@ -77,5 +74,4 @@
   (.addEventListener js/window "offline" #(offline-cb))
   (.addEventListener js/window "online" #(online-cb)))
 
-(defstate notifs-loop :start (start-notifs-loop!)
-                      :stop (stop-notifs-loop!))
+(defstate notifs-loop :start (start-notifs-loop!) :stop (stop-notifs-loop!))

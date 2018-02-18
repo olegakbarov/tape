@@ -12,8 +12,7 @@
 
 (defn to-screen
   [screen]
-  (do (close-detailed-view)
-      (swap! router assoc-in [:screen] screen)))
+  (do (close-detailed-view) (swap! router assoc-in [:screen] screen)))
 
 (defn add-to-favs
   [tupl]
@@ -37,11 +36,10 @@
         [:ui/current-filter]
         #(if (= filter-str (:ui/current-filter @db)) nil filter-str))))
 
-(defn update-filter-q
-  [q]
-  (swap! db assoc-in [:ui/filter-q] q))
+(defn update-filter-q [q] (swap! db assoc-in [:ui/filter-q] q))
 
 (defn toggle-filterbox
   []
-  (let [open? (-> @db :ui/filterbox-open?)]
+  (let [open? (-> @db
+                  :ui/filterbox-open?)]
     (swap! db assoc :ui/filterbox-open? (not open?))))

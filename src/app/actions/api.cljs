@@ -54,20 +54,25 @@
 (defn state->db
   [s]
   (let [{:keys [ticker change]} s]
-    (do (doseq [item (map identity
-                          (map #(into {} [{"type" "ticker"} {:payload %}])
-                               ticker))]
-          (evt->db item))
-        (doseq [item (map identity
-                          (map #(into {} [{"type" "change"} {:payload %}])
-                               change))]
-          (evt->db item)))))
+    (doseq [item (map
+                   identity
+                   (map
+                     #(into {} [{"type" "ticker"} {:payload %}])
+                     ticker))]
+      (evt->db item))
+    (doseq [item (map
+                   identity
+                   (map
+                     #(into {} [{"type" "change"} {:payload %}])
+                     change))]
+      (evt->db item))))
+
 
 (defn chart-data->db
   [s]
   (let [k (clojure.walk/keywordize-keys s)
         {:keys [points marketName currencyPair]} k
-        pts' (into [] (remove nil? points))]
+        pts' (vec (remove nil? points))]
     (swap! chart-data assoc-in
       [(keyword marketName) (keyword currencyPair)]
       pts')))

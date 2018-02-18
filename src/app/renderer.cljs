@@ -71,6 +71,4 @@
    [Routes]
    [DetailedView]])
 
-(reagent/render
-  [root]
-  (js/document.getElementById "root"))
+(reagent/render [root] (js/document.getElementById "root"))

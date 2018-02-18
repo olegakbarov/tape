@@ -1,7 +1,3 @@
 (ns user)
 
-(defn dev []
-  (require 'dev)
-  (in-ns 'dev))
-
-
+(defn dev [] (require 'dev) (in-ns 'dev))

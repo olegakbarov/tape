@@ -22,7 +22,7 @@
 (defn update-portfolio-record
   [updated]
   (let [{:keys [id]} updated]
-    (do (swap! db update-in [:user :portfolio id] updated))))
+    (swap! db update-in [:user :portfolio id] updated)))
 
 (defn remove-portfolio-record
   [id]

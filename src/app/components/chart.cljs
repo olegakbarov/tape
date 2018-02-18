@@ -29,8 +29,8 @@
              ; :upColor "#00F72C"
              :data data
              :treshold nil}]})
-             ; :fillColor {:linearGradient {:x1 0 :y1 0 :x2 0 :y2 1}
-             ;             :stops [[0 "black"] [1 "#ccc"]]}}]})
+; :fillColor {:linearGradient {:x1 0 :y1 0 :x2 0 :y2 1}
+;             :stops [[0 "black"] [1 "#ccc"]]}}]})
 
 (defn render-stock-fn
   [data]
@@ -42,6 +42,5 @@
   (r/create-class
    {:component-did-mount (render-stock-fn data)
     :component-did-update (render-stock-fn data)
-    :reagent-render
-    (fn [data]
-      [:div.chart {:style {:width "320px" :height "320px"}}])}))
+    :reagent-render (fn [data] [:div.chart
+                                {:style {:width "320px" :height "320px"}}])}))

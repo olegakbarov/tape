@@ -20,7 +20,7 @@
   []
   (fn []
     (let [w (.toFixed (get-total-worth) 2)]
-      (if (> w 0) [:div.total_worth (str "$ " w)] [:div]))))
+      (if (pos? w) [:div.total_worth (str "$ " w)] [:div]))))
 
 ;; TODO: dont re-render on every ws event
 (defn portfolio-list

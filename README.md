@@ -62,6 +62,14 @@ boot check-sources
 make fmt
 ```
 
+### Dependencies
+
+Check outdated deps
+
+```
+boot -d boot-deps ancient
+```
+
 ## Deploy and packaging
 
 This is not implemented yet. We are looking for you feedback and help (especially from windows folks)

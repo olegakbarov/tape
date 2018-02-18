@@ -8,11 +8,12 @@
             [app.logic.curr :refer [get-market-names get-all-pair-names]]
             [app.logic.validation :refer [str->amount validate-alert]]
             [app.actions.alerts :refer [create-alert]]
-            [app.components.ui :refer [EmptyListCompo
-                                       InputWrapper
-                                       Checkbox
-                                       Button
-                                       TextInput]]))
+            [app.components.ui :refer
+             [EmptyListCompo
+              InputWrapper
+              Checkbox
+              Button
+              TextInput]]))
 
 (defn select-pair
   []

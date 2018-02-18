@@ -5,17 +5,19 @@
             [clojure.string :as s]
             [app.db :refer [db]]
             [cljsjs.moment]
-            [app.logic.curr :refer [best-pairs
-                                    all-pairs
-                                    user-favs
-                                    by-query
-                                    pairs-by-query]]
+            [app.logic.curr :refer
+             [best-pairs
+              all-pairs
+              user-favs
+              by-query
+              pairs-by-query]]
             [app.utils.core :refer [curr-symbol->name]]
             [clojure.string :refer [split]]
-            [app.actions.ui :refer [toggle-filter
-                                    update-filter-q
-                                    open-detailed-view
-                                    toggle-filterbox]]
+            [app.actions.ui :refer
+             [toggle-filter
+              update-filter-q
+              open-detailed-view
+              toggle-filterbox]]
             [app.components.ui :refer [InputWrapper TextInput]]
             [cljsjs.react-select]))
 
@@ -70,7 +72,8 @@
                   :bestprice @(r/track best-pairs markets)
                   :favorites @(r/track user-favs markets favs)
                   nil @(r/track all-pairs markets))
-          [dt-m dt-p] (-> @db :ui/detailed-view)
+          [dt-m dt-p] (-> @db
+                          :ui/detailed-view)
           filtered (pairs-by-query pairs q)]
       [:div
        (for [pair filtered]
@@ -80,8 +83,8 @@
            [:div
             {:on-click #(open-detailed-view kw-m kw-p)
              :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
-                                           "rgba(0, 126, 255, 0.04)"
-                                           "transparent")}}
+                                         "rgba(0, 126, 255, 0.04)"
+                                         "transparent")}}
             [Row pair]]))])))
 
 (defn select-q
@@ -96,21 +99,19 @@
       :onChange on-change
       :options (clj->js (map #(zipmap [:value :label] [% %]) opts))}]))
 
-(defn toggle []
-  (let [open? (-> @db :ui/filterbox-open?)
-        q (-> @db :ui/filter-q)
+(defn toggle
+  []
+  (let [open? (-> @db
+                  :ui/filterbox-open?)
+        q (-> @db
+              :ui/filter-q)
         f (:ui/current-filter @db)]
     [:div.filterbox-toggle {:on-click toggle-filterbox}
-      (when (not open?)
-        [:div.input_label "Filters applied:"])
-      (when (and (not open?)
-                 (> (count q) 0))
-        [:div.pill.query (str "Query: " q)])
-      (when (and f (not open?))
-        [:div.pill.filter (name f)])
-      (if open?
-       [:div.open]
-       [:div.close])]))
+     (when (not open?) [:div.input_label "Filters applied:"])
+     (when (and (not open?) (> (count q) 0))
+       [:div.pill.query (str "Query: " q)])
+     (when (and f (not open?)) [:div.pill.filter (name f)])
+     (if open? [:div.open] [:div.close])]))
 
 (defn filter-box
   []
@@ -122,17 +123,19 @@
                                         .-value))]
     (fn []
       [:div#filter_box.form_wrap
-        (when (-> @db :ui/filterbox-open?)
-          [:div
-            [TextInput
-             {:on-change on-change
-              :value #(-> @db
-                          :ui/filter-q)
-              :label "search"}]
-            [InputWrapper "Filter" [select-q {:key "filter"}]]])
-        [toggle]])))
+       (when (-> @db
+                 :ui/filterbox-open?)
+         [:div
+          [TextInput
+           {:on-change on-change
+            :value #(-> @db
+                        :ui/filter-q)
+            :label "search"}]
+          [InputWrapper "Filter" [select-q {:key "filter"}]]])
+       [toggle]])))
 
-(defn live-board []
+(defn live-board
+  []
   [:div#wrapper
    [filter-box]
    [render-rows]])
