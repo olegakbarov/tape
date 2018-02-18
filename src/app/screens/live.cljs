@@ -14,7 +14,8 @@
             [clojure.string :refer [split]]
             [app.actions.ui :refer [toggle-filter
                                     update-filter-q
-                                    open-detailed-view]]
+                                    open-detailed-view
+                                    toggle-filterbox]]
             [app.components.ui :refer [InputWrapper TextInput]]
             [cljsjs.react-select]))
 
@@ -95,20 +96,41 @@
       :onChange on-change
       :options (clj->js (map #(zipmap [:value :label] [% %]) opts))}]))
 
+(defn toggle []
+  (let [open? (-> @db :ui/filterbox-open?)
+        q (-> @db :ui/filter-q)
+        f (:ui/current-filter @db)]
+    [:div.filterbox-toggle {:on-click toggle-filterbox}
+      (when (not open?)
+        [:div.input_label "Filters applied:"])
+      (when (and (not open?)
+                 (> (count q) 0))
+        [:div.pill.query (str "Query: " q)])
+      (when (and f (not open?))
+        [:div.pill.filter (name f)])
+      (if open?
+       [:div.open]
+       [:div.close])]))
+
 (defn filter-box
   []
   (let [q (:ui/filter-q @db)
         f (:ui/current-filter @db)
+        open? (:ui/filterbox-open? @db)
         on-change #(update-filter-q (-> %
                                         .-target
                                         .-value))]
-    (fn [] [:div.form_wrap
+    (fn []
+      [:div#filter_box.form_wrap
+        (when (-> @db :ui/filterbox-open?)
+          [:div
             [TextInput
              {:on-change on-change
               :value #(-> @db
                           :ui/filter-q)
               :label "search"}]
-            [InputWrapper "Filter" [select-q {:key "filter"}]]])))
+            [InputWrapper "Filter" [select-q {:key "filter"}]]])
+        [toggle]])))
 
 (defn live-board []
   [:div#wrapper

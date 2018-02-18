@@ -49,7 +49,6 @@
         content
         is-fav? (fav? favs [market pair])
         points @(r/track get-chart-points market pair)]
-    (js/console.log points)
     (when (:ui/detailed-view @db)
       [:div#detailed
        [:div.header

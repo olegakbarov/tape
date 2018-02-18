@@ -24,13 +24,13 @@
    :chart {:style {:font-family
                    "-apple-system, BlinkMacSystemFont, sans-serif"}}
    :series [{:name "TODO"
-             :type "area"
+             :type "line"
              :color "black"
-             :upColor "#00F72C"
+             ; :upColor "#00F72C"
              :data data
-             :treshold nil
-             :fillColor {:linearGradient {:x1 0 :y1 0 :x2 0 :y2 1}
-                         :stops [[0 "black"] [1 "#ccc"]]}}]})
+             :treshold nil}]})
+             ; :fillColor {:linearGradient {:x1 0 :y1 0 :x2 0 :y2 1}
+             ;             :stops [[0 "black"] [1 "#ccc"]]}}]})
 
 (defn render-stock-fn
   [data]
