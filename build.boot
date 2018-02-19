@@ -40,7 +40,7 @@
          '[powerlaces.boot-figreload :refer [reload]]
          '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]]
          '[tolitius.boot-check :as check]
-         '[boot-fmt.core :refer [fmt]]
+         '[boot-fmt.core :refer [fmt]])
 
 (task-options!
   repl {:middleware '[cemerick.piggieback/wrap-cljs-repl]})
