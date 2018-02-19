@@ -26,7 +26,6 @@
                  [mount "0.1.12"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [reagent "0.8.0-alpha2" :exclusions [cljsjs.react]]
-                 ;; [cljsjs/classnames "2.2.3-0"]
                  [cljsjs/react-select "1.0.0-rc.10-1" ]
                  [cljsjs/react "16.0.0-0"]
                  [cljsjs/react-dom "16.0.0-0"]
@@ -41,7 +40,10 @@
          '[powerlaces.boot-figreload :refer [reload]]
          '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]]
          '[tolitius.boot-check :as check]
-         '[boot-fmt.core :refer [fmt]])
+         '[boot-fmt.core :refer [fmt]]
+
+(task-options!
+  repl {:middleware '[cemerick.piggieback/wrap-cljs-repl]})
 
 (deftask prod-build
          []
