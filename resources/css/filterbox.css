@@ -3,7 +3,7 @@
   background-color: white;
   position: sticky;
   top: 70px;
-  z-index: 500;
+  z-index: 99;
 }
 
 .filterbox-toggle {
