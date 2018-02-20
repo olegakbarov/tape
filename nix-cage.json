@@ -1,22 +1,16 @@
 {
     "mounts": {
         "rw": [
-            ["~/projects/cache", "~"],
-            "~/.emacs.d",
-            "~/shell.nix",
-            "~/.Xauthority",
-            "/tmp",
-            "."
+            ".",
+            "/tmp"
         ],
         "ro": [
-            "~/PROXY.env",
-            "~/.bashrc",
-            "~/.profile",
-            "~/.config/fish",
-            "~/.config/xonsh",
-            "~/.xonshrc",
-            "~/.gitconfig"
-        ]
+            "~/.emacs.d",
+            "~/.spacemacs",
+            "~/.gitconfig",
+            "~/.Xauthority"
+        ],
+        "tmpfs": ["~", "~/.emacs.d/.cache"]
     },
     "environment": {
         "PATH":     "$HOME/.local/bin:/usr/bin:/bin:$PATH",
