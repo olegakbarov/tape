@@ -10,7 +10,9 @@
 (defn get-markets
   []
   (reduce (fn [acc [key val]]
-            (conj acc {:name key :pairs-num (count (keys val))}))
+            (conj acc
+                  {:name key
+                   :pairs-num (count (keys val))}))
           []
           (:markets @db)))
 

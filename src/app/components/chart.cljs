@@ -9,13 +9,26 @@
   {:credits false
    :plotOptions {:series {:animation false}}
    :rangeSelector {:selected 1
-                   :buttons [{:type "day" :count 1 :text "1d"}
-                             {:type "day" :count 7 :text "1w"}
-                             {:type "month" :count 1 :text "1m"}
-                             {:type "month" :count 3 :text "3m"}
-                             {:type "month" :count 6 :text "6m"}
-                             {:type "month" :count 12 :text "1y"}]
-                   :inputPosition {:align "left" :x "40px"}}
+                   :buttons [{:type "day"
+                              :count 1
+                              :text "1d"}
+                             {:type "day"
+                              :count 7
+                              :text "1w"}
+                             {:type "month"
+                              :count 1
+                              :text "1m"}
+                             {:type "month"
+                              :count 3
+                              :text "3m"}
+                             {:type "month"
+                              :count 6
+                              :text "6m"}
+                             {:type "month"
+                              :count 12
+                              :text "1y"}]
+                   :inputPosition {:align "left"
+                                   :x "40px"}}
    :xAxis [{:visible false}]
    :yAxis [{:visible false}]
    :tooltip {:split false}
@@ -39,8 +52,8 @@
 
 (defn Chart
   [data]
-  (r/create-class
-   {:component-did-mount (render-stock-fn data)
-    :component-did-update (render-stock-fn data)
-    :reagent-render (fn [data] [:div.chart
-                                {:style {:width "320px" :height "320px"}}])}))
+  (r/create-class {:component-did-mount (render-stock-fn data)
+                   :component-did-update (render-stock-fn data)
+                   :reagent-render (fn [data] [:div.chart
+                                               {:style {:width "320px"
+                                                        :height "320px"}}])}))

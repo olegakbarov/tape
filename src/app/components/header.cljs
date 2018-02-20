@@ -2,7 +2,6 @@
   (:require [reagent.core :as reagent]
             [app.db :refer [db router]]
             [app.actions.ui :refer [to-screen]]
-            [app.motion :refer [Motion spring presets]]
             [app.components.ntf :refer [ntf]]
             [goog.object :as gobj]))
 

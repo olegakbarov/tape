@@ -25,8 +25,7 @@
 
 (defn heart-beat [] (.setTimeout js/window heart-beat 2000))
 
-(defn ->msg [c e]
-  (go (>! c (.-data e))))
+(defn ->msg [c e] (go (>! c (.-data e))))
 
 (defn ->open
   [w e]
@@ -34,11 +33,9 @@
   (heart-beat)
   (js/console.log "ws conn is open"))
 
-(defn ->close [w e]
-  (js/console.log "closing ws conn...") (reconnect-ws w))
+(defn ->close [w e] (js/console.log "closing ws conn...") (reconnect-ws w))
 
-(defn ->error [w e]
-  (reconnect-ws w))
+(defn ->error [w e] (reconnect-ws w))
 
 (defn create-ws-conn!
   []
@@ -54,24 +51,21 @@
 (defn listen-ws!
   []
   (reset! t true)
-  (go
-   (let [endpoint (:ws-endpoint config)
-         stream (create-ws-conn!)]
-     (go-loop []
-       (let [msg (<! stream)] (evt->db (js->clj (js/JSON.parse msg))))
-       (recur)))))
+  (go (let [endpoint (:ws-endpoint config)
+            stream (create-ws-conn!)]
+        (go-loop []
+                 (let [msg (<! stream)] (evt->db (js->clj (js/JSON.parse msg))))
+                 (recur)))))
 
 (defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))
 
-(defstate ws-loop
-  :start (listen-ws!)
-  :stop (stop-ws!))
+(defstate ws-loop :start (listen-ws!) :stop (stop-ws!))
 
 (defn fetch-state!
   []
   (go (let [endpoint (str (:http-endpoint config) "/tickers-changes")
-              response (<! (http/get endpoint {:with-credentials? false}))]
-          (state->db (:body response)))))
+            response (<! (http/get endpoint {:with-credentials? false}))]
+        (state->db (:body response)))))
 
 ; https://cryptounicorns.io/api/v1/markets/bitfinex/tickers/eos-btc/last
 (defn fetch-chart-data!
@@ -79,10 +73,10 @@
   ;; validate params
   (go (let [endpoint (str (:http-endpoint config)
                           "/markets/"
-                           market
-                           "/tickers/"
-                           pair
-                           "/last")
+                          market
+                          "/tickers/"
+                          pair
+                          "/last")
             response (<! (http/get endpoint {:with-credentials? false}))]
-          (chart-data->db (-> response
-                              :body)))))
+        (chart-data->db (-> response
+                            :body)))))

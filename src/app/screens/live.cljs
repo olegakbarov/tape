@@ -5,20 +5,18 @@
             [clojure.string :as s]
             [app.db :refer [db]]
             [cljsjs.moment]
-            [app.logic.curr :refer
-             [best-pairs
-              all-pairs
-              user-favs
-              by-query
-              pairs-by-query]]
+            [app.logic.curr :refer [best-pairs
+                                    all-pairs
+                                    user-favs
+                                    by-query
+                                    pairs-by-query]]
             [app.utils.core :refer [curr-symbol->name]]
             [clojure.string :refer [split]]
-            [app.actions.ui :refer
-             [toggle-filter
-              update-filter-q
-              open-detailed-view
-              toggle-filterbox]]
-            [app.components.ui :refer [InputWrapper TextInput]]
+            [app.actions.ui :refer [toggle-filter
+                                    update-filter-q
+                                    open-detailed-view
+                                    toggle-filterbox]]
+            [app.components.ui :as ui]
             [cljsjs.react-select]))
 
 ;; TODO: handle updates properly
@@ -43,7 +41,7 @@
       :favorites "Favorites"
       nil (erro! (str "Not a string/keyword " v)))))
 
-(defn Row
+(defn row
   [pair]
   (let [{:keys [market currency-pair last change]} pair
         {:keys [percent amount]} change]
@@ -85,7 +83,7 @@
              :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
                                          "rgba(0, 126, 255, 0.04)"
                                          "transparent")}}
-            [Row pair]]))])))
+            [row pair]]))])))
 
 (defn select-q
   []
@@ -126,12 +124,12 @@
        (when (-> @db
                  :ui/filterbox-open?)
          [:div
-          [TextInput
+          [ui/text-input
            {:on-change on-change
             :value #(-> @db
                         :ui/filter-q)
             :label "search"}]
-          [InputWrapper "Filter" [select-q {:key "filter"}]]])
+          [ui/input-wrap "Filter" [select-q {:key "filter"}]]])
        [toggle]])))
 
 (defn live-board

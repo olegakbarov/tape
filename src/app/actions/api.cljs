@@ -54,17 +54,11 @@
 (defn state->db
   [s]
   (let [{:keys [ticker change]} s]
-    (doseq [item (map
-                   identity
-                   (map
-                     #(into {} [{"type" "ticker"} {:payload %}])
-                     ticker))]
+    (doseq [item (map identity
+                      (map #(into {} [{"type" "ticker"} {:payload %}]) ticker))]
       (evt->db item))
-    (doseq [item (map
-                   identity
-                   (map
-                     #(into {} [{"type" "change"} {:payload %}])
-                     change))]
+    (doseq [item (map identity
+                      (map #(into {} [{"type" "change"} {:payload %}]) change))]
       (evt->db item))))
 
 

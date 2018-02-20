@@ -8,12 +8,7 @@
             [app.logic.curr :refer [get-market-names get-all-pair-names]]
             [app.logic.validation :refer [str->amount validate-alert]]
             [app.actions.alerts :refer [create-alert]]
-            [app.components.ui :refer
-             [EmptyListCompo
-              InputWrapper
-              Checkbox
-              Button
-              TextInput]]))
+            [app.components.ui :as ui]))
 
 (defn select-pair
   []
@@ -92,7 +87,7 @@
   (let [alerts (-> @db
                    :user
                    :alerts)]
-    (if-not (pos? (count alerts)) [EmptyListCompo "alerts"] [alert-items])))
+    (if-not (pos? (count alerts)) [ui/empty-list "alerts"] [alert-items])))
 
 (defn alerts
   []
@@ -108,17 +103,17 @@
       [:div#wrapper
        [alerts-list]
        [:div.form_wrap
-        [InputWrapper "Market" [select-market {:key "market"}]]
-        [InputWrapper "Currency pair" [select-pair {:key "pair"}]]
-        [TextInput
+        [ui/input-wrap "Market" [select-market {:key "market"}]]
+        [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]
+        [ui/text-input
          {:on-change on-change
           :label "amount"
           :value #(-> @db
                       :form/alert
                       :amount)}]
-        [InputWrapper "Repeat alert" [select-repeat {:key "pair"}]]
+        [ui/input-wrap "Repeat alert" [select-repeat {:key "pair"}]]
         [:div.input_wrapper
-         [Button
+         [ui/button
           {:on-click on-submit
            :type "submit"
            :ref nil

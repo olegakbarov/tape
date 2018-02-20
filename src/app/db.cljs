@@ -11,7 +11,15 @@
                   :ui/filter-q ""
                   :ui/filterbox-open? false
                   :ui/ntf nil
-                  :form/alerts {:market "" :pair "" :amount "" :repeat false}
-                  :form/portfolio {:market "" :currency "" :amount ""}
-                  :user {:portfolio {} :favorites {} :alerts {} :settings {}}
+                  :form/alerts {:market ""
+                                :pair ""
+                                :amount ""
+                                :repeat false}
+                  :form/portfolio {:market ""
+                                   :currency ""
+                                   :amount ""}
+                  :user {:portfolio {}
+                         :favorites {}
+                         :alerts {}
+                         :settings {}}
                   :markets {}}))

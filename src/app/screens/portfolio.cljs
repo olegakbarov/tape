@@ -8,19 +8,19 @@
    [app.logic.curr :refer [get-market-names get-crypto-currs]]
    [app.logic.validation :refer [str->amount validate-portfolio-record]]
    [cljsjs.react-select]
-   [app.actions.form :refer [update-portfolio-form clear-portfolio-form]]
-   [app.actions.portfolio
-    :refer
-    [create-portfolio-record remove-portfolio-record get-total-worth]]
-   [app.components.ui
-    :refer
-    [EmptyListCompo InputWrapper Checkbox Button TextInput]]))
+   [app.actions.form :refer [update-portfolio-form
+                             clear-portfolio-form]]
+   [app.actions.portfolio :refer [create-portfolio-record
+                                  remove-portfolio-record
+                                  get-total-worth]]
+   [app.components.ui :as ui]))
 
 (defn total-worth
   []
   (fn []
     (let [w (.toFixed (get-total-worth) 2)]
-      (if (pos? w) [:div.total_worth (str "$ " w)] [:div]))))
+      (if (pos? w) [:div.total_worth (str "$ " w)]
+                   [:div]))))
 
 ;; TODO: dont re-render on every ws event
 (defn portfolio-list
@@ -31,7 +31,7 @@
                   vals)]
     [:div
      (if-not (pos? (count folio))
-       [EmptyListCompo "portfolio items"]
+       [ui/empty-list "portfolio items"]
        (for [row folio]
          (let [{:keys [currency amount market id]} row]
            ^{:key id}
@@ -43,7 +43,6 @@
             ^{:key "last-ctrls"}
             [:div.right_cell
              [:div.actions
-              ; [:div.edit {:on-click #(js/console.log "nimp")} "edit"]
               [:div.delete
                {:on-click #(remove-portfolio-record id)}
                "del"]]]])))]))
@@ -77,7 +76,8 @@
         on-change
         #(update-portfolio-form
           :currency
-          (if % (aget % "value") (update-portfolio-form :currency "")))]
+          (if % (aget % "value")
+                (update-portfolio-form :currency "")))]
     [:>
      js/window.Select
      {:value v
@@ -94,22 +94,23 @@
         on-submit #(when-let [a (validate-portfolio-record (->
                                                              @db
                                                              :form/portfolio))]
-                    (do (clear-portfolio-form) (create-portfolio-record a)))]
+                    (do (clear-portfolio-form)
+                        (create-portfolio-record a)))]
     (fn []
       [:div#wrapper
        [total-worth]
        [portfolio-list]
        [:div.form_wrap
-        [InputWrapper "Market" [select-market {:key "market"}]]
-        [InputWrapper "Currency" [select-curr {:key "currency"}]]
-        [TextInput
+        [ui/input-wrap "Market" [select-market {:key "market"}]]
+        [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
+        [ui/text-input
          {:on-change on-change
           :value #(-> @db
                       :form/portfolio
                       :amount)
           :label "amount"}]
         [:div.input_wrapper
-         [Button
+         [ui/button
           {:on-click on-submit
            :type "submit"
            :ref nil

@@ -2,10 +2,12 @@
   (:require [reagent.core :as reagent]
             [app.db :refer [db router]]
             [app.api :refer [listen-ws! fetch-state!]]
-            [app.eventloop :refer [start-title-loop! start-offline-watch-loop!]]
+            [app.eventloop :refer [start-title-loop!
+                                   start-offline-watch-loop!]]
             [app.actions.storage :refer [read-data-file!]]
             [app.actions.ui :refer [to-screen]]
-            [app.actions.ntf :refer [ntf-gone-offline ntf-gone-online]]
+            [app.actions.ntf :refer [ntf-gone-offline
+                                     ntf-gone-online]]
             [app.config :refer [config]]
             [app.screens.live :refer [live-board]]
             [app.screens.settings :refer [settings]]
@@ -56,13 +58,14 @@
 
 (defn DetailedView
   []
-  (fn [] [:div
-          {:style {:position "absolute"
-                   :bottom 0
-                   :display (if (:ui/detailed-view @db) "block" "none")}}
-          [Motion
-           {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
-           (fn [x] (reagent/create-element animated-comp #js {} x))]]))
+  (fn []
+    [:div
+      {:style {:position "absolute"
+               :bottom 0
+               :display (if (:ui/detailed-view @db) "block" "none")}}
+      [Motion
+       {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+       (fn [x] (reagent/create-element animated-comp #js {} x))]]))
 
 (defn root
   []

@@ -1,4 +1,6 @@
-(def project {:name "cryptounicorns" :version "0.2.0"})
+(def project
+  {:name "cryptounicorns"
+   :version "0.2.0"})
 
 (set-env!
  :source-paths #{"src"}
@@ -26,7 +28,7 @@
                  [mount "0.1.12"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [reagent "0.8.0-alpha2" :exclusions [cljsjs.react]]
-                 [cljsjs/react-select "1.0.0-rc.10-1" ]
+                 [cljsjs/react-select "1.0.0-rc.10-1"]
                  [cljsjs/react "16.0.0-0"]
                  [cljsjs/react-dom "16.0.0-0"]
                  [cljsjs/moment "2.10.6-0"]
@@ -42,8 +44,7 @@
          '[tolitius.boot-check :as check]
          '[boot-fmt.core :refer [fmt]])
 
-(task-options!
-  repl {:middleware '[cemerick.piggieback/wrap-cljs-repl]})
+; (task-options! repl {:middleware '[cemerick.piggieback/wrap-cljs-repl]})
 
 (deftask prod-build
          []
@@ -66,9 +67,7 @@
        (cljs-devtools)
        (dirac)
        (cljs-repl)
-       (reload :ids #{"renderer"}
-               :ws-host "localhost"
-               :target-path "target")
+       (reload :ids #{"renderer"} :ws-host "localhost" :target-path "target")
        (cljs :ids #{"renderer" "mount"}
              :compiler-options {:parallel-build true})
        ;; path.resolve(".") which is used in CLJS's node shim

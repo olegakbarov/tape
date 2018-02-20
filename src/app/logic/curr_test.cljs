@@ -94,9 +94,14 @@
                      :vol 38068.48557385}}})
 
 (def empty-markets
-  {"bitfinex" {"BTC-USD" {} "LTC-USD" {}}
-   "yobit" {"BTC-RUB" {} "BTC-USD" {} "LTC-USD" {} "LTC-RUB" {}}
-   "cex" {"BTC-RUB" {} "BTC-USD" {}}})
+  {"bitfinex" {"BTC-USD" {}
+               "LTC-USD" {}}
+   "yobit" {"BTC-RUB" {}
+            "BTC-USD" {}
+            "LTC-USD" {}
+            "LTC-RUB" {}}
+   "cex" {"BTC-RUB" {}
+          "BTC-USD" {}}})
 
 ;; TODO!
 

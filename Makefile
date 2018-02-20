@@ -15,7 +15,7 @@ all: build
 fmt:
 	boot fmt                       \
 		--git --mode overwrite \
-		--really --options '{:style :community :map {:comma? false} :vector {:respect-nl? true}}'
+		--really --options '{:style :community :map {:comma? false :force-nl? true} :vector {:respect-nl? true}}'
 
 .PHONY: dependencies
 dependencies:
