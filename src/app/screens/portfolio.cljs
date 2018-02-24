@@ -2,18 +2,22 @@
   (:require
    [clojure.string :as s]
    [reagent.core :as r]
+   [goog.object :as gobj]
+   [cljsjs.react-select]
    [app.components.header :refer [Header]]
    [app.actions.ui :refer [to-screen]]
    [app.db :refer [db]]
+   [app.motion :refer [Motion spring presets]]
+   [app.components.ui :as ui]
    [app.logic.curr :refer [get-market-names get-crypto-currs]]
    [app.logic.validation :refer [str->amount validate-portfolio-record]]
-   [cljsjs.react-select]
+   [app.actions.ui :refer [open-detailed-view
+                           close-detailed-view]]
    [app.actions.form :refer [update-portfolio-form
                              clear-portfolio-form]]
    [app.actions.portfolio :refer [create-portfolio-record
                                   remove-portfolio-record
-                                  get-total-worth]]
-   [app.components.ui :as ui]))
+                                  get-total-worth]]))
 
 (defn total-worth
   []
@@ -84,8 +88,7 @@
       :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
       :onChange on-change}]))
 
-(defn portfolio
-  []
+(defn item-add []
   (let [on-change (fn [e]
                     (let [v (-> e
                                 .-target
@@ -96,11 +99,12 @@
                                                              :form/portfolio))]
                     (do (clear-portfolio-form)
                         (create-portfolio-record a)))]
-    (fn []
-      [:div#wrapper
-       [total-worth]
-       [portfolio-list]
        [:div.form_wrap
+        [:h1 {:style {:margin "30px 0 50px"}} "Add holding"]
+        [ui/close {:position "absolute"
+                   :right "20px"
+                   :top "20px"}
+                  close-detailed-view]
         [ui/input-wrap "Market" [select-market {:key "market"}]]
         [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
         [ui/text-input
@@ -116,4 +120,60 @@
            :ref nil
            :disabled false
            :color "#000"}
-          "Add"]]]])))
+          "Add"]]]))
+
+(def height 355)
+
+(defn view
+  [{c :children}]
+  (let [y (gobj/get c "y")]
+    [:div
+     {:style {:position "fixed"
+              :width "321px"
+              :height (str height "px")
+              :background-color "#fff"
+              :z-index 999
+              :border-radius "4px 4px 0 0"
+              :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
+              :-webkit-transform (str "translateY(" y "px)")
+              :transform (str "translateY(" y "px)")}}
+     [item-add]]))
+
+(def animated-comp (r/reactify-component view))
+
+(defn detailed-view
+  []
+  (fn []
+    [:div
+      {:style {:position "absolute"
+               :bottom 0
+               :display (if (:ui/detailed-view @db) "block" "none")}}
+      [Motion
+       {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+       (fn [x] (r/create-element animated-comp #js {} x))]]))
+
+(defn add-btn [s]
+  [:div {:style {:padding "0 10px"
+                 :width "100%"}}
+    [ui/button
+     {:on-click #(do (reset! s false)
+                     (open-detailed-view "row" "kek"))
+      :type "submit"
+      :ref nil
+      :disabled false
+      :color "#000"}
+     "Add"]])
+
+(defn portfolio
+  []
+  (fn []
+   (let [show-btn (r/atom true)]
+    [:div.container_100
+     [Header]
+     [:div.items_wrapper_flex
+      [:div
+       [total-worth]
+       [portfolio-list]]
+      (when @show-btn [add-btn show-btn])]
+     [detailed-view]])))
+

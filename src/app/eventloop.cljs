@@ -11,12 +11,14 @@
 ;; title loop switch
 (defonce t (atom false))
 
+(def timeout-ms 3000)
+
 (defn start-title-loop!
   "Continuosly updates title with latest bitcoin(TODO) price "
   []
   (reset! t true)
   (go (while @t
-             (<! (timeout 3000))
+             (<! (timeout timeout-ms))
              (let [m (:markets @db)
                    btc (js/parseInt (best-pairs m :BTC-USD))]
                (set-title! btc)))))

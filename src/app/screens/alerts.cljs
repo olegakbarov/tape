@@ -1,14 +1,19 @@
 (ns app.screens.alerts
   (:require [reagent.core :as r]
             [clojure.string :as s]
+            [goog.object :as gobj]
             [cljsjs.react-select]
+            [app.motion :refer [Motion spring presets]]
+            [app.components.header :refer [Header]]
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
+            [app.actions.alerts :refer [create-alert]]
+            [app.components.ui :as ui]
             [app.actions.form :refer [update-alert-form clear-alert-form]]
             [app.logic.curr :refer [get-market-names get-all-pair-names]]
             [app.logic.validation :refer [str->amount validate-alert]]
-            [app.actions.alerts :refer [create-alert]]
-            [app.components.ui :as ui]))
+            [app.actions.ui :refer [open-detailed-view
+                                    close-detailed-view]]))
 
 (defn select-pair
   []
@@ -20,7 +25,8 @@
         opts (get-all-pair-names m)
         on-change #(update-alert-form
                     :pair
-                    (if % (aget % "value") (update-alert-form :pair "")))]
+                    (if % (aget % "value")
+                          (update-alert-form :pair "")))]
     [:>
      js/window.Select
      {:value v
@@ -37,7 +43,8 @@
         opts (get-market-names m)
         on-change #(update-alert-form
                     :market
-                    (if % (aget % "value") (update-alert-form :market "")))]
+                    (if % (aget % "value")
+                          (update-alert-form :market "")))]
     [:>
      js/window.Select
      {:value v
@@ -52,7 +59,8 @@
               :repeat)
         on-change #(update-alert-form
                     :repeat
-                    (if % (aget % "value") (update-alert-form :repeat "")))]
+                    (if % (aget % "value")
+                          (update-alert-form :repeat "")))]
     [:>
      js/window.Select
      {:value v
@@ -62,7 +70,8 @@
 (defn alert-items
   []
   (fn []
-    (let [alerts (-> @db
+    (let [show-btn (r/atom true)
+          alerts (-> @db
                      :user
                      :alerts
                      vals)]
@@ -87,10 +96,11 @@
   (let [alerts (-> @db
                    :user
                    :alerts)]
-    (if-not (pos? (count alerts)) [ui/empty-list "alerts"] [alert-items])))
+    (if-not (pos? (count alerts))
+            [ui/empty-list "alerts"]
+            [alert-items])))
 
-(defn alerts
-  []
+(defn add-folio-item []
   (let [on-change (fn [e]
                     (let [v (-> e
                                 .-target
@@ -99,24 +109,79 @@
         on-submit #(when-let [a (validate-alert (-> @db
                                                     :form/alert))]
                     (do (clear-alert-form) (create-alert a)))]
-    (fn []
-      [:div#wrapper
+     [:div.form_wrap
+      [:h1 {:style {:margin "30px 0 50px"}} "Add alert"]
+      [ui/close {:position "absolute"
+                 :right "20px"
+                 :top "20px"}
+                close-detailed-view]
+      [ui/input-wrap "Market" [select-market {:key "market"}]]
+      [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]
+      [ui/text-input
+       {:on-change on-change
+        :label "amount"
+        :value #(-> @db
+                    :form/alert
+                    :amount)}]
+      [ui/input-wrap "Repeat alert" [select-repeat {:key "pair"}]]
+      [:div.input_wrapper
+       [ui/button
+        {:on-click on-submit
+         :type "submit"
+         :ref nil
+         :disabled false
+         :color "#000"}
+        "Add"]]]))
+
+(def height 420)
+
+(defn view
+  [{c :children}]
+  (let [y (gobj/get c "y")]
+    [:div
+     {:style {:position "fixed"
+              :width "321px"
+              :height (str height "px")
+              :background-color "#fff"
+              :z-index 999
+              :border-radius "4px 4px 0 0"
+              :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
+              :-webkit-transform (str "translateY(" y "px)")
+              :transform (str "translateY(" y "px)")}}
+     [add-folio-item]]))
+
+(def animated-comp (r/reactify-component view))
+
+(defn detailed-view
+  []
+  (fn []
+    [:div
+      {:style {:position "absolute"
+               :bottom 0
+               :display (if (:ui/detailed-view @db) "block" "none")}}
+      [Motion
+       {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+       (fn [x] (r/create-element animated-comp #js {} x))]]))
+
+(defn add-btn [s]
+  [:div {:style {:padding "0 10px"
+                 :width "100%"}}
+    [ui/button
+     {:on-click #(do (reset! s false)
+                     (open-detailed-view "row" "kek"))
+      :type "submit"
+      :ref nil
+      :disabled false
+      :color "#000"}
+     "Add"]])
+
+(defn alerts
+  []
+  (fn []
+   (let [show-btn (r/atom true)]
+     [:div.container_100
+      [Header]
+      [:div.items_wrapper_flex
        [alerts-list]
-       [:div.form_wrap
-        [ui/input-wrap "Market" [select-market {:key "market"}]]
-        [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]
-        [ui/text-input
-         {:on-change on-change
-          :label "amount"
-          :value #(-> @db
-                      :form/alert
-                      :amount)}]
-        [ui/input-wrap "Repeat alert" [select-repeat {:key "pair"}]]
-        [:div.input_wrapper
-         [ui/button
-          {:on-click on-submit
-           :type "submit"
-           :ref nil
-           :disabled false
-           :color "#000"}
-          "Add"]]]])))
+       (when @show-btn [add-btn show-btn])]
+      [detailed-view]])))

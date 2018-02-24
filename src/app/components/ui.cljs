@@ -49,3 +49,8 @@
          :autoFocus false
          :onChange on-change
          :value (value)}]])))
+
+(defn close [style on-click]
+  [:div.common_close {:style style
+                      :on-click on-click}])
+

@@ -7,6 +7,7 @@
 
 (defonce db
          (r/atom {:ui/detailed-view nil
+                  :ui/detailed-view-height 0
                   :ui/current-filter :favorites
                   :ui/filter-q ""
                   :ui/filterbox-open? false

@@ -3,45 +3,30 @@
                    [klang.core :refer [info! warn! erro! crit! fata! trac!]])
   (:require [reagent.core :as r]
             [clojure.string :as s]
-            [app.db :refer [db]]
+            [goog.object :as gobj]
             [cljsjs.moment]
+            [cljsjs.react-select]
+            [app.db :refer [db]]
+            [app.motion :refer [Motion spring presets]]
+            [app.utils.core :refer [curr-symbol->name]]
+            [app.components.ui :as ui]
+            [app.components.header :refer [Header]]
+            [app.components.chart :refer [Chart]]
+            [app.actions.ui :refer [add-to-favs
+                                    remove-from-favs
+                                    close-detailed-view]]
+            [app.logic.ui :refer [get-chart-points]]
             [app.logic.curr :refer [best-pairs
                                     all-pairs
                                     user-favs
                                     by-query
                                     pairs-by-query]]
-            [app.utils.core :refer [curr-symbol->name]]
-            [clojure.string :refer [split]]
             [app.actions.ui :refer [toggle-filter
                                     update-filter-q
                                     open-detailed-view
-                                    toggle-filterbox]]
-            [app.components.ui :as ui]
-            [cljsjs.react-select]))
+                                    toggle-filterbox]]))
 
-;; TODO: handle updates properly
-; (defn Row [pair]
-;  (reagent/create-class
-;   {:reagent-render         #(render-row pair)
-;    :component-did-update   update-comp
-;    :component-did-mount    update-comp
-;    :should-component-update
-;     (fn [this]
-;      (println "next-props" (reagent/props this)))}))
-
-(defn keyword<->str
-  [v]
-  (if (string? v)
-    (-> v
-        (s/replace " " "")
-        .toLowerCase
-        keyword)
-    (condp = v
-      :bestprice "Best price"
-      :favorites "Favorites"
-      nil (erro! (str "Not a string/keyword " v)))))
-
-(defn row
+(defn render-row
   [pair]
   (let [{:keys [market currency-pair last change]} pair
         {:keys [percent amount]} change]
@@ -55,8 +40,30 @@
       [:span {:class "price_down"} last]
       [:div.swing
        (if (and (not (nil? amount)) (not (nil? percent)))
-         (str amount " (" percent "%)")
+         (str  (.toFixed percent 5) "% "  (.toFixed amount 5))
          "n/a")]]]))
+
+(defn row
+ [pair]
+ (r/create-class
+  {:reagent-render #(render-row pair)
+   ; :component-did-update   update-comp
+   ; :component-did-mount    update-comp
+   :should-component-update
+    (fn [this]
+     (js/console.log "next-props" (r/props this)))}))
+
+(defn keyword<->str
+  [v]
+  (if (string? v)
+    (-> v
+        (s/replace " " "")
+        .toLowerCase
+        keyword)
+    (condp = v
+      :bestprice "Best price"
+      :favorites "Favorites"
+      nil (erro! (str "Not a string/keyword " v)))))
 
 (defn render-rows
   []
@@ -109,7 +116,9 @@
      (when (and (not open?) (> (count q) 0))
        [:div.pill.query (str "Query: " q)])
      (when (and f (not open?)) [:div.pill.filter (name f)])
-     (if open? [:div.open] [:div.close])]))
+     (if open?
+       [:div.open]
+       [:div.close])]))
 
 (defn filter-box
   []
@@ -132,8 +141,106 @@
           [ui/input-wrap "Filter" [select-q {:key "filter"}]]])
        [toggle]])))
 
+;; -- Detailed view
+
+(comment {:high 3143.5286
+          :sell 3119.8
+          :buy 3081.6715
+          :vol-cur 98.522881
+          :low 3048.4535
+          :avg 3095.991
+          :market "yobit"
+          :timestamp 1509279292
+          :currency-pair "LTC-RUB"
+          :last 3070
+          :vol 304628.34})
+
+(defn fav?
+  [favs tupl]
+  (reduce (fn [acc pair]
+            (if (and (= (first pair) (first tupl)) (= (last pair) (last tupl)))
+              true
+              acc))
+          false
+          favs))
+
+(defn pair-detailed
+  []
+  (let [[market pair] (:ui/detailed-view @db)
+        favs (-> @db
+                 :user
+                 :favorites)
+        content (get-in @db [:markets market pair])
+        {:keys [high
+                low
+                sell
+                buy
+                currency-pair
+                market
+                timestamp
+                avg
+                last
+                vol
+                vol-cur]}
+        content
+        is-fav? (fav? favs [market pair])
+        points @(r/track get-chart-points market pair)]
+    (when (:ui/detailed-view @db)
+      [:div#detailed
+       [:div.header
+        [:div.title
+         pair
+         [:div.fav
+          {:class (if is-fav? "faved" "")
+           :on-click (if is-fav?
+                       #(remove-from-favs [(keyword market) (keyword pair)])
+                       #(add-to-favs [(keyword market) (keyword pair)]))}
+          (if is-fav? "saved" "save")]]
+        [:div.close {:on-click #(close-detailed-view)}]]
+       [:div.market " " market]
+       [:div.labels
+        (for [i ["High" "Low" "Buy" "Sell"]] ^{:key i} [:div.item i])]
+       [:div.prices.last
+        (for [i [high low buy sell]]
+          ^{:key (* 1000 (.random js/Math i))} ;; nothing to be proud about here
+          [:div.item (js/parseFloat i)])]
+       (when points [Chart points])])))
+
+(def height 400)
+
+(defn view
+  [{c :children}]
+  (let [y (gobj/get c "y")]
+    [:div
+     {:style {:position "fixed"
+              :width "321px"
+              :height (str height "px")
+              :background-color "#fff"
+              :z-index 999
+              :border-radius "4px 4px 0 0"
+              :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
+              :-webkit-transform (str "translateY(" y "px)")
+              :transform (str "translateY(" y "px)")}}
+     [pair-detailed]]))
+
+(def animated-comp (r/reactify-component view))
+
+(defn detailed-view
+  []
+  (fn []
+    [:div
+      {:style {:position "absolute"
+               :bottom 0
+               :display (if (:ui/detailed-view @db) "block" "none")}}
+      [Motion
+       {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+       (fn [x] (r/create-element animated-comp #js {} x))]]))
+
 (defn live-board
   []
-  [:div#wrapper
-   [filter-box]
-   [render-rows]])
+  [:div
+   [Header]
+   [:div#wrapper
+    [filter-box]
+    [render-rows]]
+   [detailed-view]])
