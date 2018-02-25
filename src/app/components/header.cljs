@@ -24,7 +24,7 @@
                               text])
                            toggle-items)))]))
 
-(defn Header
+(defn header
   []
   (fn []
     (let [screen (get-in @router [:screen])]

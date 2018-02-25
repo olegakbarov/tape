@@ -63,7 +63,7 @@
  dev-build
  []
  (set-env! :source-paths #(conj % "dev"))
- (comp (speak)
+ (comp (speak :theme "ordinance")
        (cljs-devtools)
        (dirac)
        (cljs-repl)

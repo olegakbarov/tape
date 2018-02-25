@@ -54,3 +54,7 @@
   [:div.common_close {:style style
                       :on-click on-click}])
 
+(defn burger-menu
+  [x on-click]
+  [:div.burger-menu {:class x
+                     :on-click on-click}])

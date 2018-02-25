@@ -10,12 +10,12 @@
             [app.motion :refer [Motion spring presets]]
             [app.utils.core :refer [curr-symbol->name]]
             [app.components.ui :as ui]
-            [app.components.header :refer [Header]]
+            [app.components.header :refer [header]]
             [app.components.chart :refer [Chart]]
+            [app.logic.ui :refer [get-chart-points]]
             [app.actions.ui :refer [add-to-favs
                                     remove-from-favs
                                     close-detailed-view]]
-            [app.logic.ui :refer [get-chart-points]]
             [app.logic.curr :refer [best-pairs
                                     all-pairs
                                     user-favs
@@ -104,42 +104,60 @@
       :onChange on-change
       :options (clj->js (map #(zipmap [:value :label] [% %]) opts))}]))
 
-(defn toggle
+;; - Filter
+
+(defn f-view
+  [{c :children}]
+  (js/console.log c)
+  (let [h (gobj/get c "height")
+        o (gobj/get c "opacity")
+        s (gobj/get c "scale")]
+    [:div
+     {:style {:height h
+              :opacity o
+              ; :margin-top "10px"
+              :background-color "white"
+              :transform "scaleY(" s "px)"}}
+              ; :z-index 999}}
+     [ui/text-input
+       {:on-change #(update-filter-q (-> %
+                                         .-target
+                                         .-value))
+        :value #(-> @db
+                    :ui/filter-q)
+        :label "search"}]
+     [ui/input-wrap "Filter" [select-q {:key "filter"}]]]))
+
+(def afw (r/reactify-component f-view))
+
+(defn filter-form
   []
-  (let [open? (-> @db
-                  :ui/filterbox-open?)
-        q (-> @db
-              :ui/filter-q)
-        f (:ui/current-filter @db)]
-    [:div.filterbox-toggle {:on-click toggle-filterbox}
-     (when (not open?) [:div.input_label "Filters applied:"])
-     (when (and (not open?) (> (count q) 0))
-       [:div.pill.query (str "Query: " q)])
-     (when (and f (not open?)) [:div.pill.filter (name f)])
-     (if open?
-       [:div.open]
-       [:div.close])]))
+  [Motion
+   {:style {:height (spring (if (:ui/filterbox-open? @db) 136 0))
+            :scale (spring (if (:ui/filterbox-open? @db) 1 0))
+            :opacity (spring (if (:ui/filterbox-open? @db) 1 0))
+            :display "none"}}
+   (fn [x]
+     (r/create-element afw #js {} x))])
 
 (defn filter-box
   []
   (let [q (:ui/filter-q @db)
         f (:ui/current-filter @db)
-        open? (:ui/filterbox-open? @db)
-        on-change #(update-filter-q (-> %
-                                        .-target
-                                        .-value))]
-    (fn []
-      [:div#filter_box.form_wrap
-       (when (-> @db
-                 :ui/filterbox-open?)
-         [:div
-          [ui/text-input
-           {:on-change on-change
-            :value #(-> @db
-                        :ui/filter-q)
-            :label "search"}]
-          [ui/input-wrap "Filter" [select-q {:key "filter"}]]])
-       [toggle]])))
+        open? (:ui/filterbox-open? @db)]
+    [:div#filter_box
+     [:div.filters_compact
+       [:div.left
+        [:div.input_label "Filters applied:"]
+        [:div.pills
+         (when f [:div.pill (name f)])
+         (when (> (count q) 0) [:div.pill (str "Query: " q)])]]
+       [:div.right
+        [ui/burger-menu
+         (if (-> @db :ui/filterbox-open?) "x" "")
+         toggle-filterbox]]]
+     [filter-form]]))
+
 
 ;; -- Detailed view
 
@@ -239,7 +257,7 @@
 (defn live-board
   []
   [:div
-   [Header]
+   [header]
    [:div#wrapper
     [filter-box]
     [render-rows]]

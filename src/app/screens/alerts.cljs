@@ -4,7 +4,7 @@
             [goog.object :as gobj]
             [cljsjs.react-select]
             [app.motion :refer [Motion spring presets]]
-            [app.components.header :refer [Header]]
+            [app.components.header :refer [header]]
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
             [app.actions.alerts :refer [create-alert]]
@@ -180,7 +180,7 @@
   (fn []
    (let [show-btn (r/atom true)]
      [:div.container_100
-      [Header]
+      [header]
       [:div.items_wrapper_flex
        [alerts-list]
        (when @show-btn [add-btn show-btn])]
