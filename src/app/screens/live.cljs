@@ -115,10 +115,9 @@
     [:div
      {:style {:height h
               :opacity o
-              ; :margin-top "10px"
               :background-color "white"
+              :overflow (if (-> @db :ui/filterbox-open?) "visible" "hidden")
               :transform "scaleY(" s "px)"}}
-              ; :z-index 999}}
      [ui/text-input
        {:on-change #(update-filter-q (-> %
                                          .-target
@@ -135,8 +134,7 @@
   [Motion
    {:style {:height (spring (if (:ui/filterbox-open? @db) 136 0))
             :scale (spring (if (:ui/filterbox-open? @db) 1 0))
-            :opacity (spring (if (:ui/filterbox-open? @db) 1 0))
-            :display "none"}}
+            :opacity (spring (if (:ui/filterbox-open? @db) 1 0))}}
    (fn [x]
      (r/create-element afw #js {} x))])
 
