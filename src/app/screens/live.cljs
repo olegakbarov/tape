@@ -108,7 +108,6 @@
 
 (defn f-view
   [{c :children}]
-  (js/console.log c)
   (let [h (gobj/get c "height")
         o (gobj/get c "opacity")
         s (gobj/get c "scale")]

@@ -29,13 +29,6 @@
   (fn []
     (let [screen (get-in @router [:screen])]
       [:div#header
-       [:div
-        {:style {:background-color "white"
-                 :width "100%"
-                 :height "100%"
-                 :position "absolute"
-                 :z-index "101"}}]
-       [:div {:style {:z-index 101}}
-        [:div.title "1.0.0-beta.1"]
-        [nav]]
-       [ntf]])))
+        [:div.title "UnicornEye_beta.1"]
+        [nav]
+        [ntf]])))

@@ -4,28 +4,26 @@
             [app.motion :refer [Motion spring presets]]
             [goog.object :as gobj]))
 
-(def height 30)
+(def h 30)
 
 (defn ntf-comp
   [n]
   (let [{:keys [color text]} (-> @db
                                  :ui/ntf)]
-    (when (and text color) [:div {:style {:background-color color}} text])))
+    (when (and text color)
+          [:div {:style {:background-color color}} text])))
 
 (defn view
   [{c :children}]
-  (let [y (gobj/get c "y")]
+  (let [height (gobj/get c "height")]
     [:div
      {:style {:position "fixed"
               :width "100%"
               :height (str height "px")
               :line-height (str height "px")
               :color "#fff"
-              :z-index 100
               :text-align "center"
-              :font-size "12px"
-              :-webkit-transform (str "translateY(" y "px)")
-              :transform (str "translateY(" y "px)")}}
+              :font-size "12px"}}
      [ntf-comp]]))
 
 (def animated-comp (reagent/reactify-component view))
@@ -35,10 +33,10 @@
   (fn []
     [:div
      {:style {:position "absolute"
-              :bottom 0
-              :height (str height "px")
+              :bottom "-30px"
+              :height "30px"
               :width "100%"
               :z-index 100}}
      [Motion
-      {:style {:y (spring (if (:ui/ntf @db) height 0))}}
+      {:style {:height (spring (if (:ui/ntf @db) h 0))}}
       (fn [x] (reagent/create-element animated-comp #js {} x))]]))

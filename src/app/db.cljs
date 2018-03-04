@@ -8,19 +8,23 @@
 (defonce db
          (r/atom {:ui/detailed-view nil
                   :ui/detailed-view-height 0
-                  :ui/current-filter :favorites
+                  :ui/current-filter :bestprice
                   :ui/filter-q ""
                   :ui/filterbox-open? false
                   :ui/ntf nil
+
                   :form/alerts {:market ""
                                 :pair ""
                                 :amount ""
                                 :repeat false}
+
                   :form/portfolio {:market ""
                                    :currency ""
                                    :amount ""}
+
                   :user {:portfolio {}
                          :favorites {}
                          :alerts {}
                          :settings {}}
+
                   :markets {}}))
