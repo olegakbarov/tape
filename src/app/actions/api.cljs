@@ -23,8 +23,7 @@
                        (-> p
                            :timestamp))
                 (dissoc :timestamp))]
-    ;; TODO! remove hardcode
-    (swap! db assoc-in [:markets :bitfinex pair :change] res)))
+    (swap! db assoc-in [:markets market pair :change] res)))
 
 (defn process-ticker
   [msg]
@@ -46,6 +45,7 @@
 
 (defn evt->db
   [msg]
+  ;; TODO spec it
   (condp = (get msg "type")
     "ticker" (process-ticker msg)
     "change" (process-change msg)

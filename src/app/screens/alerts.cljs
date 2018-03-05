@@ -53,7 +53,8 @@
 
 (defn select-repeat
   []
-  (let [opts ["Yes" "No"]
+  (let [opts [["Yes" true]
+              ["No" false]]
         v (-> @db
               :form/alert
               :repeat)
@@ -64,7 +65,7 @@
     [:>
      js/window.Select
      {:value v
-      :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
+      :options (clj->js (map #(zipmap [:value :label] [(last %) (first %)]) opts))
       :onChange on-change}]))
 
 (defn alert-items

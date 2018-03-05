@@ -44,15 +44,14 @@
               only-one-dot))))))
 
 (defn validate-alert
-  ;; TODO test it
+  ;; TODO abandon in favor of spec
   "Validates alert item for non-emptyness"
   [alert]
-  (assert (every? string? (vals alert)))
   (as-> alert a
     (if (s/blank? (:market a)) false a)
     (if (s/blank? (:pair a)) false a)
     (if (s/blank? (:amount a)) false a)
-    (if (s/blank? (:repeat a)) false a)))
+    (if (contains? #{true false} (:repeat a)) a false)))
 
 (defn validate-portfolio-record
   ;; TODO test it

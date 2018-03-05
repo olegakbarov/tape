@@ -69,7 +69,9 @@
                                 vals)]
                  (dispatch-notif? markets notifs))))))
 
-(defn stop-notifs-loop! [] (reset! n false) (info! "Stopped notifs loop."))
+(defn stop-notifs-loop! []
+  (reset! n false)
+  (info! "Stopped notifs loop."))
 
 (defn start-offline-watch-loop!
   [online-cb offline-cb]
