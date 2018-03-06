@@ -11,15 +11,17 @@
    [app.components.ui :as ui]
    [app.logic.curr :refer [get-market-names get-crypto-currs]]
    [app.logic.validation :refer [str->amount validate-portfolio-record]]
-   [app.actions.ui :refer [open-detailed-view
-                           close-detailed-view]]
+   [app.actions.ui :refer [toggle-edit-portfolio-view
+                           close-detailed-view
+                           toggle-add-portfolio-view
+                           close-every-portfolio-view]]
    [app.actions.form :refer [update-portfolio-form
                              clear-portfolio-form]]
    [app.actions.portfolio :refer [create-portfolio-record
                                   remove-portfolio-record
                                   get-total-worth]]))
 
-(defn total-worth
+(defn- total-worth
   []
   (fn []
     (let [w (.toFixed (get-total-worth) 2)]
@@ -41,15 +43,13 @@
            ^{:key id}
            [:div.row_wrap
             ^{:key "currency"}
+             {:on-click #(toggle-edit-portfolio-view id)}
             [:div.left_cell
              [:div.title (str (name currency) " " amount)]
              [:div.market market]]
             ^{:key "last-ctrls"}
             [:div.right_cell
-             [:div.actions
-              [:div.delete
-               {:on-click #(remove-portfolio-record id)}
-               "del"]]]])))]))
+             [:div.actions]]])))]))
 
 (defn select-market
   []
@@ -100,11 +100,14 @@
                     (do (clear-portfolio-form)
                         (create-portfolio-record a)))]
        [:div.form_wrap
-        [:h1 {:style {:margin "30px 0 50px"}} "Add holding"]
+        [:h1 {:style {:margin "30px 0 50px"}}
+         (cond
+           (-> @db :ui/portfolio-add-view) "Add holding"
+           (-> @db :ui/portfolio-edit-view) "Edit holding")]
         [ui/close {:position "absolute"
                    :right "20px"
                    :top "20px"}
-                  close-detailed-view]
+                  #(close-every-portfolio-view)]
         [ui/input-wrap "Market" [select-market {:key "market"}]]
         [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
         [ui/text-input
@@ -120,7 +123,9 @@
            :ref nil
            :disabled false
            :color "#000"}
-          "Add"]]]))
+          (cond
+            (-> @db :ui/portfolio-add-view) "Add"
+            (-> @db :ui/portfolio-edit-view) "Save")]]]))
 
 (def height 355)
 
@@ -144,20 +149,22 @@
 (defn detailed-view
   []
   (fn []
+   (let [open? (or (:ui/portfolio-edit-view @db)
+                   (:ui/portfolio-add-view @db))]
     [:div
       {:style {:position "absolute"
                :bottom 0
-               :display (if (:ui/detailed-view @db) "block" "none")}}
+               :display (if open? "block" "none")}}
       [Motion
-       {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
-       (fn [x] (r/create-element animated-comp #js {} x))]]))
+       {:style {:y (spring (if open? (- height) 0))}}
+       (fn [x] (r/create-element animated-comp #js {} x))]])))
 
 (defn add-btn [s]
   [:div {:style {:padding "0 10px"
                  :width "100%"}}
     [ui/button
      {:on-click #(do (reset! s false)
-                     (open-detailed-view "row" "kek"))
+                     (toggle-add-portfolio-view))
       :type "submit"
       :ref nil
       :disabled false

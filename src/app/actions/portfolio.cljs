@@ -51,3 +51,4 @@
                 (+ acc (to-dollar (js/parseFloat amount) currency market))))
             0
             folio)))
+

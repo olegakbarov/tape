@@ -3,6 +3,7 @@
             [app.actions.storage :refer [persist-user-currents!]]
             [app.utils.core :refer [generate-uuid]]))
 
+;; TODO define with spec
 (comment {:id "uuid-uuid"
           :market :bitfinex
           :pair :BTC-LTC
