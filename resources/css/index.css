@@ -1,7 +1,8 @@
 @import url("_colors.css");
 @import url("_spinner.css");
 @import url("_highcharts.css");
-@import url("select.css");
+@import url("_select.css");
+@import url("_switch.css");
 @import url("common.css");
 @import url("header.css");
 @import url("live.css");
@@ -53,19 +54,4 @@ body {
   position: relative;
 }
 
-/* common */
-
-span.dynamics.green {
-  font-weight: 300;
-  color: var(--green);
-  font-size: 11px;
-}
-
-.input_wrapper {
-  padding: 7px 0;
-}
-
-.input_label {
-  margin-bottom: 7px;
-}
 

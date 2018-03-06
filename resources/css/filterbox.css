@@ -28,6 +28,10 @@
   color: gray;
 }
 
+.input_label {
+  margin-bottom: 7px;
+}
+
 .left > .pills {
   display: flex;
 }

@@ -67,39 +67,6 @@ input.input_item {
   justify-content: flex-end;
 }
 
-.actions > .delete,
-.actions > .edit {
-  font-size: 10px;
-  line-height: 10px;
-  text-transform: uppercase;
-  padding: 3px 7px;
-  border-radius: 4px;
-  margin-left: 10px;
-  transition: all .15s ease;
-}
-
-.actions > .edit {
-  color: var(--blue);
-  border: 1px solid var(--blue);
-}
-
-.actions > .edit:hover {
-  color: white;
-  background-color: var(--blue);
-  cursor: pointer;
-}
-
-.actions > .delete {
-  color: var(--red);
-  border: 1px solid var(--red);
-}
-
-.actions > .delete:hover {
-  color: white;
-  background-color: var(--red);
-  cursor: pointer;
-}
-
 .input_label {
   text-transform: uppercase;
   color: #ccc;
