@@ -1,0 +1,37 @@
+input.checkbox {
+  display: none;
+  opacity: 0;
+}
+
+label {
+  width: 60px;
+  height: 30px;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  background: rgb(189, 189, 189);
+  border-radius: 30px;
+  transition: background-color 0.2s;
+}
+
+label:after {
+  left: 0;
+  width: 22px;
+  height: 22px;
+  margin: 4px;
+  content: '';
+  position: absolute;
+  background: #FFF;
+  border-radius: 11px;
+}
+
+input:checked + label {
+  background: var(--green);
+}
+
+input:checked + label:after {
+  left: auto;
+  right: 0;
+}
+
+

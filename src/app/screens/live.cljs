@@ -80,7 +80,7 @@
           [dt-m dt-p] (-> @db
                           :ui/detailed-view)
           filtered (pairs-by-query pairs q)]
-      [:div
+      [:div.rows_wrapper
        (for [pair filtered]
          (let [{:keys [market currency-pair]} pair
                [kw-m kw-p] (mapv keyword [market currency-pair])]
@@ -154,9 +154,6 @@
          (if (-> @db :ui/filterbox-open?) "x" "")
          toggle-filterbox]]]
      [filter-form]]))
-
-
-;; -- Detailed view
 
 (comment {:high 3143.5286
           :sell 3119.8
@@ -255,7 +252,6 @@
   []
   [:div
    [header]
-   [:div#wrapper
-    [filter-box]
-    [render-rows]]
+   [filter-box]
+   [render-rows]
    [detailed-view]])

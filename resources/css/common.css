@@ -68,3 +68,18 @@ button.button:active {
 .burger-menu.x:after{
   transform: translateY(-8px) rotate(-45deg);
 }
+
+/* ------------- NOTIF -------------  */
+
+.notif {
+  position: absolute;
+  bottom: -30px;
+  background-color: red;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-size: 13px;
+  text-align: center;
+  color: white;
+}
+

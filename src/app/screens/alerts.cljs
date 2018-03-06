@@ -182,7 +182,7 @@
    (let [show-btn (r/atom true)]
      [:div.alerts_container
       [header]
-      [:div.alerts_wrapper_flex
+      [:div.alerts_items_wrapper
        [alerts-list]
        (when @show-btn [add-btn show-btn])]
       [detailed-view]])))

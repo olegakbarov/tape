@@ -1,11 +1,13 @@
 #filter_box {
-  padding-top: 10px;
+  position: fixed;
+  top: 70px;
+  width: 100%;
   background-color: white;
-  position: sticky;
   z-index: 99;
   padding: 10px;
   box-sizing: border-box;
   border-bottom: 1px solid #eaeaea;
+  height: 60px;
 }
 
 .filters_compact {

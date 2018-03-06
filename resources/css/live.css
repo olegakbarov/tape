@@ -20,6 +20,10 @@
   }
 }
 
+.rows_wrapper {
+  padding-top: 130px;
+}
+
 .row_wrap {
   display: flex;
   padding: 10px 0;
