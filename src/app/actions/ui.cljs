@@ -12,11 +12,6 @@
   []
   (swap! db assoc-in [:ui/detailed-view] nil))
 
-(defn to-screen
-  [screen]
-  (do (close-detailed-view)
-      (swap! router assoc-in [:screen] screen)))
-
 (defn add-to-favs
   [tupl]
   (do (swap! db update-in [:user :favorites] #(into % (vector tupl)))
@@ -50,26 +45,35 @@
     (swap! db assoc :ui/filterbox-open? (not open?))))
 
 (defn toggle-edit-portfolio-view
-  "With id provided opens view and populates fields with item with this id.
-  Without params resets key in db to `nil` and thus closes the detailed view"
+  "Without params resets key in db to `nil` and thus closes the detailed view.
+  With id provided opens view and populates fields with item with this id."
+  ([]
+   (swap! db assoc :ui/portfolio-edit-view nil))
   ([id]
    (let [{:keys [market currency amount id]} (-> @db :user :portfolio (get id))]
+    (swap! db assoc :ui/portfolio-edit-view id)
     (swap! db update-in [:form/portfolio] merge {:market (name market)
                                                  :currency (name currency)
                                                  :amount amount
-                                                 :id id})
-    (swap! db assoc :ui/portfolio-edit-view id)))
-  ([]
-   (swap! db assoc :ui/portfolio-edit-view nil)))
+                                                 :id id}))))
 
 (defn toggle-add-portfolio-view
   []
   (swap! db assoc :ui/portfolio-add-view
          (not (-> @db :ui/portfolio-add-view))))
 
-
 (defn close-every-portfolio-view
   []
   ;; TODO: ugly
   (swap! db assoc :ui/portfolio-add-view false)
-  (swap! db assoc :ui/portfolio-edit-view nil))
+  (swap! db assoc :ui/portfolio-edit-view nil)
+  (swap! db update-in [:form/portfolio] merge {:market ""
+                                               :currency ""
+                                               :amount ""}))
+
+(defn to-screen
+  [screen]
+  (do (close-detailed-view)
+      (close-every-portfolio-view)
+      (swap! router assoc-in [:screen] screen)))
+

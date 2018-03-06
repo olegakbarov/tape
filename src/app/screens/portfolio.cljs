@@ -134,7 +134,7 @@
   (let [y (gobj/get c "y")]
     [:div
      {:style {:position "fixed"
-              :width "321px"
+              :width "100%"
               :height (str height "px")
               :background-color "#fff"
               :z-index 999
@@ -175,12 +175,12 @@
   []
   (fn []
    (let [show-btn (r/atom true)]
-    [:div.container_100
+    [:div.portfolio_container
      [header]
-     [:div.items_wrapper_flex
-      [:div
-       [total-worth]
-       [portfolio-list]]
-      (when @show-btn [add-btn show-btn])]
+     [:div.portfolio_items_wrapper]
+     [total-worth]
+     [portfolio-list]
+     [:div.portfolio_toolbar
+       (when @show-btn [add-btn show-btn])]
      [detailed-view]])))
 

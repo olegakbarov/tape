@@ -32,6 +32,7 @@
                  [cljsjs/react "16.0.0-0"]
                  [cljsjs/react-dom "16.0.0-0"]
                  [cljsjs/moment "2.10.6-0"]
+                 [cljsjs/react-virtualized "9.18.5-1"]
                  [cljsjs/react-motion "0.5.0-0"]
                  [cljsjs/chartjs "2.6.0-0"]
                  [cljsjs/highstock "5.0.14-0"]

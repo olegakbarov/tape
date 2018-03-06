@@ -180,9 +180,9 @@
   []
   (fn []
    (let [show-btn (r/atom true)]
-     [:div.container_100
+     [:div.alerts_container
       [header]
-      [:div.items_wrapper_flex
+      [:div.alerts_wrapper_flex
        [alerts-list]
        (when @show-btn [add-btn show-btn])]
       [detailed-view]])))
