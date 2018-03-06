@@ -7,13 +7,12 @@
   "Checks if record with this :market and :currency already exists in db"
   [rec]
   (let [{:keys [market currency]} rec
-        folio (-> @db :user :portfolio)]
+        folio (-> @db
+                  :user
+                  :portfolio)]
     (reduce
      (fn [acc [k v]]
-       (if (and (= (:market v) market)
-                (= (:currency v) currency))
-           true
-           acc))
+       (if (and (= (:market v) market) (= (:currency v) currency)) true acc))
      false
      folio)))
 
@@ -21,7 +20,6 @@
   "Adds notif to state and persists it to disk"
   [a]
   (let [id (generate-uuid)]
-
     (do (swap! db assoc-in
           [:user :portfolio id]
           (merge a
@@ -67,4 +65,3 @@
                 (+ acc (to-dollar (js/parseFloat amount) currency market))))
             0
             folio)))
-

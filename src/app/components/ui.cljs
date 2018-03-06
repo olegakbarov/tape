@@ -3,7 +3,8 @@
             [clojure.string :as s]
             [app.db :refer [db]]))
 
-(defn spinner []
+(defn spinner
+  []
   [:div.orbit-spinner
    (for [i [1 2 3]] ^{:key i} [:div.orbit])])
 
@@ -50,11 +51,14 @@
          :onChange on-change
          :value (value)}]])))
 
-(defn close [style on-click]
-  [:div.common_close {:style style
-                      :on-click on-click}])
+(defn close
+  [style on-click]
+  [:div.common_close
+   {:style style
+    :on-click on-click}])
 
 (defn burger-menu
   [x on-click]
-  [:div.burger-menu {:class x
-                     :on-click on-click}])
+  [:div.burger-menu
+   {:class x
+    :on-click on-click}])

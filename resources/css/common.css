@@ -36,6 +36,12 @@ button.button:active {
   cursor: pointer;
 }
 
+.input_label {
+  margin-top: 7px;
+}
+
+/* ------------- BURGER -------------  */
+
 .burger-menu {
   display: block;
   width: 24px;

@@ -13,18 +13,21 @@
             [app.components.header :refer [header]]
             [app.components.chart :refer [Chart]]
             [app.logic.ui :refer [get-chart-points]]
-            [app.actions.ui :refer [add-to-favs
-                                    remove-from-favs
-                                    close-detailed-view]]
-            [app.logic.curr :refer [best-pairs
-                                    all-pairs
-                                    user-favs
-                                    by-query
-                                    pairs-by-query]]
-            [app.actions.ui :refer [toggle-filter
-                                    update-filter-q
-                                    open-detailed-view
-                                    toggle-filterbox]]))
+            [app.actions.ui :refer
+             [add-to-favs
+              remove-from-favs
+              close-detailed-view]]
+            [app.logic.curr :refer
+             [best-pairs
+              all-pairs
+              user-favs
+              by-query
+              pairs-by-query]]
+            [app.actions.ui :refer
+             [toggle-filter
+              update-filter-q
+              open-detailed-view
+              toggle-filterbox]]))
 
 (defn render-row
   [pair]
@@ -40,18 +43,16 @@
       [:span {:class "price_down"} last]
       [:div.swing
        (if (and (not (nil? amount)) (not (nil? percent)))
-         (str  (.toFixed percent 5) "% "  (.toFixed amount 5))
+         (str (.toFixed percent 5) "% " (.toFixed amount 5))
          "n/a")]]]))
 
 (defn row
- [pair]
- (r/create-class
-  {:reagent-render #(render-row pair)
-   ; :component-did-update   update-comp
-   ; :component-did-mount    update-comp
-   :should-component-update
-    (fn [this]
-     (js/console.log "next-props" (r/props this)))}))
+  [pair]
+  (r/create-class {:reagent-render #(render-row pair)
+                   ; :component-did-update   update-comp
+                   ; :component-did-mount    update-comp
+                   :should-component-update
+                   (fn [this] (js/console.log "next-props" (r/props this)))}))
 
 (defn keyword<->str
   [v]
@@ -115,15 +116,19 @@
      {:style {:height h
               :opacity o
               :background-color "white"
-              :overflow (if (-> @db :ui/filterbox-open?) "visible" "hidden")
-              :transform "scaleY(" s "px)"}}
+              :overflow (if (-> @db
+                                :ui/filterbox-open?)
+                          "visible"
+                          "hidden")
+              :transform "scaleY("
+              s "px)"}}
      [ui/text-input
-       {:on-change #(update-filter-q (-> %
-                                         .-target
-                                         .-value))
-        :value #(-> @db
-                    :ui/filter-q)
-        :label "search"}]
+      {:on-change #(update-filter-q (-> %
+                                        .-target
+                                        .-value))
+       :value #(-> @db
+                   :ui/filter-q)
+       :label "search"}]
      [ui/input-wrap "Filter" [select-q {:key "filter"}]]]))
 
 (def afw (r/reactify-component f-view))
@@ -134,8 +139,7 @@
    {:style {:height (spring (if (:ui/filterbox-open? @db) 136 0))
             :scale (spring (if (:ui/filterbox-open? @db) 1 0))
             :opacity (spring (if (:ui/filterbox-open? @db) 1 0))}}
-   (fn [x]
-     (r/create-element afw #js {} x))])
+   (fn [x] (r/create-element afw #js {} x))])
 
 (defn filter-box
   []
@@ -144,15 +148,18 @@
         open? (:ui/filterbox-open? @db)]
     [:div#filter_box
      [:div.filters_compact
-       [:div.left
-        [:div.input_label "Filters applied:"]
-        [:div.pills
-         (when f [:div.pill (name f)])
-         (when (> (count q) 0) [:div.pill (str "Query: " q)])]]
-       [:div.right
-        [ui/burger-menu
-         (if (-> @db :ui/filterbox-open?) "x" "")
-         toggle-filterbox]]]
+      [:div.left
+       [:div.input_label "Filters applied:"]
+       [:div.pills
+        (when f [:div.pill (name f)])
+        (when (> (count q) 0) [:div.pill (str "Query: " q)])]]
+      [:div.right
+       [ui/burger-menu
+        (if (-> @db
+                :ui/filterbox-open?)
+          "x"
+          "")
+        toggle-filterbox]]]
      [filter-form]]))
 
 (comment {:high 3143.5286
@@ -239,14 +246,13 @@
 
 (defn detailed-view
   []
-  (fn []
-    [:div
-      {:style {:position "absolute"
-               :bottom 0
-               :display (if (:ui/detailed-view @db) "block" "none")}}
-      [Motion
-       {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
-       (fn [x] (r/create-element animated-comp #js {} x))]]))
+  (fn [] [:div
+          {:style {:position "absolute"
+                   :bottom 0
+                   :display (if (:ui/detailed-view @db) "block" "none")}}
+          [Motion
+           {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+           (fn [x] (r/create-element animated-comp #js {} x))]]))
 
 (defn live-board
   []

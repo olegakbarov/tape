@@ -12,8 +12,9 @@
             [app.actions.form :refer [update-alert-form clear-alert-form]]
             [app.logic.curr :refer [get-market-names get-all-pair-names]]
             [app.logic.validation :refer [str->amount validate-alert]]
-            [app.actions.ui :refer [open-detailed-view
-                                    close-detailed-view]]))
+            [app.actions.ui :refer
+             [open-detailed-view
+              close-detailed-view]]))
 
 (defn select-pair
   []
@@ -25,8 +26,7 @@
         opts (get-all-pair-names m)
         on-change #(update-alert-form
                     :pair
-                    (if % (aget % "value")
-                          (update-alert-form :pair "")))]
+                    (if % (aget % "value") (update-alert-form :pair "")))]
     [:>
      js/window.Select
      {:value v
@@ -43,8 +43,7 @@
         opts (get-market-names m)
         on-change #(update-alert-form
                     :market
-                    (if % (aget % "value")
-                          (update-alert-form :market "")))]
+                    (if % (aget % "value") (update-alert-form :market "")))]
     [:>
      js/window.Select
      {:value v
@@ -60,12 +59,12 @@
               :repeat)
         on-change #(update-alert-form
                     :repeat
-                    (if % (aget % "value")
-                          (update-alert-form :repeat "")))]
+                    (if % (aget % "value") (update-alert-form :repeat "")))]
     [:>
      js/window.Select
      {:value v
-      :options (clj->js (map #(zipmap [:value :label] [(last %) (first %)]) opts))
+      :options (clj->js (map #(zipmap [:value :label] [(last %) (first %)])
+                             opts))
       :onChange on-change}]))
 
 (defn alert-items
@@ -97,11 +96,10 @@
   (let [alerts (-> @db
                    :user
                    :alerts)]
-    (if-not (pos? (count alerts))
-            [ui/empty-list "alerts"]
-            [alert-items])))
+    (if-not (pos? (count alerts)) [ui/empty-list "alerts"] [alert-items])))
 
-(defn add-folio-item []
+(defn add-folio-item
+  []
   (let [on-change (fn [e]
                     (let [v (-> e
                                 .-target
@@ -110,29 +108,30 @@
         on-submit #(when-let [a (validate-alert (-> @db
                                                     :form/alert))]
                     (do (clear-alert-form) (create-alert a)))]
-     [:div.form_wrap
-      [:h1 {:style {:margin "30px 0 50px"}} "Add alert"]
-      [ui/close {:position "absolute"
-                 :right "20px"
-                 :top "20px"}
-                close-detailed-view]
-      [ui/input-wrap "Market" [select-market {:key "market"}]]
-      [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]
-      [ui/text-input
-       {:on-change on-change
-        :label "amount"
-        :value #(-> @db
-                    :form/alert
-                    :amount)}]
-      [ui/input-wrap "Repeat alert" [select-repeat {:key "pair"}]]
-      [:div.input_wrapper
-       [ui/button
-        {:on-click on-submit
-         :type "submit"
-         :ref nil
-         :disabled false
-         :color "#000"}
-        "Add"]]]))
+    [:div.form_wrap
+     [:h1 {:style {:margin "30px 0 50px"}} "Add alert"]
+     [ui/close
+      {:position "absolute"
+       :right "20px"
+       :top "20px"}
+      close-detailed-view]
+     [ui/input-wrap "Market" [select-market {:key "market"}]]
+     [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]
+     [ui/text-input
+      {:on-change on-change
+       :label "amount"
+       :value #(-> @db
+                   :form/alert
+                   :amount)}]
+     [ui/input-wrap "Repeat alert" [select-repeat {:key "pair"}]]
+     [:div.input_wrapper
+      [ui/button
+       {:on-click on-submit
+        :type "submit"
+        :ref nil
+        :disabled false
+        :color "#000"}
+       "Add"]]]))
 
 (def height 420)
 
@@ -155,34 +154,34 @@
 
 (defn detailed-view
   []
-  (fn []
-    [:div
-      {:style {:position "absolute"
-               :bottom 0
-               :display (if (:ui/detailed-view @db) "block" "none")}}
-      [Motion
-       {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
-       (fn [x] (r/create-element animated-comp #js {} x))]]))
+  (fn [] [:div
+          {:style {:position "absolute"
+                   :bottom 0
+                   :display (if (:ui/detailed-view @db) "block" "none")}}
+          [Motion
+           {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+           (fn [x] (r/create-element animated-comp #js {} x))]]))
 
-(defn add-btn [s]
-  [:div {:style {:padding "0 10px"
-                 :width "100%"}}
-    [ui/button
-     {:on-click #(do (reset! s false)
-                     (open-detailed-view "row" "kek"))
-      :type "submit"
-      :ref nil
-      :disabled false
-      :color "#000"}
-     "Add"]])
+(defn add-btn
+  [s]
+  [:div
+   {:style {:padding "0 10px"
+            :width "100%"}}
+   [ui/button
+    {:on-click #(do (reset! s false) (open-detailed-view "row" "kek"))
+     :type "submit"
+     :ref nil
+     :disabled false
+     :color "#000"}
+    "Add"]])
 
 (defn alerts
   []
   (fn []
-   (let [show-btn (r/atom true)]
-     [:div.alerts_container
-      [header]
-      [:div.alerts_items_wrapper
-       [alerts-list]
-       (when @show-btn [add-btn show-btn])]
-      [detailed-view]])))
+    (let [show-btn (r/atom true)]
+      [:div.alerts_container
+       [header]
+       [:div.alerts_items_wrapper
+        [alerts-list]
+        (when @show-btn [add-btn show-btn])]
+       [detailed-view]])))
