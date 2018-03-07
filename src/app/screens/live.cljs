@@ -227,32 +227,21 @@
 
 (def height 400)
 
-(defn view
-  [{c :children}]
-  (let [y (gobj/get c "y")]
-    [:div
-     {:style {:position "fixed"
-              :width "321px"
-              :height (str height "px")
-              :background-color "#fff"
-              :z-index 999
-              :border-radius "4px 4px 0 0"
-              :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
-              :-webkit-transform (str "translateY(" y "px)")
-              :transform (str "translateY(" y "px)")}}
-     [pair-detailed]]))
-
-(def animated-comp (r/reactify-component view))
+(def animated-comp
+ (r/reactify-component
+  (fn [{c :children}]
+    (let [y (gobj/get c "y")]
+      [:div.detailed_view
+       {:style {:transform (str "translateY(" y "px)")}}
+       [pair-detailed]]))))
 
 (defn detailed-view
   []
-  (fn [] [:div
-          {:style {:position "absolute"
-                   :bottom 0
-                   :display (if (:ui/detailed-view @db) "block" "none")}}
-          [Motion
-           {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
-           (fn [x] (r/create-element animated-comp #js {} x))]]))
+  (fn []
+    [:div.motion_wrapper
+      [Motion
+        {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+        (fn [x] (r/create-element animated-comp #js {} x))]]))
 
 (defn live-board
   []

@@ -3,6 +3,7 @@
 @import url("_highcharts.css");
 @import url("_select.css");
 @import url("_switch.css");
+@import url("_motion.css");
 @import url("common.css");
 @import url("header.css");
 @import url("live.css");
@@ -47,5 +48,10 @@ body {
   height: 100%;
   position: relative;
   overflow: scroll;
+}
+
+#wrapper {
+  margin-top: 70px;
+  position: relative;
 }
 

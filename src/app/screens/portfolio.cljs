@@ -13,7 +13,6 @@
              [str->amount validate-portfolio-record]]
             [app.actions.ui :refer
              [toggle-edit-portfolio-view
-              close-detailed-view
               toggle-add-portfolio-view
               close-every-portfolio-view]]
             [app.actions.form :refer
@@ -23,6 +22,14 @@
              [create-portfolio-record
               remove-portfolio-record
               get-total-worth]]))
+
+(defn handle-save [id]
+  (close-every-portfolio-view)
+  (clear-portfolio-form))
+
+(defn handle-delete [id]
+  (close-every-portfolio-view)
+  (clear-portfolio-form))
 
 (defn- total-worth
   []
@@ -121,10 +128,15 @@
                    :amount)
        :label "amount"}]
      [:div.input_wrapper
+      (when (-> @db
+               :ui/portfolio-edit-view)
+       [ui/button
+        {:on-click #(remove-portfolio-record
+                     (-> @db :ui/portfolio-edit-view))
+         :color "red"}
+        "Delete"])
       [ui/button
        {:on-click on-submit
-        :type "submit"
-        :ref nil
         :disabled false
         :color "#000"}
        (cond (-> @db
@@ -134,33 +146,21 @@
                  :ui/portfolio-edit-view)
              "Save")]]]))
 
-(def height 355)
+(def height 395)
 
-(defn view
-  [{c :children}]
-  (let [y (gobj/get c "y")]
-    [:div
-     {:style {:position "fixed"
-              :width "100%"
-              :height (str height "px")
-              :background-color "#fff"
-              :z-index 999
-              :border-radius "4px 4px 0 0"
-              :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
-              :-webkit-transform (str "translateY(" y "px)")
-              :transform (str "translateY(" y "px)")}}
-     [item-add]]))
-
-(def animated-comp (r/reactify-component view))
+(def animated-comp
+  (r/reactify-component
+   (fn [{c :children}]
+    (let [y (gobj/get c "y")]
+      [:div.detailed_view
+       {:style {:transform (str "translateY(" y "px)")}}
+       [item-add]]))))
 
 (defn detailed-view
   []
   (fn []
     (let [open? (or (:ui/portfolio-edit-view @db) (:ui/portfolio-add-view @db))]
-      [:div
-       {:style {:position "absolute"
-                :bottom 0
-                :display (if open? "block" "none")}}
+      [:div.motion_wrapper
        [Motion
         {:style {:y (spring (if open? (- height) 0))}}
         (fn [x] (r/create-element animated-comp #js {} x))]])))
