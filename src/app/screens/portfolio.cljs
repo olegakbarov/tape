@@ -37,7 +37,7 @@
                   :user
                   :portfolio
                   vals)]
-    [:div
+    [:div.portfolio_items_wrapper
      (if-not (pos? (count folio))
        [ui/empty-list "portfolio items"]
        (for [row folio]
@@ -184,7 +184,6 @@
     (let [show-btn (r/atom true)]
       [:div.portfolio_container
        [header]
-       [:div.portfolio_items_wrapper]
        [total-worth]
        [portfolio-list]
        [:div.portfolio_toolbar
