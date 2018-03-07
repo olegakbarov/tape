@@ -2,28 +2,19 @@
   (:require [clojure.walk]
             [app.db :refer [db chart-data]]))
 
-(defn format-pair
-  "Accepts vector of {:name 'eos' :symbol 'EOS'}"
-  [v]
-  (let [[f l] v] (keyword (str (:symbol f) "-" (:symbol l)))))
-
 (defn process-change
   [msg]
   (let [p (-> msg
               clojure.walk/keywordize-keys
               :payload
               clojure.walk/keywordize-keys)
-        pair (format-pair (-> p
-                              :currencyPair))
-        market (keyword (-> p
-                            :market))
+        pair (-> p :symbolPair)
+        market (keyword (-> p :market))
         res (-> p
-                (dissoc :currencyPair)
-                (assoc :ts
-                       (-> p
-                           :timestamp))
+                (dissoc :symbolPair)
+                (assoc :ts (-> p :timestamp))
                 (dissoc :timestamp))]
-    (swap! db assoc-in [:markets market pair :change] res)))
+    (swap! db assoc-in [:markets market pair :changes] res)))
 
 (defn process-ticker
   [msg]
@@ -31,42 +22,38 @@
               clojure.walk/keywordize-keys
               :payload
               clojure.walk/keywordize-keys)
-        pair (format-pair (-> p
-                              :currencyPair))
-        market (keyword (-> p
-                            :market))
+        pair (-> p :symbolPair)
+        market (keyword (-> p :market))
         res (-> p
-                (dissoc :currencyPair)
-                (assoc :currency-pair (keyword pair))
+                (dissoc :symbolPair)
+                (assoc :symbol-pair (keyword pair))
                 (assoc :market
-                       (keyword (-> p
-                                    :market))))]
+                       (keyword (-> p :market))))]
     (swap! db update-in [:markets market pair] #(merge % res))))
 
 (defn evt->db
   [msg]
   ;; TODO spec it
   (condp = (get msg "type")
-    "ticker" (process-ticker msg)
-    "change" (process-change msg)
+    "tickers" (process-ticker msg)
+    "changes" (process-change msg)
     :default (js/console.log "Unexpected event signature: " msg)))
 
 (defn state->db
   [s]
-  (let [{:keys [ticker change]} s]
+  (let [{:keys [tickers changes]} s]
     (doseq [item (map identity
-                      (map #(into {} [{"type" "ticker"} {:payload %}]) ticker))]
+                      (map #(into {} [{"type" "tickers"} {:payload %}]) tickers))]
       (evt->db item))
     (doseq [item (map identity
-                      (map #(into {} [{"type" "change"} {:payload %}]) change))]
+                      (map #(into {} [{"type" "changes"} {:payload %}]) changes))]
       (evt->db item))))
-
 
 (defn chart-data->db
   [s]
   (let [k (clojure.walk/keywordize-keys s)
-        {:keys [points marketName currencyPair]} k
+        {:keys [points marketName symbolPair]} k
         pts' (vec (remove nil? points))]
     (swap! chart-data assoc-in
-      [(keyword marketName) (keyword currencyPair)]
+      [(keyword marketName) (keyword symbolPair)]
       pts')))

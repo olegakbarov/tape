@@ -73,7 +73,7 @@
 
 (defn fetch-state!
   []
-  (go (let [endpoint (str (:http-endpoint config) "/tickers-changes")
+  (go (let [endpoint (str (:http-endpoint config) "/events")
             response (<! (http/get endpoint {:with-credentials? false}))]
         (state->db (:body response)))))
 
@@ -81,13 +81,15 @@
 (defn fetch-chart-data!
   [market pair]
   ;; validate params
-  (go (let [endpoint (str (:http-endpoint config)
-                          "/markets/"
-                          market
-                          "/tickers/"
-                          pair
-                          "/last")
-            response (<! (http/get endpoint {:with-credentials? false}))]
+  (go (let [endpoint (str (:http-endpoint config) "/tickers")
+            query {
+                   "market" market
+                   "symbolPair" pair
+                   "metric" "last"
+                   "resolution" "24h"
+                   "from" (* 1000000 (- (.getTime (js/Date.)) (* 60 (* 60 (* 7 24)))))
+                   "to" (* 1000000 (.getTime (js/Date.)))}
+            response (<! (http/get endpoint {:with-credentials? false,
+                                             :query-params query}))]
         ;; handle 4xx-5xx resp
-        (chart-data->db (-> response
-                            :body)))))
+        (chart-data->db (-> response :body)))))

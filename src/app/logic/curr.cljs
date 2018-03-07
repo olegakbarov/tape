@@ -90,7 +90,7 @@
        (filter #(re-find (re-pattern q) (:market %)))))
 
 (defn pairs-by-query
-  "Returns paris collection only with items where :market or :currency-pair fields matches the substring `q`"
+  "Returns paris collection only with items where :market or :symbol-pair fields matches the substring `q`"
   ;; TODO fails with special chars (eg \)
   [pairs q]
   (let [lc #(.toLowerCase %)]
@@ -100,6 +100,6 @@
                                   name)))
                  (re-find (re-pattern (lc q))
                           (lc (-> %
-                                  :currency-pair
+                                  :symbol-pair
                                   name))))
             pairs)))

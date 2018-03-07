@@ -5,5 +5,6 @@ stdenv.mkDerivation {
     nodejs-8_x
     boot
     electron
+    clojure
   ];
 }
