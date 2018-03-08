@@ -43,13 +43,13 @@
 (defn toggle-edit-portfolio-view
   "Without params resets key in db to `nil` and thus closes the detailed view.
   With id provided opens view and populates fields with item with this id."
-  ([] (swap! db assoc :ui/portfolio-edit-view nil))
+  ([] (swap! db assoc :ui/folio-edit nil))
   ([id]
    (let [{:keys [market currency amount id]} (-> @db
                                                  :user
                                                  :portfolio
                                                  (get id))]
-     (swap! db assoc :ui/portfolio-edit-view id)
+     (swap! db assoc :ui/folio-edit id)
      (swap! db update-in
        [:form/portfolio]
        merge
@@ -58,18 +58,19 @@
         :amount amount
         :id id}))))
 
-(defn toggle-add-portfolio-view
+(defn open-add-portfolio-view
   []
-  (swap! db assoc
-    :ui/portfolio-add-view
-    (not (-> @db
-             :ui/portfolio-add-view))))
+  (swap! db assoc :ui/folio-add true))
+
+(defn close-add-portfolio-view
+  []
+  (swap! db assoc :ui/folio-add true))
 
 (defn close-every-portfolio-view
   []
   ;; TODO: ugly
-  (swap! db assoc :ui/portfolio-add-view false)
-  (swap! db assoc :ui/portfolio-edit-view nil)
+  (swap! db assoc :ui/folio-add false)
+  (swap! db assoc :ui/folio-edit nil)
   (swap! db update-in
     [:form/portfolio]
     merge

@@ -136,12 +136,11 @@
 (def height 420)
 
 (def animated-comp
- (r/reactify-component
-  (fn [{c :children}]
-    (let [y (gobj/get c "y")]
-      [:div.detailed_view
-       {:style {:transform (str "translateY(" y "px)")}}
-       [add-folio-item]]))))
+  (r/reactify-component (fn [{c :children}]
+                          (let [y (gobj/get c "y")]
+                            [:div.detailed_view
+                             {:style {:transform (str "translateY(" y "px)")}}
+                             [add-folio-item]]))))
 
 (defn detailed-view
   []

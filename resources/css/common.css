@@ -32,6 +32,12 @@ button.button:active {
   transition: all .3s ease;
 }
 
+.common_close.left_top {
+  position: absolute;
+  top: 20px;
+  right: 20px;;
+}
+
 .common_close:hover {
   opacity: 1;
   cursor: pointer;

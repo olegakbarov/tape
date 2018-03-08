@@ -7,8 +7,12 @@
 
 (defonce db
          (r/atom {:ui/detailed-view nil
-                  :ui/portfolio-add-view false
-                  :ui/portfolio-edit-view nil
+
+                  :ui/folio-add false
+                  :ui/folio-add-height nil ;; !!
+                  :ui/folio-edit nil
+                  :ui/folio-edit-height nil ;; !!
+
                   :ui/alerts-add-view false
                   :ui/alerts-edit-view nil
                   :ui/current-filter :bestprice

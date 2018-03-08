@@ -228,20 +228,18 @@
 (def height 400)
 
 (def animated-comp
- (r/reactify-component
-  (fn [{c :children}]
-    (let [y (gobj/get c "y")]
-      [:div.detailed_view
-       {:style {:transform (str "translateY(" y "px)")}}
-       [pair-detailed]]))))
+  (r/reactify-component (fn [{c :children}]
+                          (let [y (gobj/get c "y")]
+                            [:div.detailed_view
+                             {:style {:transform (str "translateY(" y "px)")}}
+                             [pair-detailed]]))))
 
 (defn detailed-view
   []
-  (fn []
-    [:div.motion_wrapper
-      [Motion
-        {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
-        (fn [x] (r/create-element animated-comp #js {} x))]]))
+  (fn [] [:div.motion_wrapper
+          [Motion
+           {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+           (fn [x] (r/create-element animated-comp #js {} x))]]))
 
 (defn live-board
   []

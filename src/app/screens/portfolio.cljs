@@ -6,14 +6,15 @@
             [app.components.header :refer [header]]
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
-            [app.motion :refer [Motion spring presets]]
             [app.components.ui :as ui]
+            [app.motion :refer [Motion spring presets]]
             [app.logic.curr :refer [get-market-names get-crypto-currs]]
             [app.logic.validation :refer
              [str->amount validate-portfolio-record]]
             [app.actions.ui :refer
              [toggle-edit-portfolio-view
-              toggle-add-portfolio-view
+              open-add-portfolio-view
+              close-add-portfolio-view
               close-every-portfolio-view]]
             [app.actions.form :refer
              [update-portfolio-form
@@ -23,13 +24,30 @@
               remove-portfolio-record
               get-total-worth]]))
 
-(defn handle-save [id]
+(defn handle-delete
+  []
+  (remove-portfolio-record (-> @db
+                               :ui/folio-edit))
+  (close-every-portfolio-view))
+
+(defn handle-close []
   (close-every-portfolio-view)
   (clear-portfolio-form))
 
-(defn handle-delete [id]
-  (close-every-portfolio-view)
-  (clear-portfolio-form))
+(defn handle-change
+  [e]
+  (let [v (-> e
+              .-target
+              .-value)]
+    (update-portfolio-form :amount (str->amount v))))
+
+(defn handle-submit
+  []
+  (when-let [a (validate-portfolio-record (-> @db
+                                              :form/portfolio))]
+    (do (create-portfolio-record a)
+        (close-every-portfolio-view)
+        (clear-portfolio-form))))
 
 (defn- total-worth
   []
@@ -51,7 +69,8 @@
          (let [{:keys [currency amount market id]} row]
            ^{:key id}
            [:div.row_wrap
-            ^{:key "currency"} {:on-click #(toggle-edit-portfolio-view id)}
+            ^{:key "currency"}
+            {:on-click #(toggle-edit-portfolio-view id)}
             [:div.left_cell
              [:div.title (str (name currency) " " amount)]
              [:div.market market]]
@@ -78,7 +97,7 @@
 
 (defn select-curr
   []
-  ;; TODO: only currency available on selected market
+  ;; TODO: only allow currency available on selected market
   (let [m (-> @db
               :markets)
         v (-> @db
@@ -95,97 +114,110 @@
       :options (clj->js (map #(zipmap [:value :label] [% %]) opts))
       :onChange on-change}]))
 
-(defn item-add
+(defn edit-item
   []
-  (let [on-change (fn [e]
-                    (let [v (-> e
-                                .-target
-                                .-value)]
-                      (update-portfolio-form :amount (str->amount v))))
-        on-submit #(when-let [a (validate-portfolio-record (->
-                                                             @db
-                                                             :form/portfolio))]
-                    (do (clear-portfolio-form) (create-portfolio-record a)))]
-    [:div.form_wrap
-     [:h1 {:style {:margin "30px 0 50px"}}
-      (cond (-> @db
-                :ui/portfolio-add-view)
-            "Add holding"
-            (-> @db
-                :ui/portfolio-edit-view)
-            "Edit holding")]
-     [ui/close
-      {:position "absolute"
-       :right "20px"
-       :top "20px"}
-      #(close-every-portfolio-view)]
-     [ui/input-wrap "Market" [select-market {:key "market"}]]
-     [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
-     [ui/text-input
-      {:on-change on-change
-       :value #(-> @db
-                   :form/portfolio
-                   :amount)
-       :label "amount"}]
-     [:div.input_wrapper
-      (when (-> @db
-               :ui/portfolio-edit-view)
-       [ui/button
-        {:on-click #(remove-portfolio-record
-                     (-> @db :ui/portfolio-edit-view))
-         :color "red"}
-        "Delete"])
-      [ui/button
-       {:on-click on-submit
-        :disabled false
-        :color "#000"}
-       (cond (-> @db
-                 :ui/portfolio-add-view)
-             "Add"
-             (-> @db
-                 :ui/portfolio-edit-view)
-             "Save")]]]))
+  [:div.form_wrap
+   [:h1 "Edit holding"]
+   [ui/close "left_top" #(handle-close)]
+   [ui/input-wrap "Market" [select-market {:key "market"}]]
+   [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
+   [ui/text-input
+    {:on-change handle-change
+     :value #(-> @db
+                 :form/portfolio
+                 :amount)
+     :label "amount"}]
+   [:div.input_wrapper
+    [ui/button
+     {:on-click handle-delete
+      :color "red"}
+     "Delete"]
+    [ui/button
+     {:on-click handle-submit
+      :color "#000"}
+     "Save"]]])
 
-(def height 395)
+(defn add-item
+  []
+  [:div.form_wrap
+   [:h1 "Add holding"]
+   [ui/close "left_top" #(handle-close)]
+   [ui/input-wrap "Market" [select-market {:key "market"}]]
+   [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
+   [ui/text-input
+    {:on-change handle-change
+     :value #(-> @db
+                 :form/portfolio
+                 :amount)
+     :label "amount"}]
+   [:div.input_wrapper
+    [ui/button
+     {:on-click handle-submit
+      :color "#000"}
+     "Add"]]])
 
-(def animated-comp
-  (r/reactify-component
-   (fn [{c :children}]
-    (let [y (gobj/get c "y")]
-      [:div.detailed_view
-       {:style {:transform (str "translateY(" y "px)")}}
-       [item-add]]))))
+(def animated-view-edit
+  (r/reactify-component (fn [{c :children}]
+                          (let [y (gobj/get c "y")]
+                            [:div.detailed_view
+                             {:ref #(swap! db update-in
+                                     [:ui/folio-edit-height]
+                                     (fn [] (if % (.-offsetHeight %) 0)))
+                              :style {:transform (str "translateY(" y "px)")}}
+                             [edit-item]]))))
 
-(defn detailed-view
+(defn detailed-view-edit
   []
   (fn []
-    (let [open? (or (:ui/portfolio-edit-view @db) (:ui/portfolio-add-view @db))]
+    (let [open? @(r/cursor db [:ui/folio-edit])]
       [:div.motion_wrapper
        [Motion
-        {:style {:y (spring (if open? (- height) 0))}}
-        (fn [x] (r/create-element animated-comp #js {} x))]])))
+        {:style {:y (spring (if open?
+                              (- (:ui/folio-edit-height @db))
+                              0))}}
+        (fn [y] (r/create-element animated-view-edit #js {} y))]])))
 
-(defn add-btn
+(def animated-view-add
+  (r/reactify-component (fn [{c :children}]
+                          (let [y (gobj/get c "y")]
+                            [:div.detailed_view
+                             {:ref #(swap! db update-in
+                                     [:ui/folio-add-height]
+                                     (fn [] (if % (.-offsetHeight %) 0)))
+                              :style {:transform (str "translateY(" y "px)")}}
+                             [add-item]]))))
+
+(defn detailed-view-add
+  []
+  (fn []
+    (let [open? @(r/cursor db [:ui/folio-add])]
+      [:div.motion_wrapper
+       [Motion
+        {:style {:y (spring (if open?
+                              (- (:ui/folio-add-height @db))
+                              0))}}
+        (fn [y] (r/create-element animated-view-add #js {} y))]])))
+
+(defn portfolio-toolbar
   [s]
-  [:div
-   {:style {:padding "0 10px"
-            :width "100%"}}
-   [ui/button
-    {:on-click #(do (reset! s false) (toggle-add-portfolio-view))
-     :type "submit"
-     :ref nil
-     :disabled false
-     :color "#000"}
-    "Add"]])
+  (let [open? (not (or (:ui/folio-edit @db)
+                       (:ui/folio-add @db)))]
+    (when open?
+      [:div.portfolio_toolbar
+       [:div
+        {:style {:padding "0 10px"
+                 :width "100%"}}
+        [ui/button
+         {:on-click #(open-add-portfolio-view)
+          :color "#000"}
+         "Add"]]])))
 
 (defn portfolio
   []
-  (fn []
-    (let [show-btn (r/atom true)]
-      [:div.portfolio_container
-       [header]
-       [total-worth]
-       [portfolio-list]
-       [:div.portfolio_toolbar
-        (when @show-btn [add-btn show-btn])]
-       [detailed-view]])))
+  [:div.portfolio_container
+   [header]
+   [total-worth]
+   [portfolio-list]
+   [portfolio-toolbar]
+   [detailed-view-edit]
+   [detailed-view-add]])

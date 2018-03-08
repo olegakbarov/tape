@@ -10,12 +10,9 @@
 
 (defn button
   [params text]
-  (let [{:keys [on-click type ref disabled color]} params]
+  (let [{:keys [color]} params]
     [:button.button
-     (merge (when color {:style {:background-color color}})
-            {:on-click on-click
-             :ref ref
-             :type type})
+     (merge params (when color {:style {:background-color color}}))
      text]))
 
 (defn checkbox
@@ -52,9 +49,9 @@
          :value (value)}]])))
 
 (defn close
-  [style on-click]
+  [klass on-click]
   [:div.common_close
-   {:style style
+   {:class klass
     :on-click on-click}])
 
 (defn burger-menu
