@@ -3,6 +3,7 @@
             [reagent.core :as r]
             [goog.object :as gobj]
             [cljsjs.react-select]
+            [cljsjs.moment]
             [app.components.header :refer [header]]
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
@@ -55,18 +56,17 @@
     (let [w (.toFixed (get-total-worth) 2)]
       (if (pos? w) [:div.total_worth (str "$ " w)] [:div]))))
 
-;; TODO: dont re-render on every ws event
 (defn portfolio-list
   []
-  (let [folio (-> @db
-                  :user
-                  :portfolio
-                  vals)]
+  (let [folio @(r/track #(-> @db
+                             :user
+                             :portfolio))]
     [:div.portfolio_items_wrapper
-     (if-not (pos? (count folio))
+     (if-not (pos? (count (vals folio)))
        [ui/empty-list "portfolio items"]
-       (for [row folio]
-         (let [{:keys [currency amount market id]} row]
+       (for [row (vals folio)]
+         (let [{:keys [currency amount market id added]} row
+               _ (js/console.log row)]
            ^{:key id}
            [:div.row_wrap
             ^{:key "currency"}
@@ -76,7 +76,11 @@
              [:div.market market]]
             ^{:key "last-ctrls"}
             [:div.right_cell
-             [:div.actions]]])))]))
+             [:div.actions
+              [:div.ts
+                (.format
+                  (js/moment added)
+                  "hh:mm:ss\n MM/DD/YYYY")]]]])))]))
 
 (defn select-market
   []

@@ -68,6 +68,10 @@ input.input_item {
   justify-content: flex-end;
 }
 
+.right_cell > .actions > .ts {
+  font-size: 10px;
+}
+
 .input_label {
   text-transform: uppercase;
   color: #ccc;
