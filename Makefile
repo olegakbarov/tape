@@ -24,8 +24,9 @@ dependencies:
 .PHONY: build
 build: dependencies
 	boot $(env)-build
-	electron-packager                              \
-		target/ MyApp                          \
-		--platform=$(OSTYPE)                   \
-		--arch=x64                             \
-		--overwrite
+	# electron-packager                              \
+	#   target/ MyApp                          \
+	#   --platform=$(OSTYPE)                   \
+	#   --arch=x64                             \
+	# 	--overwrite
+

@@ -50,7 +50,7 @@
 (deftask prod-build
          []
          (comp (cljs :ids #{"main"} :optimizations :simple)
-               (cljs :ids #{"renderer"} :optimizations :advanced)))
+               (cljs :ids #{"renderer"} :optimizations :simple)))
 
 (deftask check-sources
          []
@@ -82,3 +82,4 @@
                                 :closure-defines {'app.main/dev? true}
                                 :parallel-build true})
        (target)))
+
