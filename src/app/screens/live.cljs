@@ -90,7 +90,7 @@
             {:on-click #(open-detailed-view kw-m kw-p)
              :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
                                          "rgba(0, 126, 255, 0.04)"
-                                         "transparent")}}
+                                         "white")}}
             [row pair]]))])))
 
 (defn select-q

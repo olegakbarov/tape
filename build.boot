@@ -28,6 +28,7 @@
                  [mount "0.1.12"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [reagent "0.8.0-alpha2" :exclusions [cljsjs.react]]
+                 [adzerk/env "0.4.0"]
                  [cljsjs/react-select "1.0.0-rc.10-1"]
                  [cljsjs/react "16.0.0-0"]
                  [cljsjs/react-dom "16.0.0-0"]
@@ -36,7 +37,8 @@
                  [cljsjs/react-motion "0.5.0-0"]
                  [cljsjs/chartjs "2.6.0-0"]
                  [cljsjs/highstock "5.0.14-0"]
-                 [cljsjs/highcharts-css "5.0.10-0"]])
+                 [cljsjs/highcharts-css "5.0.10-0"]
+                 [cljsjs/raven "3.22.1-0"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]

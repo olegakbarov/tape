@@ -23,7 +23,10 @@
             [app.actions.portfolio :refer
              [create-portfolio-record
               remove-portfolio-record
+              update-portfolio-record
               get-total-worth]]))
+
+;; event handlers are composed of granular api calls
 
 (defn handle-delete
   []
@@ -50,6 +53,16 @@
         (close-every-portfolio-view)
         (clear-portfolio-form))))
 
+;; components below
+
+(defn handle-edit
+  []
+  (when-let [a (validate-portfolio-record (-> @db
+                                              :form/portfolio))]
+    (do (update-portfolio-record a)
+        (close-every-portfolio-view)
+        (clear-portfolio-form))))
+
 (defn- total-worth
   []
   (fn []
@@ -65,8 +78,7 @@
      (if-not (pos? (count (vals folio)))
        [ui/empty-list "portfolio items"]
        (for [row (vals folio)]
-         (let [{:keys [currency amount market id added]} row
-               _ (js/console.log row)]
+         (let [{:keys [currency amount market id added]} row]
            ^{:key id}
            [:div.row_wrap
             ^{:key "currency"}
@@ -137,7 +149,7 @@
       :color "red"}
      "Delete"]
     [ui/button
-     {:on-click handle-submit
+     {:on-click handle-edit
       :color "#000"}
      "Save"]]])
 

@@ -1,6 +1,7 @@
 (ns app.renderer
   (:require [reagent.core :as reagent]
             [mount.core :as mount]
+            [klang.core :refer-macros [info! warn! erro! crit! fata! trac!]]
             [app.db :refer [router]]
             [app.api :refer [fetch-state!]]
             [app.actions.storage :refer [read-data-file!]]
@@ -12,12 +13,19 @@
             [app.screens.live :refer [live-board]]
             [app.screens.settings :refer [settings]]
             [app.screens.portfolio :refer [portfolio]]
-            [app.screens.alerts :refer [alerts]]))
+            [app.screens.alerts :refer [alerts]]
+            [app.config :refer [config]]
+            [cljsjs.raven]))
 
 (enable-console-print!)
 
 (defn init
   []
+  (when-let [slug (:sentry config)]
+    (do (-> js/Raven
+            (.config slug)
+            (.install))
+        (info! (str "Sentry endpoint: " slug))))
   (fetch-state!)
   (start-offline-watch-loop! ntf-gone-online ntf-gone-offline)
   (mount/start))
