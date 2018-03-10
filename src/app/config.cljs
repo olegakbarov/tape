@@ -10,5 +10,5 @@
 (def config
   {:env ENV
    :ws-endpoint WS_ENDPOINT
-   :http-endpoint WS_ENDPOINT
+   :http-endpoint HTTP_ENDPOINT
    :sentry SENTRY})

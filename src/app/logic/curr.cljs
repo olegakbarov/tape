@@ -1,6 +1,7 @@
 (ns app.logic.curr
   (:require [clojure.walk]
-            [app.db :refer [db]]))
+            [app.db :refer [db]]
+            [reagent.core :as r]))
 
 (defn get-lowest-prices
   "Returns lowest `:last` prices across all markets"
@@ -90,7 +91,8 @@
        (filter #(re-find (re-pattern q) (:market %)))))
 
 (defn pairs-by-query
-  "Returns paris collection only with items where :market or :currency-pair fields matches the substring `q`"
+  "Returns paris collection only with items where :market
+  or :currency-pair fields matches the substring `q`"
   ;; TODO fails with special chars (eg \)
   [pairs q]
   (let [lc #(.toLowerCase %)]
@@ -103,3 +105,22 @@
                                   :currency-pair
                                   name))))
             pairs)))
+
+(defn- to-dollar
+  "Returns dollar price of curr on this market"
+  [amount curr market]
+  ;; TODO handle case where altcoin doesn't have dollar value (if any)
+  ;; TODO spec it
+  (let [pair (keyword (str (name curr) "-USD"))
+        lst @(r/cursor db [:markets (keyword market) (keyword pair) :last])]
+    (* amount lst)))
+
+(defn get-total-worth
+  [folio]
+  ; (js/console.log folio)
+  (reduce (fn [acc [id item]]
+            (let [{:keys [amount currency market]} item]
+              (+ acc (to-dollar (js/parseFloat amount) currency market))))
+          0
+          folio))
+

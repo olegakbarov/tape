@@ -9,9 +9,10 @@
             [app.db :refer [db]]
             [app.components.ui :as ui]
             [app.motion :refer [Motion spring presets]]
-            [app.logic.curr :refer [get-market-names get-crypto-currs]]
+            [app.logic.curr :refer [get-market-names
+                                    get-crypto-currs]]
             [app.logic.validation :refer
-             [str->amount validate-portfolio-record]]
+             [str->amount]]
             [app.actions.ui :refer
              [toggle-edit-portfolio-view
               open-add-portfolio-view
@@ -23,10 +24,10 @@
             [app.actions.portfolio :refer
              [create-portfolio-record
               remove-portfolio-record
-              update-portfolio-record
-              get-total-worth]]))
+              update-portfolio-record]]
+            [app.logic.curr :refer [get-total-worth]]))
 
-;; event handlers are composed of granular api calls
+;; EVENT HANDLERS ARE COMPOSED OF GRANULAR API CALLS
 
 (defn handle-delete
   []
@@ -47,33 +48,34 @@
 
 (defn handle-submit
   []
-  (when-let [a (validate-portfolio-record (-> @db
-                                              :form/portfolio))]
+  (let [a (-> @db :form/portfolio)]
     (do (create-portfolio-record a)
         (close-every-portfolio-view)
         (clear-portfolio-form))))
 
-;; components below
-
 (defn handle-edit
   []
-  (when-let [a (validate-portfolio-record (-> @db
-                                              :form/portfolio))]
+  (when-let [a (-> @db :form/portfolio)]
     (do (update-portfolio-record a)
         (close-every-portfolio-view)
         (clear-portfolio-form))))
 
-(defn- total-worth
+
+;; ===================================================
+;; COMPONENTS GO BELOW
+
+(defn total-worth
   []
-  (fn []
-    (let [w (.toFixed (get-total-worth) 2)]
-      (if (pos? w) [:div.total_worth (str "$ " w)] [:div]))))
+  (let [folio @(r/cursor db [:user :portfolio])
+        worth (get-total-worth folio)
+        w (.toFixed worth 2)]
+    (if (pos? w)
+        [:div.total_worth (str "$ " w)]
+        [:div])))
 
 (defn portfolio-list
   []
-  (let [folio @(r/track #(-> @db
-                             :user
-                             :portfolio))]
+  (let [folio @(r/cursor db [:user :portfolio])]
     [:div.portfolio_items_wrapper
      (if-not (pos? (count (vals folio)))
        [ui/empty-list "portfolio items"]
@@ -92,19 +94,17 @@
               [:div.ts
                 (.format
                   (js/moment added)
-                  "hh:mm:ss\n MM/DD/YYYY")]]]])))]))
+                  "hh:mm:ss MM/DD/YYYY")]]]])))]))
 
 (defn select-market
   []
-  (let [m (-> @db
-              :markets)
-        v (-> @db
-              :form/portfolio
-              :market)
+  (let [m @(r/cursor db [:markets])
+        v @(r/cursor db [:form/portfolio :market])
         opts (get-market-names m)
         on-change #(update-portfolio-form
                     :market
-                    (if % (aget % "value") (update-portfolio-form :market "")))]
+                    (if % (aget % "value")
+                          (update-portfolio-form :market "")))]
     [:>
      js/window.Select
      {:value v
@@ -114,11 +114,8 @@
 (defn select-curr
   []
   ;; TODO: only allow currency available on selected market
-  (let [m (-> @db
-              :markets)
-        v (-> @db
-              :form/portfolio
-              :currency)
+  (let [m @(r/cursor db [:markets])
+        v @(r/cursor db [:form/portfolio :currency])
         opts (get-crypto-currs m)
         on-change
         #(update-portfolio-form
@@ -139,9 +136,7 @@
    [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
    [ui/text-input
     {:on-change handle-change
-     :value #(-> @db
-                 :form/portfolio
-                 :amount)
+     :value @(r/cursor db [:form/portfolio :amount])
      :label "amount"}]
    [:div.input_wrapper
     [ui/button
@@ -162,9 +157,7 @@
    [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
    [ui/text-input
     {:on-change handle-change
-     :value #(-> @db
-                 :form/portfolio
-                 :amount)
+     :value @(r/cursor db [:form/portfolio :amount])
      :label "amount"}]
    [:div.input_wrapper
     [ui/button

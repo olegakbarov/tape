@@ -36,9 +36,9 @@
 
 (defn text-input
   "Generic text/number input"
-  [cfg]
+  []
   ;; TODO: spec it
-  (fn []
+  (fn [cfg]
     (let [{:keys [on-change value label]} cfg]
       [:div.input_wrapper
        (when label [:div.input_label label])
@@ -46,7 +46,7 @@
         {:type "text"
          :autoFocus false
          :onChange on-change
-         :value (value)}]])))
+         :value value}]])))
 
 (defn close
   [klass on-click]

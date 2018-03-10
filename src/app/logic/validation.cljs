@@ -43,26 +43,6 @@
               valid-chars
               only-one-dot))))))
 
-(defn validate-alert
-  ;; TODO abandon in favor of spec
-  "Validates alert item for non-emptyness"
-  [alert]
-  (as-> alert a
-    (if (s/blank? (:market a)) false a)
-    (if (s/blank? (:pair a)) false a)
-    (if (s/blank? (:amount a)) false a)
-    (if (contains? #{true false} (:repeat a)) a false)))
-
-(defn validate-portfolio-record
-  ;; TODO test it
-  "Validates portfolio record item for non-emptyness"
-  [rec]
-  (assert (every? string? (vals rec)))
-  (as-> rec r
-    (if (s/blank? (:market r)) false r)
-    (if (s/blank? (:currency r)) false r)
-    (if (s/blank? (:amount r)) false r)))
-
 (defn str->item
   "Accepts string and coll of strings, filters out items not starting-with? string"
   [coll s]

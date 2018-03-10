@@ -8,7 +8,6 @@
             [cljsjs.react-select]
             [app.db :refer [db]]
             [app.motion :refer [Motion spring presets]]
-            [app.utils.core :refer [curr-symbol->name]]
             [app.components.ui :as ui]
             [app.components.header :refer [header]]
             [app.components.chart :refer [Chart]]
@@ -126,8 +125,7 @@
       {:on-change #(update-filter-q (-> %
                                         .-target
                                         .-value))
-       :value #(-> @db
-                   :ui/filter-q)
+       :value @(r/cursor db [:ui/filter-q])
        :label "search"}]
      [ui/input-wrap "Filter" [select-q {:key "filter"}]]]))
 
@@ -155,10 +153,7 @@
         (when (> (count q) 0) [:div.pill (str "Query: " q)])]]
       [:div.right
        [ui/burger-menu
-        (if (-> @db
-                :ui/filterbox-open?)
-          "x"
-          "")
+        (if @(r/cursor db [:ui/filterbox-open?]) "x" "")
         toggle-filterbox]]]
      [filter-form]]))
 
