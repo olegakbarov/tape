@@ -14,14 +14,16 @@ Cryptounicorns Desktop is a cryptocurrency price tracking app. It is designed to
 
 To start working in development mode you got to have and `boot`, and `electron` installed on your machine. You also need to run `npm i` to get JavaScript dependencies. Rename your `run.sh.example` to `run.sh` and populate it with env variables:
 
-In first tab run:
-
 ```
 SENTRY=""
 WS_ENDPOINT=""
 HTTP_ENDPOINT=""
 boot watch dev-build
 ```
+
+In first tab run:
+
+`sh run.sh`
 
 After compilation of ClojureScript is complete, in second(!) tab run:
 
