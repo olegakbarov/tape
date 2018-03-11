@@ -21,11 +21,9 @@
   [w]
   (if (< @retries 10)
     (.setTimeout js/window (fn [] (.close w (create-ws-conn!))) 3000)))
-    ;; dispatch notif here
+;; dispatch notif here
 
-(defn heart-beat
-  []
-  (.setTimeout js/window heart-beat 2000))
+(defn heart-beat [] (.setTimeout js/window heart-beat 2000))
 
 (defn ->msg [c e] (go (>! c (.-data e))))
 
@@ -35,14 +33,9 @@
   (heart-beat)
   (js/console.log "ws conn is open"))
 
-(defn ->close
-  [w e]
-  (js/console.log "closing ws conn...")
-  (reconnect-ws w))
+(defn ->close [w e] (js/console.log "closing ws conn...") (reconnect-ws w))
 
-(defn ->error
-  [w e]
-  (reconnect-ws w))
+(defn ->error [w e] (reconnect-ws w))
 
 (defn create-ws-conn!
   []
@@ -64,10 +57,7 @@
                  (let [msg (<! stream)] (evt->db (js->clj (js/JSON.parse msg))))
                  (recur)))))
 
-(defn stop-ws!
-  []
-  (prn "Stopping ws ...")
-  (reset! t false))
+(defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))
 
 (defstate ws-loop :start (listen-ws!) :stop (stop-ws!))
 

@@ -8,23 +8,25 @@
             [cljsjs.react-select]
             [app.db :refer [db]]
             [app.motion :refer [Motion spring presets]]
-            [app.utils.core :refer [curr-symbol->name]]
             [app.components.ui :as ui]
             [app.components.header :refer [header]]
             [app.components.chart :refer [Chart]]
             [app.logic.ui :refer [get-chart-points]]
-            [app.actions.ui :refer [add-to-favs
-                                    remove-from-favs
-                                    close-detailed-view]]
-            [app.logic.curr :refer [best-pairs
-                                    all-pairs
-                                    user-favs
-                                    by-query
-                                    pairs-by-query]]
-            [app.actions.ui :refer [toggle-filter
-                                    update-filter-q
-                                    open-detailed-view
-                                    toggle-filterbox]]))
+            [app.actions.ui :refer
+             [add-to-favs
+              remove-from-favs
+              close-detailed-view]]
+            [app.logic.curr :refer
+             [best-pairs
+              all-pairs
+              user-favs
+              by-query
+              pairs-by-query]]
+            [app.actions.ui :refer
+             [toggle-filter
+              update-filter-q
+              open-detailed-view
+              toggle-filterbox]]))
 
 (defn render-row
   [pair]
@@ -40,18 +42,16 @@
       [:span {:class "price_down"} last]
       [:div.swing
        (if (and (not (nil? amount)) (not (nil? percent)))
-         (str  (.toFixed percent 5) "% "  (.toFixed amount 5))
+         (str (.toFixed percent 5) "% " (.toFixed amount 5))
          "n/a")]]]))
 
 (defn row
- [pair]
- (r/create-class
-  {:reagent-render #(render-row pair)
-   ; :component-did-update   update-comp
-   ; :component-did-mount    update-comp
-   :should-component-update
-    (fn [this]
-     (js/console.log "next-props" (r/props this)))}))
+  [pair]
+  (r/create-class {:reagent-render #(render-row pair)
+                   ; :component-did-update   update-comp
+                   ; :component-did-mount    update-comp
+                   :should-component-update
+                   (fn [this] (js/console.log "next-props" (r/props this)))}))
 
 (defn keyword<->str
   [v]
@@ -89,7 +89,7 @@
             {:on-click #(open-detailed-view kw-m kw-p)
              :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
                                          "rgba(0, 126, 255, 0.04)"
-                                         "transparent")}}
+                                         "white")}}
             [row pair]]))])))
 
 (defn select-q
@@ -115,15 +115,18 @@
      {:style {:height h
               :opacity o
               :background-color "white"
-              :overflow (if (-> @db :ui/filterbox-open?) "visible" "hidden")
-              :transform "scaleY(" s "px)"}}
+              :overflow (if (-> @db
+                                :ui/filterbox-open?)
+                          "visible"
+                          "hidden")
+              :transform "scaleY("
+              s "px)"}}
      [ui/text-input
-       {:on-change #(update-filter-q (-> %
-                                         .-target
-                                         .-value))
-        :value #(-> @db
-                    :ui/filter-q)
-        :label "search"}]
+      {:on-change #(update-filter-q (-> %
+                                        .-target
+                                        .-value))
+       :value @(r/cursor db [:ui/filter-q])
+       :label "search"}]
      [ui/input-wrap "Filter" [select-q {:key "filter"}]]]))
 
 (def afw (r/reactify-component f-view))
@@ -134,8 +137,7 @@
    {:style {:height (spring (if (:ui/filterbox-open? @db) 136 0))
             :scale (spring (if (:ui/filterbox-open? @db) 1 0))
             :opacity (spring (if (:ui/filterbox-open? @db) 1 0))}}
-   (fn [x]
-     (r/create-element afw #js {} x))])
+   (fn [x] (r/create-element afw #js {} x))])
 
 (defn filter-box
   []
@@ -144,15 +146,15 @@
         open? (:ui/filterbox-open? @db)]
     [:div#filter_box
      [:div.filters_compact
-       [:div.left
-        [:div.input_label "Filters applied:"]
-        [:div.pills
-         (when f [:div.pill (name f)])
-         (when (> (count q) 0) [:div.pill (str "Query: " q)])]]
-       [:div.right
-        [ui/burger-menu
-         (if (-> @db :ui/filterbox-open?) "x" "")
-         toggle-filterbox]]]
+      [:div.left
+       [:div.input_label "Filters applied:"]
+       [:div.pills
+        (when f [:div.pill (name f)])
+        (when (> (count q) 0) [:div.pill (str "Query: " q)])]]
+      [:div.right
+       [ui/burger-menu
+        (if @(r/cursor db [:ui/filterbox-open?]) "x" "")
+        toggle-filterbox]]]
      [filter-form]]))
 
 (comment {:high 3143.5286
@@ -220,33 +222,19 @@
 
 (def height 400)
 
-(defn view
-  [{c :children}]
-  (let [y (gobj/get c "y")]
-    [:div
-     {:style {:position "fixed"
-              :width "321px"
-              :height (str height "px")
-              :background-color "#fff"
-              :z-index 999
-              :border-radius "4px 4px 0 0"
-              :box-shadow "0px -5px 5px -5px rgba(107,107,107,.4)"
-              :-webkit-transform (str "translateY(" y "px)")
-              :transform (str "translateY(" y "px)")}}
-     [pair-detailed]]))
-
-(def animated-comp (r/reactify-component view))
+(def animated-comp
+  (r/reactify-component (fn [{c :children}]
+                          (let [y (gobj/get c "y")]
+                            [:div.detailed_view
+                             {:style {:transform (str "translateY(" y "px)")}}
+                             [pair-detailed]]))))
 
 (defn detailed-view
   []
-  (fn []
-    [:div
-      {:style {:position "absolute"
-               :bottom 0
-               :display (if (:ui/detailed-view @db) "block" "none")}}
-      [Motion
-       {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
-       (fn [x] (r/create-element animated-comp #js {} x))]]))
+  (fn [] [:div.motion_wrapper
+          [Motion
+           {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+           (fn [x] (r/create-element animated-comp #js {} x))]]))
 
 (defn live-board
   []

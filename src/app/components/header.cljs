@@ -29,6 +29,6 @@
   (fn []
     (let [screen (get-in @router [:screen])]
       [:div#header
-        [:div.title "UnicornEye_beta.1"]
-        [nav]
-        [ntf]])))
+       [:div.title "UnicornEye_beta.1"]
+       [nav]
+       [ntf]])))

@@ -2,7 +2,8 @@
   (:require [reagent.core :as reagent]
             [app.components.header :refer [header]]))
 
-(defn settings []
+(defn settings
+  []
   [:div
    [header]
    [:div#wrapper]])

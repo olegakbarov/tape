@@ -10,8 +10,7 @@
   [n]
   (let [{:keys [color text]} (-> @db
                                  :ui/ntf)]
-    (when (and text color)
-          [:div {:style {:background-color color}} text])))
+    (when (and text color) [:div {:style {:background-color color}} text])))
 
 (defn view
   [{c :children}]

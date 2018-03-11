@@ -22,12 +22,15 @@
                  [binaryage/dirac "1.2.29" :scope "test"]
                  [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
                  [tolitius/boot-check "0.1.6" :scope "test"]
+                 [pandeiro/boot-http "0.7.6" :scope "test"]
+                 ;
                  [klang "0.5.13" :scope "test"]
                  [cljs-http "0.1.44"]
                  [compact-uuids "0.2.0"]
                  [mount "0.1.12"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [reagent "0.8.0-alpha2" :exclusions [cljsjs.react]]
+                 [adzerk/env "0.4.0"]
                  [cljsjs/react-select "1.0.0-rc.10-1"]
                  [cljsjs/react "16.0.0-0"]
                  [cljsjs/react-dom "16.0.0-0"]
@@ -36,7 +39,8 @@
                  [cljsjs/react-motion "0.5.0-0"]
                  [cljsjs/chartjs "2.6.0-0"]
                  [cljsjs/highstock "5.0.14-0"]
-                 [cljsjs/highcharts-css "5.0.10-0"]])
+                 [cljsjs/highcharts-css "5.0.10-0"]
+                 [cljsjs/raven "3.22.1-0"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
@@ -44,13 +48,14 @@
          '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]]
          '[tolitius.boot-check :as check]
          '[boot-fmt.core :refer [fmt]])
+         ; '[pandeiro.boot-http :refer [serve]])
 
 ; (task-options! repl {:middleware '[cemerick.piggieback/wrap-cljs-repl]})
 
 (deftask prod-build
          []
          (comp (cljs :ids #{"main"} :optimizations :simple)
-               (cljs :ids #{"renderer"} :optimizations :advanced)))
+               (cljs :ids #{"renderer"} :optimizations :simple)))
 
 (deftask check-sources
          []
@@ -64,11 +69,14 @@
  dev-build
  []
  (set-env! :source-paths #(conj % "dev"))
- (comp (speak :theme "ordinance")
+ (comp ;(serve)
+       (speak :theme "ordinance")
        (cljs-devtools)
        (dirac)
        (cljs-repl)
-       (reload :ids #{"renderer"} :ws-host "localhost" :target-path "target")
+       (reload :ids #{"renderer"}
+               :ws-host "localhost"
+               :target-path "target")
        (cljs :ids #{"renderer" "mount"}
              :compiler-options {:parallel-build true})
        ;; path.resolve(".") which is used in CLJS's node shim
@@ -80,5 +88,10 @@
        (cljs :ids #{"main"}
              :compiler-options {:asset-path "target/main.out"
                                 :closure-defines {'app.main/dev? true}
-                                :parallel-build true})
+                                :parallel-build true
+                                :external-config
+                                 {:devtools/config {:features-to-install [:formatters :hints]
+                                                    :fn-symbol "λ"
+                                                    :print-config-overrides true}}})
        (target)))
+

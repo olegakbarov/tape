@@ -4,38 +4,26 @@
   <img src="docs/img/alerts.png" width="220px" />
 </div>
 
-### Cryptounicorns Desktop
+## Cryptounicorns Desktop
 
 [![Build Status](https://travis-ci.org/cryptounicorns/desktop.svg)](https://travis-ci.org/cryptounicorns/desktop)
 
 Cryptounicorns Desktop is a cryptocurrency price tracking app. It is designed to work with multiple (possibly a lot) exchanges, allowing you to gain instights about price fluctuations at rapid pace. Long-term goal is to make approachable interface for vast majority of exchange markets.
 
-### API
+## Development
 
-Current api root is `cryptounicorns.io` (about to change to `dev.cryptounicorns.io`, though):
-
-##### Websocker stream
+To start working in development mode you got to have and `boot`, and `electron` installed on your machine. You also need to run `npm i` to get JavaScript dependencies. Rename your `run.sh.example` to `run.sh` and populate it with env variables:
 
 ```
-ws://%API_ROOT%/api/v1/tickers-changes/stream
+SENTRY=""
+WS_ENDPOINT=""
+HTTP_ENDPOINT=""
+boot watch dev-build
 ```
-
-##### Http endpoint with initial state
-
-```
-http://%API_ROOT%/api/v1/tickers-changes
-```
-
-
-### Development
-
-To start working in development mode you got to have and `boot`, and `electron` installed on your machine. You also need to run `npm i` to get JavaScript some dependencies.
 
 In first tab run:
 
-```
-boot watch dev-build
-```
+`sh run.sh`
 
 After compilation of ClojureScript is complete, in second(!) tab run:
 
@@ -68,17 +56,5 @@ Check outdated deps
 
 ```
 boot -d boot-deps ancient
-```
-
-## Deploy and packaging
-
-This is not implemented yet. We are looking for you feedback and help (especially from windows folks)
-
-### Packaging
-
-We probably go with [`electron-packager`](https://github.com/maxogden/electron-packager) for packaging, which offers this kind of workflow:
-
-```
-electron-packager target/ APP_NAME --platform=darwin --arch=x64 --version=VERSION
 ```
 

@@ -9,4 +9,4 @@ target/
 
 snippets.*
 out
-__server
+run.sh

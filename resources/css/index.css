@@ -3,11 +3,11 @@
 @import url("_highcharts.css");
 @import url("_select.css");
 @import url("_switch.css");
+@import url("_motion.css");
 @import url("common.css");
 @import url("header.css");
 @import url("live.css");
 @import url("filterbox.css");
-@import url("detailed.css");
 @import url("portfolio.css");
 @import url("alerts.css");
 
@@ -53,5 +53,4 @@ body {
   margin-top: 70px;
   position: relative;
 }
-
 

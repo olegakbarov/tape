@@ -3,18 +3,16 @@
             [clojure.string :as s]
             [app.db :refer [db]]))
 
-(defn spinner []
+(defn spinner
+  []
   [:div.orbit-spinner
    (for [i [1 2 3]] ^{:key i} [:div.orbit])])
 
 (defn button
   [params text]
-  (let [{:keys [on-click type ref disabled color]} params]
+  (let [{:keys [color]} params]
     [:button.button
-     (merge (when color {:style {:background-color color}})
-            {:on-click on-click
-             :ref ref
-             :type type})
+     (merge params (when color {:style {:background-color color}}))
      text]))
 
 (defn checkbox
@@ -38,9 +36,9 @@
 
 (defn text-input
   "Generic text/number input"
-  [cfg]
+  []
   ;; TODO: spec it
-  (fn []
+  (fn [cfg]
     (let [{:keys [on-change value label]} cfg]
       [:div.input_wrapper
        (when label [:div.input_label label])
@@ -48,13 +46,16 @@
         {:type "text"
          :autoFocus false
          :onChange on-change
-         :value (value)}]])))
+         :value value}]])))
 
-(defn close [style on-click]
-  [:div.common_close {:style style
-                      :on-click on-click}])
+(defn close
+  [klass on-click]
+  [:div.common_close
+   {:class klass
+    :on-click on-click}])
 
 (defn burger-menu
   [x on-click]
-  [:div.burger-menu {:class x
-                     :on-click on-click}])
+  [:div.burger-menu
+   {:class x
+    :on-click on-click}])

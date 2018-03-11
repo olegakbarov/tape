@@ -5,5 +5,4 @@
 
 (defn set-title!
   [text]
-  (let [fmtd (str " $" text)]
-    (.send ipc "set-title" fmtd)))
+  (let [fmtd (str " $" text)] (.send ipc "set-title" fmtd)))

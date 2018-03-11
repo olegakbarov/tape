@@ -3,18 +3,19 @@
 }
 
 .portfolio_items_wrapper {
-  margin-top: 270px;
-  display: flex;
-  flex-direction:column;
-  justify-content: flex-start;
+  position: fixed;
+  top: 270px;
+  width: 100%;
+  height: calc(100% - 330px);
+  overflow: scroll;
 }
 
 .portfolio_toolbar {
+  height: 60px;
   background-color: white;
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 10px 0;
   border-top: 1px solid #eaeaea;
 }
 
@@ -65,6 +66,10 @@ input.input_item {
 .right_cell > .actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.right_cell > .actions > .ts {
+  font-size: 10px;
 }
 
 .input_label {

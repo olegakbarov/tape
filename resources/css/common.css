@@ -1,4 +1,5 @@
 button.button {
+  margin-top: 20px;
   padding: 10px;
   width: 100%;
   background-color: black;
@@ -31,9 +32,19 @@ button.button:active {
   transition: all .3s ease;
 }
 
+.common_close.left_top {
+  position: absolute;
+  top: 20px;
+  right: 20px;;
+}
+
 .common_close:hover {
   opacity: 1;
   cursor: pointer;
+}
+
+.input_label {
+  margin-top: 7px;
 }
 
 /* ------------- BURGER -------------  */

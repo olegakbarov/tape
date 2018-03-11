@@ -1,11 +1,6 @@
 (ns app.utils.core
-  (:require [app.constants.currs :as c]
-            [app.db :refer [db]]
+  (:require [app.db :refer [db]]
             [compact-uuids.core :as uuid]))
-
-(defn curr-symbol->name
-  [s]
-  (:name (first (filter (fn [p] (= (:symbol p) s)) c/pairs))))
 
 (defn get-markets
   []
