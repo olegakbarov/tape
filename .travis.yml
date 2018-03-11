@@ -21,7 +21,4 @@ cache:
     - $HOME/.boot/cache/lib
     - $HOME/bin
 env:
-  - env=prod
-  - SENTRY=""
-  - WS_ENDPOINT=""
-  - HTTP_ENDPOINT=""
+  - env=prod SENTRY="" WS_ENDPOINT="" HTTP_ENDPOINT=""

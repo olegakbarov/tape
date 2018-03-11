@@ -79,9 +79,15 @@
 
 (defn user-favs
   [markets favs]
+  ; (js/console.log markets)
   (if (empty? markets)
     []
-    (reduce (fn [acc tupl] (conj acc (get-in markets tupl))) [] favs)))
+    (reduce
+      (fn [acc tupl]
+        (js/console.log (get-in markets tupl))
+        (conj acc (get-in markets tupl)))
+      []
+      favs)))
 
 (defn by-query
   [markets q]

@@ -4,6 +4,7 @@
 
 (defn process-change
   [msg]
+  (js/console.log msg)
   (let [p (-> msg
               clojure.walk/keywordize-keys
               :payload
@@ -14,7 +15,7 @@
                 (dissoc :symbolPair)
                 (assoc :ts (-> p :timestamp))
                 (dissoc :timestamp))]
-    (swap! db assoc-in [:markets market pair :changes] res)))
+    (swap! db assoc-in [:markets market (keyword pair) :changes] res)))
 
 (defn process-ticker
   [msg]
@@ -29,7 +30,7 @@
                 (assoc :symbol-pair (keyword pair))
                 (assoc :market
                        (keyword (-> p :market))))]
-    (swap! db update-in [:markets market pair] #(merge % res))))
+    (swap! db update-in [:markets market (keyword pair)] #(merge % res))))
 
 (defn evt->db
   [msg]
