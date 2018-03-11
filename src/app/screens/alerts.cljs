@@ -61,6 +61,9 @@
      (clear-alert-form)
      (close-every-alert-view))))
 
+;; ========================================
+;; COMPONENTS
+
 (defn select-pair
   []
   (let [m @(r/cursor db [:markets])

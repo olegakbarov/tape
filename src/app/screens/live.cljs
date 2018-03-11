@@ -65,22 +65,19 @@
       :favorites "Favorites"
       nil (erro! (str "Not a string/keyword " v)))))
 
-(defn render-rows
-  []
-  (fn []
-    (let [markets (:markets @db)
-          favs (-> @db
-                   :user
-                   :favorites)
-          q (:ui/filter-q @db)
-          pairs (condp = (:ui/current-filter @db)
-                  :bestprice @(r/track best-pairs markets)
-                  :favorites @(r/track user-favs markets favs)
-                  nil @(r/track all-pairs markets))
-          [dt-m dt-p] (-> @db
-                          :ui/detailed-view)
-          filtered (pairs-by-query pairs q)]
+(defn render-rows []
+  (let [markets @(r/cursor db [:markets])
+        favs @(r/cursor db [:user :favorites])
+        curr-filter @(r/cursor db [:ui/current-filter])
+        q @(r/cursor db [:ui/filter-q])
+        pairs (condp = curr-filter
+                :bestprice @(r/track best-pairs markets)
+                :favorites @(r/track user-favs markets favs)
+                nil @(r/track all-pairs markets))
+        [dt-m dt-p] @(r/cursor db [:ui/detailed-view])
+        filtered @(r/track pairs-by-query pairs q)]
       [:div.rows_wrapper
+       [:h1 (str "Total pairs " (count filtered))]
        (for [pair filtered]
          (let [{:keys [market symbol-pair]} pair
                [kw-m kw-p] (mapv keyword [market symbol-pair])]
@@ -90,13 +87,12 @@
              :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
                                          "rgba(0, 126, 255, 0.04)"
                                          "white")}}
-            [row pair]]))])))
+            [row pair]]))]))
 
 (defn select-q
   []
   (let [opts ["Favorites" "Best price"]
-        v (-> @db
-              :ui/current-filter)
+        v @(r/cursor db [:ui/current-filter])
         on-change #(if % (toggle-filter (keyword<->str (aget % "value"))))]
     [:>
      js/window.Select
@@ -115,8 +111,7 @@
      {:style {:height h
               :opacity o
               :background-color "white"
-              :overflow (if (-> @db
-                                :ui/filterbox-open?)
+              :overflow (if @(r/cursor db [:ui/filterbox-open?])
                           "visible"
                           "hidden")
               :transform "scaleY("
@@ -141,9 +136,9 @@
 
 (defn filter-box
   []
-  (let [q (:ui/filter-q @db)
-        f (:ui/current-filter @db)
-        open? (:ui/filterbox-open? @db)]
+  (let [q @(r/cursor db [:ui/filter-q])
+        f @(r/cursor db [:ui/current-filter])
+        open? @(r/cursor db [:ui/filterbox-open?])]
     [:div#filter_box
      [:div.filters_compact
       [:div.left
@@ -180,10 +175,8 @@
 
 (defn pair-detailed
   []
-  (let [[market pair] (:ui/detailed-view @db)
-        favs (-> @db
-                 :user
-                 :favorites)
+  (let [[market pair] @(r/cursor db [:ui/detailed-view])
+        favs @(r/cursor db [:user :favorites])
         content (get-in @db [:markets market pair])
         {:keys [high
                 low
@@ -238,8 +231,9 @@
 
 (defn live-board
   []
-  [:div
-   [header]
-   [filter-box]
-   [render-rows]
-   [detailed-view]])
+  (fn []
+    [:div
+     [header]
+     [filter-box]
+     [render-rows]
+     [detailed-view]]))

@@ -4,12 +4,12 @@
             [clojure.walk]
             [cljs.core.async :as a :refer [<! >! chan timeout sliding-buffer]]
             [cljs-http.client :as http]
+            [mount.core :refer [defstate]]
             [app.db :refer [db]]
             [app.config :refer [config]]
             [app.actions.tray :refer [set-title!]]
             [app.actions.api :refer [evt->db state->db chart-data->db]]
-            [app.logic.curr :refer [best-pairs]]
-            [mount.core :refer [defstate]]))
+            [app.logic.curr :refer [best-pairs]]))
 
 (defonce t (atom false))
 
@@ -21,7 +21,6 @@
   [w]
   (if (< @retries 10)
     (.setTimeout js/window (fn [] (.close w (create-ws-conn!))) 3000)))
-;; dispatch notif here
 
 (defn heart-beat [] (.setTimeout js/window heart-beat 2000))
 
@@ -54,7 +53,8 @@
   (go (let [endpoint (:ws-endpoint config)
             stream (create-ws-conn!)]
         (go-loop []
-                 (let [msg (<! stream)] (evt->db (js->clj (js/JSON.parse msg))))
+                 (let [msg (<! stream)]
+                   (evt->db (js->clj (js/JSON.parse msg))))
                  (recur)))))
 
 (defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))

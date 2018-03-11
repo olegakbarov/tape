@@ -1,25 +1,24 @@
 (ns app.logic.curr
   (:require [clojure.walk]
+            [reagent.core :as r]
             [app.db :refer [db]]
-            [reagent.core :as r]))
+            [cljs.pprint :refer [pprint]]))
 
 (defn get-lowest-prices
   "Returns lowest `:last` prices across all markets"
   [markets]
-  (let [market-items (vals markets)]
-    (reduce (fn [acc item]
-              (into {}
-                    (map (fn [item]
-                           (let [[key val] item
-                                 acc-pair (get acc key)]
-                             (if-not acc-pair
-                               (assoc acc key val)
-                               (if (< (:last val) (:last acc-pair))
-                                 (assoc acc key val)
-                                 acc))))
-                         item)))
-            {}
-            market-items)))
+  (let [market-items (vals markets)
+        res (reduce
+              (fn [acc item]
+                 (if-let [v (get acc (:symbol-pair item))]
+                    (if (< (:last item) (:last v))
+                      acc
+                      (assoc acc (:symbol-pair item) item))
+                    (assoc acc (:symbol-pair item) item)))
+              {}
+              ;; flat vector of all pairs
+              (mapcat vals (vals markets)))]
+      res))
 
 (defn best-pairs
   "Returns pairs with lowest prices across all markets"
@@ -47,7 +46,7 @@
   "Returns all currencies across all markets"
   [markets]
   (set (flatten (map #(flatten (clojure.string/split % "-"))
-                     (->> (:markets @db)
+                     (->> markets
                           vals
                           (map keys)
                           flatten
@@ -71,7 +70,7 @@
 (defn currs-by-market
   "Returns currencies available for given market"
   [market]
-  (let [m (:markets @db)
+  (let [m @(r/cursor db [:markets])
         pairs (get m market)]
     (reduce (fn [acc item] (flatten (conj acc (clojure.string/split item "-"))))
             []
@@ -91,7 +90,7 @@
        (filter #(re-find (re-pattern q) (:market %)))))
 
 (defn pairs-by-query
-  "Returns paris collection only with items where :market
+  "Returns pairs collection only with items where :market
   or :currency-pair fields matches the substring `q`"
   ;; TODO fails with special chars (eg \)
   [pairs q]
