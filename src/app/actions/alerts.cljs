@@ -32,14 +32,12 @@
   (s/keys :req-un [::market ::pair ::amount ::archived]
           :opt-un [::id]))
 
-(comment
- (s/valid? ::alert
+(s/valid? ::alert
   {:market :bitfinex
    :pair :XRP-USD
    :amount "1.33"
    :id "bhrnck4b6ekv9b2k0krj4nj027"
-   :archived false}))
-
+   :archived false})
 
 ; TODO: this accepts alert from ui, not keywordized
 ; (s/fdef create-alert-record

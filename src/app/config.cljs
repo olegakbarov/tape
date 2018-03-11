@@ -3,8 +3,8 @@
 
 (env/def
   SENTRY nil
-  WS_ENDPOINT :required
-  HTTP_ENDPOINT :required
+  WS_ENDPOINT (or WS_ENDPOINT "wss://cryptounicorns.io/api/v1/events/stream")
+  HTTP_ENDPOINT (or HTTP_ENDPOINT "https://cryptounicorns.io/api/v1")
   ENV (or ENV :dev))
 
 (def config

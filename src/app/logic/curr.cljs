@@ -45,12 +45,13 @@
 (defn get-all-currs
   "Returns all currencies across all markets"
   [markets]
-  (set (flatten (map #(flatten (clojure.string/split % "-"))
-                     (->> markets
-                          vals
-                          (map keys)
-                          flatten
-                          (map name))))))
+  (set (flatten (map
+                  #(flatten (clojure.string/split % "-"))
+                  (->> markets
+                       vals
+                       (map keys)
+                       flatten
+                       (map name))))))
 
 (defn get-all-pair-names
   "Returns unique currency pairs"
