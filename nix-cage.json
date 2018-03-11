@@ -2,6 +2,7 @@
     "mounts": {
         "rw": [
             ".",
+            [".boot", "~/.boot"],
             "/tmp"
         ],
         "ro": [
