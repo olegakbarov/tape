@@ -102,7 +102,7 @@
                                   name)))
                  (re-find (re-pattern (lc q))
                           (lc (-> %
-                                  :currency-pair
+                                  :symbol-pair
                                   name))))
             pairs)))
 

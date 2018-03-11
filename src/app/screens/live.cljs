@@ -30,12 +30,12 @@
 
 (defn render-row
   [pair]
-  (let [{:keys [market currency-pair last change]} pair
-        {:keys [percent amount]} change]
+  (let [{:keys [market symbol-pair last changes]} pair
+        {:keys [percent amount]} changes]
     [:div.row_wrap
-     ^{:key "currency-pair"}
+     ^{:key "symbol-pair"}
      [:div.left_cell
-      [:div.title currency-pair]
+      [:div.title symbol-pair]
       [:div.market market]]
      ^{:key "last-price"}
      [:div.right_cell
@@ -82,8 +82,8 @@
           filtered (pairs-by-query pairs q)]
       [:div.rows_wrapper
        (for [pair filtered]
-         (let [{:keys [market currency-pair]} pair
-               [kw-m kw-p] (mapv keyword [market currency-pair])]
+         (let [{:keys [market symbol-pair]} pair
+               [kw-m kw-p] (mapv keyword [market symbol-pair])]
            ^{:key (str pair market)}
            [:div
             {:on-click #(open-detailed-view kw-m kw-p)
@@ -165,7 +165,7 @@
           :avg 3095.991
           :market "yobit"
           :timestamp 1509279292
-          :currency-pair "LTC-RUB"
+          :symbol-pair "LTC-RUB"
           :last 3070
           :vol 304628.34})
 
@@ -189,7 +189,7 @@
                 low
                 sell
                 buy
-                currency-pair
+                symbol-pair
                 market
                 timestamp
                 avg
