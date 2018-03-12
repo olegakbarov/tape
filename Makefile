@@ -2,9 +2,10 @@
 
 include boot.properties
 
-version            := $(shell jq -r .version package.json)
-path               := $(PATH):$(PWD)/bin:$(PWD)/node_modules/.bin
-env                ?= dev
+name    := unicorneye
+version := $(shell jq -r .version package.json)
+path    := $(PATH):$(PWD)/bin:$(PWD)/node_modules/.bin
+env     ?= dev
 
 export PATH=$(path)
 
@@ -13,7 +14,7 @@ all: build
 
 .PHONY: fmt
 fmt:
-	boot fmt                       \
+	boot fmt                 \
 		--git --mode overwrite \
 		--really --options '{:style :community :map {:comma? false :force-nl? true} :vector {:respect-nl? true}}'
 
@@ -24,9 +25,9 @@ dependencies:
 .PHONY: build
 build: dependencies
 	boot $(env)-build
-	# electron-packager                              \
-	#   target/ MyApp                          \
-	#   --platform=$(OSTYPE)                   \
-	#   --arch=x64                             \
-	# 	--overwrite
+	electron-packager       \
+		target/ build         \
+		--platform=$(OSTYPE)  \
+		--arch=x64            \
+		--overwrite
 

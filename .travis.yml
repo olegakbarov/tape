@@ -1,27 +1,25 @@
-language: clojure
-sudo: false
-jdk:
-  - openjdk8
-install:
-  - wget -O boot-installer https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
-  - chmod 755 boot-installer
-  - ./boot-installer -V | sed 's|^BOOT_|export BOOT_|g' > boot-env
-  - source boot-env
-  - mkdir -p ~/bin
-  - export PATH=~/bin:$PATH
-  - echo '#!/usr/bin/env bash' > ~/bin/boot
-  - echo 'set -e' >> ~/bin/boot
-  - echo 'exec java -jar ~/.boot/cache/bin/'$BOOT_VERSION'/boot.jar $@' >> ~/bin/boot
-  - chmod 755 ~/bin/boot
-script: make
+language: nix
+script: |
+  bash -c '
+    set -e
+    set -x
+
+    nixpkgs_rev=bea585cf420f7744441d6c7297fafb9401bd3c6d
+
+    curl -L https://github.com/NixOS/nixpkgs/archive/${nixpkgs_rev}.tar.gz | tar -xz -C $HOME
+
+    export NIX_PATH=nixpkgs=$HOME/nixpkgs-${nixpkgs_rev}
+    export SENTRY=""
+    export WS_ENDPOINT=""
+    export HTTP_ENDPOINT=""
+
+    nix-shell --command make
+  '
+
 cache:
   directories:
-    - $HOME/.m2
-    - $HOME/.boot/cache/bin
-    - $HOME/.boot/cache/lib
-    - $HOME/bin
+    - /nix
+
 env:
+  - env=dev
   - env=prod
-  - SENTRY=""
-  - WS_ENDPOINT=""
-  - HTTP_ENDPOINT=""

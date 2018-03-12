@@ -1,6 +1,6 @@
-target/
+/target
 /node_modules
-/MyApp-*
+/build-*/
 
 .tern-port
 .nrepl-port
