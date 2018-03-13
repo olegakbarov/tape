@@ -82,7 +82,7 @@
   (if (= js/process.platform "darwin") (.hide (.-dock app)))
   (.on app "ready" init-browser)
   (do (.on app "ready" set-tray!)
-      (.on app "ready" #(set-title! nil "0000"))
+      ; (.on app "ready" #(set-title! nil "0000"))
       (.on app "ready" set-tray-event-handlers)
       (.on app "browser-window-created" (fn [e w] (.setMenu w (clj->js nil)))))
   (.on ipc "show-window" show-window)

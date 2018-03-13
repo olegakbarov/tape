@@ -33,26 +33,18 @@
 (defn render-row
   [pair]
   (let [{:keys [market symbol-pair last changes]} pair
-        {:keys [percent amount]} changes]
+        {:keys [percent amount]} changes
+        swing-class (if percent (if (pos? (.toFixed percent 2)) "up" "down") "")]
     [:div.row_wrap
      [:div.left_cell
       [:div.title symbol-pair]
       [:div.market market]]
      [:div.right_cell
-      [:span.price_down last]
-      [:div.swing
-       (if (and (not (nil? amount)) (not (nil? percent)))
-         (str (.toFixed percent 5) "% " (.toFixed amount 5))
+      [:span last]
+      [:div.swing {:class swing-class}
+       (if (and amount percent)
+         (str (.toFixed percent 2) "% " (.toFixed amount 2))
          "n/a")]]]))
-
-(defn row
-  [pair]
-  (r/create-class {:reagent-render #(render-row pair)
-                   ; :component-did-update   update-comp
-                   ; :component-did-mount    update-comp
-                   :should-component-update
-                    (fn [this])}))
-                      ; (js/console.log "next-props" (r/props this)))}))
 
 (defn keyword<->str
   [v]
@@ -74,7 +66,7 @@
         q @(r/cursor db [:ui/filter-q])
         market-filter @(r/cursor db [:ui/market-filter])
         pairs (condp = curr-filter
-                :bestprice @(r/track best-pairs markets)
+                ; :bestprice @(r/track best-pairs markets)
                 :favorites @(r/track user-favs markets favs)
                 :market @(r/track pairs-by-market markets market-filter)
                 nil @(r/track all-pairs markets))
@@ -91,11 +83,11 @@
              :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
                                          "rgba(0, 126, 255, 0.04)"
                                          "white")}}
-            [row pair]]))]))
+            [render-row pair]]))]))
 
 (defn select-q
   []
-  (let [opts ["Favorites" "Best price" "Market"]
+  (let [opts ["Favorites" "Market"]
         v @(r/cursor db [:ui/current-filter])
         on-change #(if % (toggle-filter (keyword<->str (aget % "value"))))]
     [:>
@@ -131,7 +123,7 @@
        :value @(r/cursor db [:ui/filter-q])
        :label "search"}]
      [ui/input-wrap "Filter" [select-q {:key "filter"}]]
-     [ui/input-wrap "Filter" [select-market {:key "market"}]]]))
+     [ui/input-wrap "Market" [select-market {:key "market"}]]]))
 
 (comment {:high 3143.5286
           :sell 3119.8

@@ -73,6 +73,13 @@
 
 .right_cell > .swing {
   line-height: 14px;
-  color: var(--green);
   font-size: 11px;
+}
+
+.right_cell > .swing.up {
+  color: var(--green);
+}
+
+.right_cell > .swing.down {
+  color: var(--red);
 }
