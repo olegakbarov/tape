@@ -38,8 +38,12 @@
                                filter-str)})))
 
 
-(defn update-filter-q [q] (swap! db assoc-in [:ui/filter-q] q))
+(defn update-filter-q [q]
+  (swap! db assoc-in [:ui/filter-q] q))
 
+(defn update-filter-market [m]
+  (js/console.log m)
+  (swap! db assoc-in [:ui/market-filter] m))
 
 (defn toggle-filterbox
   []
@@ -139,3 +143,6 @@
       (close-every-portfolio-view)
       (close-every-alert-view)
       (swap! router assoc-in [:screen] screen)))
+
+
+

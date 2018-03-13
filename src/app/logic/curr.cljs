@@ -79,12 +79,10 @@
 
 (defn user-favs
   [markets favs]
-  ; (js/console.log markets)
   (if (empty? markets)
     []
     (reduce
       (fn [acc tupl]
-        (js/console.log (get-in markets tupl))
         (conj acc (get-in markets tupl)))
       []
       favs)))
@@ -123,10 +121,15 @@
 
 (defn get-total-worth
   [folio]
-  ; (js/console.log folio)
   (reduce (fn [acc [id item]]
             (let [{:keys [amount currency market]} item]
               (+ acc (to-dollar (js/parseFloat amount) currency market))))
           0
           folio))
+
+(defn pairs-by-market
+  [markets mname]
+  (-> markets
+      (get mname)
+      vals))
 

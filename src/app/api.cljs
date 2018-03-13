@@ -61,11 +61,19 @@
 
 (defstate ws-loop :start (listen-ws!) :stop (stop-ws!))
 
+(defn set-initial-data-fetching []
+  (swap! db assoc :ui/fetching-init-data? true))
+
+(defn unset-initial-data-fetching []
+  (swap! db assoc :ui/fetching-init-data? false))
+
 (defn fetch-state!
   []
-  (go (let [endpoint (str (:http-endpoint config) "/events")
+  (go (let [_ (set-initial-data-fetching)
+            endpoint (str (:http-endpoint config) "/events")
             response (<! (http/get endpoint {:with-credentials? false}))]
-        (state->db (:body response)))))
+        (state->db (:body response))
+        (unset-initial-data-fetching))))
 
 ; https://cryptounicorns.io/api/v1/markets/bitfinex/tickers/eos-btc/last
 (defn fetch-chart-data!

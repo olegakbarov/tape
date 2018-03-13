@@ -6,7 +6,9 @@
 (defonce chart-data (r/atom {}))
 
 (defonce db
- (r/atom {:ui/current-filter :bestprice
+ (r/atom {:ui/fetching-init-data? true ;; hack
+          :ui/current-filter :market
+          :ui/market-filter :bitfinex
           :ui/filter-q ""
           :ui/filterbox-open? false
           :ui/ntf nil

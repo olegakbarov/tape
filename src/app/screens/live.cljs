@@ -21,25 +21,25 @@
               all-pairs
               user-favs
               by-query
-              pairs-by-query]]
+              pairs-by-query
+              pairs-by-market]]
             [app.actions.ui :refer
              [toggle-filter
               update-filter-q
               open-detailed-view
-              toggle-filterbox]]))
+              toggle-filterbox
+              update-filter-market]]))
 
 (defn render-row
   [pair]
   (let [{:keys [market symbol-pair last changes]} pair
         {:keys [percent amount]} changes]
     [:div.row_wrap
-     ^{:key "symbol-pair"}
      [:div.left_cell
       [:div.title symbol-pair]
       [:div.market market]]
-     ^{:key "last-price"}
      [:div.right_cell
-      [:span {:class "price_down"} last]
+      [:span.price_down last]
       [:div.swing
        (if (and (not (nil? amount)) (not (nil? percent)))
          (str (.toFixed percent 5) "% " (.toFixed amount 5))
@@ -51,7 +51,8 @@
                    ; :component-did-update   update-comp
                    ; :component-did-mount    update-comp
                    :should-component-update
-                   (fn [this] (js/console.log "next-props" (r/props this)))}))
+                    (fn [this])}))
+                      ; (js/console.log "next-props" (r/props this)))}))
 
 (defn keyword<->str
   [v]
@@ -63,6 +64,7 @@
     (condp = v
       :bestprice "Best price"
       :favorites "Favorites"
+      :market "Market"
       nil (erro! (str "Not a string/keyword " v)))))
 
 (defn render-rows []
@@ -70,9 +72,11 @@
         favs @(r/cursor db [:user :favorites])
         curr-filter @(r/cursor db [:ui/current-filter])
         q @(r/cursor db [:ui/filter-q])
+        market-filter @(r/cursor db [:ui/market-filter])
         pairs (condp = curr-filter
                 :bestprice @(r/track best-pairs markets)
                 :favorites @(r/track user-favs markets favs)
+                :market @(r/track pairs-by-market markets market-filter)
                 nil @(r/track all-pairs markets))
         [dt-m dt-p] @(r/cursor db [:ui/detailed-view])
         filtered @(r/track pairs-by-query pairs q)]
@@ -91,7 +95,7 @@
 
 (defn select-q
   []
-  (let [opts ["Favorites" "Best price"]
+  (let [opts ["Favorites" "Best price" "Market"]
         v @(r/cursor db [:ui/current-filter])
         on-change #(if % (toggle-filter (keyword<->str (aget % "value"))))]
     [:>
@@ -100,57 +104,34 @@
       :onChange on-change
       :options (clj->js (map #(zipmap [:value :label] [% %]) opts))}]))
 
-;; - Filter
-
-(defn f-view
-  [{c :children}]
-  (let [h (gobj/get c "height")
-        o (gobj/get c "opacity")
-        s (gobj/get c "scale")]
-    [:div
-     {:style {:height h
-              :opacity o
-              :background-color "white"
-              :overflow (if @(r/cursor db [:ui/filterbox-open?])
-                          "visible"
-                          "hidden")
-              :transform "scaleY("
-              s "px)"}}
-     [ui/text-input
-      {:on-change #(update-filter-q (-> %
-                                        .-target
-                                        .-value))
-       :value @(r/cursor db [:ui/filter-q])
-       :label "search"}]
-     [ui/input-wrap "Filter" [select-q {:key "filter"}]]]))
-
-(def afw (r/reactify-component f-view))
-
-(defn filter-form
+(defn select-market
   []
-  [Motion
-   {:style {:height (spring (if (:ui/filterbox-open? @db) 136 0))
-            :scale (spring (if (:ui/filterbox-open? @db) 1 0))
-            :opacity (spring (if (:ui/filterbox-open? @db) 1 0))}}
-   (fn [x] (r/create-element afw #js {} x))])
+  (let [opts @(r/track #(-> @db
+                            :markets
+                            keys
+                            (as-> x (map name x))))
+        v @(r/cursor db [:ui/market-filter])
+        on-change #(if % (update-filter-market (keyword (aget % "value"))))]
+    [:>
+     js/window.Select
+     {:value v
+      :onChange on-change
+      :options (clj->js (map #(zipmap [:value :label] [% %]) opts))}]))
 
+;; - Filter
+;;
 (defn filter-box
   []
   (let [q @(r/cursor db [:ui/filter-q])
         f @(r/cursor db [:ui/current-filter])
         open? @(r/cursor db [:ui/filterbox-open?])]
     [:div#filter_box
-     [:div.filters_compact
-      [:div.left
-       [:div.input_label "Filters applied:"]
-       [:div.pills
-        (when f [:div.pill (name f)])
-        (when (> (count q) 0) [:div.pill (str "Query: " q)])]]
-      [:div.right
-       [ui/burger-menu
-        (if @(r/cursor db [:ui/filterbox-open?]) "x" "")
-        toggle-filterbox]]]
-     [filter-form]]))
+     [ui/text-input
+      {:on-change #(update-filter-q (-> % .-target .-value))
+       :value @(r/cursor db [:ui/filter-q])
+       :label "search"}]
+     [ui/input-wrap "Filter" [select-q {:key "filter"}]]
+     [ui/input-wrap "Filter" [select-market {:key "market"}]]]))
 
 (comment {:high 3143.5286
           :sell 3119.8
@@ -232,8 +213,11 @@
 (defn live-board
   []
   (fn []
-    [:div
-     [header]
-     [filter-box]
-     [render-rows]
-     [detailed-view]]))
+   (let [spin? (-> @db :ui/fetching-init-data?)]
+      (if spin?
+        [:div.spinner]
+        [:div
+         [header]
+         [filter-box]
+         [render-rows]
+         [detailed-view]]))))

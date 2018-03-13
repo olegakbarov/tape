@@ -4,7 +4,6 @@
 
 (defn process-change
   [msg]
-  (js/console.log msg)
   (let [p (-> msg
               clojure.walk/keywordize-keys
               :payload
