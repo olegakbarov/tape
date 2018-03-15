@@ -60,7 +60,7 @@
 
 (defn set-tray!
   []
-  (let [p (.join path js/__dirname "../../../resources/assets/btc1w.png")]
+  (let [p (.join path js/__dirname "../../../resources/assets/c@2x.png")]
     (reset! tray (Tray. p))))
 
 (defn set-tray-event-handlers

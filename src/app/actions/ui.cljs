@@ -42,7 +42,6 @@
   (swap! db assoc-in [:ui/filter-q] q))
 
 (defn update-filter-market [m]
-  (js/console.log m)
   (swap! db assoc-in [:ui/market-filter] m))
 
 (defn toggle-filterbox

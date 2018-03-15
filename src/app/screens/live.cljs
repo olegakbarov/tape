@@ -6,6 +6,7 @@
             [goog.object :as gobj]
             [cljsjs.moment]
             [cljsjs.react-select]
+            [cljsjs.react-virtualized]
             [app.db :refer [db]]
             [app.motion :refer [Motion spring presets]]
             [app.components.ui :as ui]
@@ -34,7 +35,9 @@
   [pair]
   (let [{:keys [market symbol-pair last changes]} pair
         {:keys [percent amount]} changes
-        swing-class (if percent (if (pos? (.toFixed percent 2)) "up" "down") "")]
+        amount (if amount (.toFixed amount 2) nil)
+        percent (if percent (.toFixed percent 2) nil)
+        swing-class (if percent (if (pos? percent) "up" "down") "")]
     [:div.row_wrap
      [:div.left_cell
       [:div.title symbol-pair]
@@ -43,7 +46,8 @@
       [:span last]
       [:div.swing {:class swing-class}
        (if (and amount percent)
-         (str (.toFixed percent 2) "% " (.toFixed amount 2))
+         (str (if (pos? percent) "+" "") percent  "% "
+              (if (pos? amount) "+" "") amount)
          "n/a")]]]))
 
 (defn keyword<->str
@@ -73,17 +77,35 @@
         [dt-m dt-p] @(r/cursor db [:ui/detailed-view])
         filtered @(r/track pairs-by-query pairs q)]
       [:div.rows_wrapper
-       [:h1 (str "Total pairs " (count filtered))]
-       (for [pair filtered]
-         (let [{:keys [market symbol-pair]} pair
-               [kw-m kw-p] (mapv keyword [market symbol-pair])]
-           ^{:key (str pair market)}
-           [:div
-            {:on-click #(open-detailed-view kw-m kw-p)
-             :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
-                                         "rgba(0, 126, 255, 0.04)"
-                                         "white")}}
-            [render-row pair]]))]))
+        [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
+       ; (for [pair filtered])]
+        [:> js/ReactVirtualized.AutoSizer
+         (fn [_]
+          (r/as-element
+             [:> js/ReactVirtualized.List
+               {:height 480
+                :width 320
+                :headerHeight 70
+                :rowHeight 45
+                :rowCount (count filtered)
+                :rowRenderer
+                  (fn [x]
+                   (let [index (aget x "index")]
+                     (r/create-element
+                      "div"
+                      #js{:style (aget x "style")
+                          :key (aget x "key")}
+                      (r/as-element [render-row (get (vec filtered) index)]))))}]))]]))
+
+         ; (let [{:keys [market symbol-pair]} pair
+         ;       [kw-m kw-p] (mapv keyword [market symbol-pair])]
+         ;   ^{:key (str pair market)}
+         ;   [:div
+         ;    {:on-click #(open-detailed-view kw-m kw-p)
+         ;     :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
+         ;                                 "rgba(0, 126, 255, 0.04)"
+         ;                                 "white")}}
+         ;    [render-row pair]]))]))
 
 (defn select-q
   []
