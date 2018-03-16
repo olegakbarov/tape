@@ -11,7 +11,7 @@
             [klang.core :refer-macros [info! erro!]]))
 
 (when (= :dev (:env config))
-  (do (info! "Spec validation activated...")
+  (do (info! "[action.alerts] Spec validation activated...")
       (ts/instrument)))
 
 (s/fdef render-alert!

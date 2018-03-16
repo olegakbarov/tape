@@ -21,7 +21,6 @@
              [best-pairs
               all-pairs
               user-favs
-              by-query
               pairs-by-query
               pairs-by-market]]
             [app.actions.ui :refer
@@ -75,7 +74,8 @@
                 :market @(r/track pairs-by-market markets market-filter)
                 nil @(r/track all-pairs markets))
         [dt-m dt-p] @(r/cursor db [:ui/detailed-view])
-        filtered @(r/track pairs-by-query pairs q)]
+        filtered @(r/track pairs-by-query pairs q)
+        filtered (remove nil? filtered)]
       [:div.rows_wrapper
         [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
        ; (for [pair filtered])]
@@ -228,6 +228,7 @@
   []
   (fn []
    (let [spin? (-> @db :ui/fetching-init-data?)]
+         ; _ (js/console.log (:markets @db))]
       (if spin?
         [:div.spinner]
         [:div
