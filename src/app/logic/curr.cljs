@@ -91,7 +91,6 @@
   "Returns pairs collection only with items where :market
   or :symbol-pair fields matches the substring `q`"
   [pairs q]
-  ; (js/console.log (map :symbol-pair pairs))
   (let [lc #(.toLowerCase %)
         q (as-> q $
                 (.toLowerCase $)

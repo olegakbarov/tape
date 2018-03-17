@@ -42,13 +42,14 @@
       (let [market (keyword (:market c))
             pair (keyword (:symbolPair c))
             {:keys [percent amount c]} c]
-        ;; TODO set n/a when not provided
-        (when (-> @db
-                  :markets
-                  (get market)
-                  (get pair))
-          (swap! db assoc-in [:markets market pair :changes] {:percent percent
-                                                              :amount amount}))))))
+        (when (and percent amount (-> @db
+                                      :markets
+                                      (get market)
+                                      (get pair)))
+          (swap! db assoc-in
+                 [:markets market pair :changes]
+                 {:percent percent
+                  :amount amount}))))))
 
 (defn process-ticker
   [msg]
@@ -61,11 +62,10 @@
             (clojure.set/rename-keys $ {:symbolPair :symbol-pair})
             (assoc $ :symbol-pair pair)
             (assoc $ :market market)
-            (swap! db assoc-in [:markets market pair] $)))))
+            (swap! db update-in [:markets market pair] #(merge % $))))))
 
 (defn evt->db
   [msg]
-  ; (js/console.log msg)
   (condp = (get msg "type")
     "tickers" (process-ticker msg)
     "changes" (process-change msg)
@@ -73,13 +73,16 @@
 
 (defn state->db
   [s]
-  ;;TODO  CHECK
   (let [{:keys [tickers changes]} s]
     (doseq [item (map identity
-                      (map #(into {} [{"type" "tickers"} {"payload" %}]) tickers))]
+                      (map
+                        #(into {} [{"type" "tickers"} {"payload" %}])
+                        tickers))]
       (evt->db item))
     (doseq [item (map identity
-                      (map #(into {} [{"type" "changes"} {"payload" %}]) changes))]
+                      (map
+                        #(into {} [{"type" "changes"} {"payload" %}])
+                        changes))]
       (evt->db item))))
 
 (defn chart-data->db

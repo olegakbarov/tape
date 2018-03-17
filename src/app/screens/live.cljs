@@ -44,7 +44,7 @@
      [:div.right_cell
       [:span last]
       [:div.swing {:class swing-class}
-       (if (and amount percent)
+       (if (and changes amount percent)
          (str (if (pos? percent) "+" "") percent  "% "
               (if (pos? amount) "+" "") amount)
          "n/a")]]]))
@@ -69,7 +69,6 @@
         q @(r/cursor db [:ui/filter-q])
         market-filter @(r/cursor db [:ui/market-filter])
         pairs (condp = curr-filter
-                ; :bestprice @(r/track best-pairs markets)
                 :favorites @(r/track user-favs markets favs)
                 :market @(r/track pairs-by-market markets market-filter)
                 nil @(r/track all-pairs markets))
@@ -228,7 +227,6 @@
   []
   (fn []
    (let [spin? (-> @db :ui/fetching-init-data?)]
-         ; _ (js/console.log (:markets @db))]
       (if spin?
         [:div.spinner]
         [:div
