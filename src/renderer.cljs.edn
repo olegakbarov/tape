@@ -1,0 +1,4 @@
+{:require  [app.renderer]
+ :init-fns [app.renderer/init]
+ :compiler-options {:target :browser}}
+
