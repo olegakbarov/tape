@@ -80,14 +80,17 @@
   [market pair]
   ;; validate params
   (go (let [endpoint (str (:http-endpoint config) "/tickers")
+            now (.getTime (js/Date.))
+            week (* 60 60 24 7 1000)
             query {
                    "market" market
                    "symbolPair" pair
                    "metric" "last"
-                   "resolution" "24h"
-                   "from" (* 1000000 (- (.getTime (js/Date.)) (* 60 (* 60 (* 7 24)))))
-                   "to" (* 1000000 (.getTime (js/Date.)))}
+                   "resolution" "1h"
+                   "from" (* 1000000 (- now week))
+                   "to" (* 1000000 now)}
             response (<! (http/get endpoint {:with-credentials? false,
                                              :query-params query}))]
         ;; handle 4xx-5xx resp
         (chart-data->db (-> response :body)))))
+

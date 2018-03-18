@@ -5,6 +5,7 @@
             [clojure.test.check.properties :as prop :include-macros true]
             [cljs.spec.test.alpha :as ts]
             [cljs.pprint :refer [pprint]]
+            [reagent.core :as r]
             [klang.core :refer-macros [info! erro!]]
             [app.db :refer [db chart-data]]
             [app.config :refer [config]]))
@@ -88,8 +89,14 @@
 (defn chart-data->db
   [s]
   (let [k (clojure.walk/keywordize-keys s)
-        {:keys [points marketName symbolPair]} k
-        pts' (vec (remove nil? points))]
-    (swap! chart-data assoc-in
-      [(keyword marketName) (keyword symbolPair)]
-      pts')))
+        {:keys [Values]} (first k)
+        [market pair] @(r/cursor db [:ui/current-graph])
+        pts' (->> Values
+                 (remove nil?)
+                 (map (fn [v] (vec [(/ (first v) 1000000) (last v)]))))]
+    (log pts')
+    (swap! chart-data assoc-in [market pair] pts')))
+
+(defn get-chart-points
+  [market pair]
+  (if (and market pair) (get-in @chart-data [market pair])))
