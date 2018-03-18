@@ -32,11 +32,16 @@
               toggle-filterbox
               update-filter-market]]))
 
+;; EVENT HANDLERS ARE COMPOSED OF GRANULAR API CALLS
+
 (defn handle-open-detailed-view
   [m p]
   (fetch-chart-data! m p)
   (set-fetching-chart m p)
   (open-detailed-view m p))
+
+;; ========================================
+;; COMPONENTS
 
 (defn render-row
   [pair]
@@ -88,7 +93,7 @@
                 :market @(r/track pairs-by-market markets market-filter)
                 nil @(r/track all-pairs markets))
         filtered @(r/track pairs-by-query pairs q)
-        filtered (remove nil? filtered)] ;; TOOD investigate
+        filtered (remove nil? filtered)] ;; TODO investigate
       [:div.rows_wrapper
         [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
         [:> js/ReactVirtualized.AutoSizer

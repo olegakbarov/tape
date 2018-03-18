@@ -117,3 +117,17 @@
         ;; handle 4xx-5xx resp
         (chart-data->db (-> response :body)))))
 
+(defn set-initial-data-fetching []
+  (swap! db assoc :ui/fetching-init-data? true))
+
+(defn unset-initial-data-fetching []
+  (swap! db assoc :ui/fetching-init-data? false))
+
+(defn fetch-state!
+  []
+  (go (let [_ (set-initial-data-fetching)
+            endpoint (str (:http-endpoint config) "/events")
+            response (<! (http/get endpoint {:with-credentials? false}))]
+        (state->db (:body response))
+        (unset-initial-data-fetching))))
+

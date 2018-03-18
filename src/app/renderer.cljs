@@ -3,7 +3,7 @@
             [mount.core :as mount]
             [klang.core :refer-macros [info! warn! erro! crit! fata! trac!]]
             [app.db :refer [router]]
-            [app.api :refer [fetch-state!]]
+            [app.actions.api :refer [fetch-state!]]
             [app.actions.storage :refer [read-data-file!]]
             [app.actions.ui :refer [to-screen]]
             [app.eventloop :refer [start-offline-watch-loop!]]
