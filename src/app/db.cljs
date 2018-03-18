@@ -12,7 +12,7 @@
           :ui/filter-q ""
           :ui/filterbox-open? false
           :ui/ntf nil
-          :ui/detailed-view [:bitfinex :OMG-ETH]
+          :ui/detailed-view nil
           :ui/folio-add false
           :ui/folio-add-height nil ;; !!
           :ui/folio-edit nil
@@ -23,7 +23,7 @@
           :ui/alert-edit-height nil ;; !!
           :ui/alerts-add-view false
           :ui/alerts-edit-view nil
-          :ui/current-graph [:bitfinex :OMG-ETH]
+          :ui/current-graph nil
           :form/alerts {:market ""
                         :pair ""
                         :amount ""

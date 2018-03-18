@@ -22,13 +22,21 @@
               user-favs
               pairs-by-query
               pairs-by-market]]
-            [app.actions.api :refer [get-chart-points]]
+            [app.actions.charts :refer [select-chart-points
+                                        set-fetching-chart]]
+            [app.actions.api :refer [fetch-chart-data!]]
             [app.actions.ui :refer
              [toggle-filter
               update-filter-q
               open-detailed-view
               toggle-filterbox
               update-filter-market]]))
+
+(defn handle-open-detailed-view
+  [m p]
+  (fetch-chart-data! m p)
+  (set-fetching-chart m p)
+  (open-detailed-view m p))
 
 (defn render-row
   [pair]
@@ -41,7 +49,7 @@
         [dt-m dt-p] @(r/cursor db [:ui/detailed-view])]
         ;; TODO add timestamp to view
     [:div.row_wrap
-      {:on-click #(open-detailed-view kw-m kw-p)
+      {:on-click #(handle-open-detailed-view kw-m kw-p)
        :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
                                    "rgba(0, 126, 255, 0.04)"
                                    "white")}}
@@ -168,8 +176,7 @@
                 vol-cur]}
         content
         is-fav? (fav? favs [market pair])
-        points @(r/track get-chart-points market pair)
-        _ (js/console.log points)]
+        points @(r/track select-chart-points market pair)]
     (when (:ui/detailed-view @db)
       [:div#detailed
        ; [:div.header

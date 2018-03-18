@@ -1,10 +1,12 @@
 (ns app.actions.api
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]])
   (:require [clojure.walk]
             [clojure.test.check :as tc]
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop :include-macros true]
             [cljs.spec.test.alpha :as ts]
             [cljs.pprint :refer [pprint]]
+            [cljs-http.client :as http]
             [reagent.core :as r]
             [klang.core :refer-macros [info! erro!]]
             [app.db :refer [db chart-data]]
@@ -97,6 +99,21 @@
     (log pts')
     (swap! chart-data assoc-in [market pair] pts')))
 
-(defn get-chart-points
+; https://cryptounicorns.io/api/v1/markets/bitfinex/tickers/eos-btc/last
+(defn fetch-chart-data!
   [market pair]
-  (if (and market pair) (get-in @chart-data [market pair])))
+  (go (let [endpoint (str (:http-endpoint config) "/tickers")
+            now (.getTime (js/Date.))
+            week (* 60 60 24 7 1000)
+            query {
+                   "market" (name market)
+                   "symbolPair" (name pair)
+                   "metric" "last"
+                   "resolution" "1h"
+                   "from" (* 1000000 (- now week))
+                   "to" (* 1000000 now)}
+            response (<! (http/get endpoint {:with-credentials? false,
+                                             :query-params query}))]
+        ;; handle 4xx-5xx resp
+        (chart-data->db (-> response :body)))))
+

@@ -59,6 +59,7 @@
   []
   (reset! n true)
   (info! "Notifs loop started ...")
+  ;; TODO track -> cursor
   (let [has-notifs? (r/track #(-> @db
                                   :user/alerts
                                   count))]
@@ -66,6 +67,7 @@
       (go (while @n
                  (<! (timeout 3000))
                  (let [markets @(r/cursor db [:markets])
+                       ;; TODO track -> cursor
                        notifs @(r/track #(-> @db
                                              :user/notifs
                                              vals))]
