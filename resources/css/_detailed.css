@@ -1,3 +1,32 @@
 #detailed {
   color: black;
+  background-color: white;
+  height: 100%;
+  position: relative;
+}
+
+#detailed > .header {
+  padding: 0 5px 30px;
+  height: 80px;
+}
+
+#detailed > .header > .title {
+  font-size: 20px;
+}
+
+#detailed > .header > .title > span.fav {
+  color: var(--green);
+  border: 1px solid var(--green);
+  font-size: 10px;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+#detailed > .header > .title > span.fav:hover {
+  cursor: pointer;
+}
+
+#detailed > .header > .title > span.fav.faved {
+  background-color: var(--green);
+  color: white;
 }

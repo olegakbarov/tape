@@ -184,16 +184,16 @@
         points @(r/track select-chart-points market pair)]
     (when (:ui/detailed-view @db)
       [:div#detailed
-       ; [:div.header
-       ;  [:div.title
-       ;   pair
-       ;   [:div.fav
-       ;    {:class (if is-fav? "faved" "")
-       ;     :on-click (if is-fav?
-       ;                 #(remove-from-favs [(keyword market) (keyword pair)])
-       ;                 #(add-to-favs [(keyword market) (keyword pair)]))}
-       ;    (if is-fav? "saved" "save")]]
-       ;  [:div.close {:on-click #(close-detailed-view)}]]
+       [:div.header
+        [:div.title
+         pair
+         [:span.fav
+          {:class (if is-fav? "faved" "")
+           :on-click (if is-fav?
+                       #(remove-from-favs [(keyword market) (keyword pair)])
+                       #(add-to-favs [(keyword market) (keyword pair)]))}
+          (if is-fav? "saved" "save")]]
+        [:div.common_close {:on-click #(close-detailed-view)}]]
        ; [:div.market " " market]
        ; [:div.labels
        ;  (for [i ["High" "Low" "Buy" "Sell"]] ^{:key i} [:div.item i])]
@@ -233,3 +233,4 @@
          [filter-box]
          [render-rows]
          [detailed-view]]))))
+

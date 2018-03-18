@@ -40,6 +40,7 @@
                  [cljsjs/chartjs "2.6.0-0"]
                  [cljsjs/highstock "5.0.14-0"]
                  [cljsjs/highcharts-css "5.0.10-0"]
+                 [cljsjs/dygraph "2.1.0-0"]
                  [cljsjs/raven "3.22.1-0"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
