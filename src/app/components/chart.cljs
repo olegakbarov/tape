@@ -23,7 +23,10 @@
         nil
         (str
           "<div id=\"price_at\">"
-          (.format (js/moment x) "hh:mm:ss, MM/DD/YY" " price " y)
+          (when-let [y (.toFixed y 5)]
+            (if (.isNaN js/window y) "n/a" y))
+          " at "
+          (.format (js/moment x) "hh:mm:ss")
           "</div>"))))
 
 (def config

@@ -95,7 +95,6 @@
         [market pair] @(r/cursor db [:ui/current-graph])
         pts' (->> Values
                  (remove nil?)
-                 ;; TODO wtf 1000000000????
                  (map (fn [v] (vec [(/ (first v) 1000000) (last v)]))))]
     (swap! chart-data assoc-in [market pair] pts')))
 
