@@ -60,8 +60,6 @@
 (defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))
 
 (defstate ws-loop :start (listen-ws!) :stop (stop-ws!))
-;; title loop switch
-(defonce t (atom false))
 
 (def timeout-ms 3000)
 

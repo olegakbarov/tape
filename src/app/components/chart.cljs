@@ -19,11 +19,12 @@
               (get "series")
               (aget 0)
               (aget "y"))]
-    ; (js/console.log y)
     (if (nil? x)
         nil
-        (str " " (.format (js/moment x) "MMMM Do, hh:mm:ss")
-                 " price " y))))
+        (str
+          "<div id=\"price_at\">"
+          (.format (js/moment x) "hh:mm:ss, MM/DD/YY" " price " y)
+          "</div>"))))
 
 (def config
   {:axisLabelFontSize 9
@@ -46,5 +47,5 @@
     {:component-did-mount (render-stock-fn data)
      :component-did-update (render-stock-fn data)
      :reagent-render (fn [data] [:div.chart
-                                 {:style {:width "320px"
+                                 {:style {:width "100%"
                                           :height "220px"}}])}))

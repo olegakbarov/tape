@@ -25,6 +25,14 @@ html {
   height: 100%;
 }
 
+:root {
+  --green: #27AE60;
+  --blue: #657AF3;
+  --red: #EB5757;
+  --darkgreen: #22b52e;
+  --gray: #828282;
+}
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -37,7 +45,6 @@ body {
   font-size: 11px;
   line-height: 11px;
   letter-spacing: .5px;
-  /* background-color: #212121; */
   background-color: #fff;
   color: #000;
   position: relative;

@@ -96,7 +96,7 @@
         pts' (->> Values
                  (remove nil?)
                  ;; TODO wtf 1000000000????
-                 (map (fn [v] (vec [(/ (first v) 1000000000) (last v)]))))]
+                 (map (fn [v] (vec [(/ (first v) 1000000) (last v)]))))]
     (swap! chart-data assoc-in [market pair] pts')))
 
 ; https://cryptounicorns.io/api/v1/markets/bitfinex/tickers/eos-btc/last

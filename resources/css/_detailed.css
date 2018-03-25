@@ -2,31 +2,135 @@
   color: black;
   background-color: white;
   height: 100%;
-  position: relative;
 }
 
 #detailed > .header {
-  padding: 0 5px 30px;
-  height: 80px;
+  padding: 0 10px 30px;
+}
+
+#detailed > .header > .common_close {
+  position: ablsolute;
+  right: 10px;
+  top: 10px;
+}
+
+#detailed > .header > .market {
+  font-family: SF UI Display;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 15px;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 15px;
 }
 
 #detailed > .header > .title {
-  font-size: 20px;
+  font-family: SF UI Display;
+  font-size: 26px;
+  line-height: 26px;
+  font-weight: bold;
+  vertical-align: middle;
+  display: inline-block;
+  /* margin-bottom: 15px; */
 }
 
-#detailed > .header > .title > span.fav {
+#detailed > .header > span.fav {
+  font-weight: normal;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 10px;
+
+  font-size: 10px;
+  line-height: 10px;
+  letter-spacing: .1px;
+  text-transform: uppercase;
+
   color: var(--green);
   border: 1px solid var(--green);
-  font-size: 10px;
-  padding: 3px;
+  padding: 4px;
   border-radius: 3px;
+  text-align: center;
+  min-width: 46px;
 }
 
-#detailed > .header > .title > span.fav:hover {
+#detailed > .header > span.fav:hover {
   cursor: pointer;
 }
 
-#detailed > .header > .title > span.fav.faved {
+#detailed > .header > span.fav.faved {
   background-color: var(--green);
   color: white;
 }
+
+#detailed > .header > .last_price {
+  font-family: SF UI Display;
+  font-weight: bold;
+  font-size: 21px;
+  margin-top: 15px;
+}
+
+#detailed > .header > .last_price > .change {
+  margin-left: 5px;
+}
+
+#detailed > .header > .last_price > .change.up {
+  color: var(--green);
+}
+
+#detailed > .header > .last_price > .change.down {
+  color: var(--red);
+}
+
+#detailed > .table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#detailed > .table > .row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#detailed > .table > .row > * {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  font-family: SF UI Text;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 0 10px;
+}
+
+#detailed > .table > .row:hover {
+  background-color: rgba(196, 196, 196, 0.15);
+}
+
+#detailed > .table > .row > *:first-child {
+  text-transform: uppercase;
+}
+
+#detailed > .table > .row > *:last-child {
+  text-align: right;
+  font-weight: normal;
+}
+
+/* hack for chart */
+#price_at {
+  height: 23px;
+  position: absolute;
+  background-color: white;
+  top: -46px;
+  left: 10px;
+  font-family: SF UI Display;
+  font-weight: bold;
+  font-size: 21px;
+  line-height: 21px;
+}
+
+.chart {
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+}
+

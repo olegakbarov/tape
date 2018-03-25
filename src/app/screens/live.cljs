@@ -95,13 +95,13 @@
         filtered @(r/track pairs-by-query pairs q)
         filtered (remove nil? filtered)] ;; TODO investigate
       [:div.rows_wrapper
-        [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
+        ; [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
         [:> js/ReactVirtualized.AutoSizer
          (fn [_]
           (r/as-element
              [:> js/ReactVirtualized.List
                {:height 480
-                :width 320
+                :width (.-innerWidth js/window)
                 :headerHeight 70
                 :rowHeight 45
                 :rowCount (count filtered)
@@ -168,45 +168,42 @@
   (let [[market pair] @(r/cursor db [:ui/detailed-view])
         favs @(r/cursor db [:user :favorites])
         content @(r/cursor db [:markets market pair])
-        {:keys [high
-                low
-                sell
-                buy
-                symbol-pair
-                market
-                timestamp
-                avg
-                last
-                vol
-                vol-cur]}
-        content
+        {:keys [high low sell buy
+                symbol-pair market
+                timestamp changes avg last
+                vol vol-cur]} content
+        {:keys [percent]} changes
         is-fav? (fav? favs [market pair])
         points @(r/track select-chart-points market pair)]
     (when (:ui/detailed-view @db)
       [:div#detailed
        [:div.header
-        [:div.title
-         pair
-         [:span.fav
+        [:div.market market]
+        [:div.title pair]
+        [:span.fav
           {:class (if is-fav? "faved" "")
            :on-click (if is-fav?
                        #(remove-from-favs [(keyword market) (keyword pair)])
                        #(add-to-favs [(keyword market) (keyword pair)]))}
-          (if is-fav? "saved" "save")]]
-        [:div.common_close {:on-click #(close-detailed-view)}]]
-       ; [:div.market " " market]
-       ; [:div.labels
-       ;  (for [i ["High" "Low" "Buy" "Sell"]] ^{:key i} [:div.item i])]
-       ; [:div.prices.last
-       ;  (for [i [high low buy sell]]
-       ;    ^{:key (* 1000 (.random js/Math i))} ;; nothing to be proud about here
-       ;    [:div.item (js/parseFloat i)])]
+          (if is-fav? "saved" "save")]
+        [:div.common_close.left_top {:on-click #(close-detailed-view)}]
+        [:div.last_price
+         last
+         [:span.change {:class (if (pos? percent) "up" "down")}
+          (if percent (str
+                        (when (pos? percent) "+")
+                        (.toFixed percent 2) "%") "")]]]
        (if points
          [Chart points]
-         [:div.spinner])])))
+         [:div.spinner])
+       [:div.table
+        (for [i [["High" high] ["Low" low] ["Buy" buy] ["Sell" sell]]]
+          ^{:key (first i)}
+          [:div.row
+            [:div.cell (first i)]
+            [:div.cell (clojure.core/last i)]])]])))
 
-
-(def height 400)
+(def height 515)
 
 (def animated-comp
   (r/reactify-component (fn [{c :children}]
