@@ -9,8 +9,9 @@
             [app.db :refer [db]]
             [app.components.ui :as ui]
             [app.motion :refer [Motion spring presets]]
-            [app.logic.curr :refer [get-market-names
-                                    get-crypto-currs]]
+            [app.logic.curr :refer
+             [get-market-names
+              get-crypto-currs]]
             [app.logic.validation :refer
              [str->amount]]
             [app.actions.ui :refer
@@ -35,9 +36,7 @@
                                :ui/folio-edit))
   (close-every-portfolio-view))
 
-(defn handle-close []
-  (close-every-portfolio-view)
-  (clear-portfolio-form))
+(defn handle-close [] (close-every-portfolio-view) (clear-portfolio-form))
 
 (defn handle-change
   [e]
@@ -48,14 +47,16 @@
 
 (defn handle-submit
   []
-  (let [a (-> @db :form/portfolio)]
+  (let [a (-> @db
+              :form/portfolio)]
     (do (create-portfolio-record a)
         (close-every-portfolio-view)
         (clear-portfolio-form))))
 
 (defn handle-edit
   []
-  (when-let [a (-> @db :form/portfolio)]
+  (when-let [a (-> @db
+                   :form/portfolio)]
     (do (update-portfolio-record a)
         (close-every-portfolio-view)
         (clear-portfolio-form))))
@@ -69,9 +70,7 @@
   (let [folio @(r/cursor db [:user :portfolio])
         worth (get-total-worth folio)
         w (.toFixed worth 2)]
-    (if (pos? w)
-        [:div.total_worth (str "$ " w)]
-        [:div])))
+    (if (pos? w) [:div.total_worth (str "$ " w)] [:div])))
 
 (defn portfolio-list
   []
@@ -83,8 +82,7 @@
          (let [{:keys [currency amount market id added]} row]
            ^{:key id}
            [:div.row_wrap
-            ^{:key "currency"}
-            {:on-click #(toggle-edit-portfolio-view id)}
+            ^{:key "currency"} {:on-click #(toggle-edit-portfolio-view id)}
             [:div.left_cell
              [:div.title (str (name currency) " " amount)]
              [:div.market market]]
@@ -92,9 +90,7 @@
             [:div.right_cell
              [:div.actions
               [:div.ts
-                (.format
-                  (js/moment added)
-                  "hh:mm:ss MM/DD/YYYY")]]]])))]))
+               (.format (js/moment added) "hh:mm:ss MM/DD/YYYY")]]]])))]))
 
 (defn select-market
   []
@@ -103,8 +99,7 @@
         opts (get-market-names m)
         on-change #(update-portfolio-form
                     :market
-                    (if % (aget % "value")
-                          (update-portfolio-form :market "")))]
+                    (if % (aget % "value") (update-portfolio-form :market "")))]
     [:>
      js/window.Select
      {:value v
@@ -181,9 +176,7 @@
     (let [open? @(r/cursor db [:ui/folio-edit])]
       [:div.motion_wrapper
        [Motion
-        {:style {:y (spring (if open?
-                              (- (:ui/folio-edit-height @db))
-                              0))}}
+        {:style {:y (spring (if open? (- (:ui/folio-edit-height @db)) 0))}}
         (fn [y] (r/create-element animated-view-edit #js {} y))]])))
 
 (def animated-view-add
@@ -202,15 +195,12 @@
     (let [open? @(r/cursor db [:ui/folio-add])]
       [:div.motion_wrapper
        [Motion
-        {:style {:y (spring (if open?
-                              (- (:ui/folio-add-height @db))
-                              0))}}
+        {:style {:y (spring (if open? (- (:ui/folio-add-height @db)) 0))}}
         (fn [y] (r/create-element animated-view-add #js {} y))]])))
 
 (defn portfolio-toolbar
   [s]
-  (let [open? (not (or (:ui/folio-edit @db)
-                       (:ui/folio-add @db)))]
+  (let [open? (not (or (:ui/folio-edit @db) (:ui/folio-add @db)))]
     (when open?
       [:div.portfolio_toolbar
        [:div

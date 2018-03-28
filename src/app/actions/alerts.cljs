@@ -11,11 +11,12 @@
             [klang.core :refer-macros [info! erro!]]))
 
 (when (= :dev (:env config))
-  (do (info! "[action.alerts] Spec validation activated...")
-      (ts/instrument)))
+  (do (info! "[action.alerts] Spec validation activated...") (ts/instrument)))
 
 (s/fdef render-alert!
-  :args (s/cat :k keyword? :v string?))
+ :args
+ (s/cat :k keyword?
+        :v string?))
 
 (defn render-alert!
   [title text]
@@ -29,15 +30,14 @@
 
 (s/def ::alert
   ;; required and optional unnamespaced keys
-  (s/keys :req-un [::market ::pair ::amount ::archived]
-          :opt-un [::id]))
+  (s/keys :req-un [::market ::pair ::amount ::archived] :opt-un [::id]))
 
 (s/valid? ::alert
-  {:market :bitfinex
-   :pair :XRP-USD
-   :amount "1.33"
-   :id "bhrnck4b6ekv9b2k0krj4nj027"
-   :archived false})
+          {:market :bitfinex
+           :pair :XRP-USD
+           :amount "1.33"
+           :id "bhrnck4b6ekv9b2k0krj4nj027"
+           :archived false})
 
 ; TODO: this accepts alert from ui, not keywordized
 ; (s/fdef create-alert-record
@@ -61,7 +61,9 @@
         (persist-user-currents!))))
 
 (s/fdef update-alert-record
-  :args (s/cat :updated ::alert))
+ :args
+ (s/cat :updated
+        ::alert))
 
 (defn update-alert-record
   [updated]
@@ -69,15 +71,18 @@
     (swap! db update-in [:user :alerts id] merge updated)))
 
 (s/fdef remove-alert-record
-  :args (s/cat :id ::id))
+ :args
+ (s/cat :id
+        ::id))
 
 (defn remove-alert-record
   [id]
-  (do (swap! db update-in [:user :alerts] dissoc id)
-      (persist-user-currents!)))
+  (do (swap! db update-in [:user :alerts] dissoc id) (persist-user-currents!)))
 
 (s/fdef alert->archived
-  :args (s/cat :id ::id))
+ :args
+ (s/cat :id
+        ::id))
 
 (defn alert->archived
   [id]

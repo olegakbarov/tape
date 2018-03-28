@@ -8,17 +8,16 @@
   "Returns lowest `:last` prices across all markets"
   [markets]
   (let [market-items (vals markets)
-        res (reduce
-              (fn [acc item]
-                 (if-let [v (get acc (:symbol-pair item))]
-                    (if (< (:last item) (:last v))
-                      acc
-                      (assoc acc (:symbol-pair item) item))
-                    (assoc acc (:symbol-pair item) item)))
-              {}
-              ;; flat vector of all pairs
-              (mapcat vals (vals markets)))]
-      res))
+        res (reduce (fn [acc item]
+                      (if-let [v (get acc (:symbol-pair item))]
+                        (if (< (:last item) (:last v))
+                          acc
+                          (assoc acc (:symbol-pair item) item))
+                        (assoc acc (:symbol-pair item) item)))
+                    {}
+                    ;; flat vector of all pairs
+                    (mapcat vals (vals markets)))]
+    res))
 
 (defn best-pairs
   "Returns pairs with lowest prices across all markets"
@@ -45,13 +44,12 @@
 (defn get-all-currs
   "Returns all currencies across all markets"
   [markets]
-  (set (flatten (map
-                  #(flatten (clojure.string/split % "-"))
-                  (->> markets
-                       vals
-                       (map keys)
-                       flatten
-                       (map name))))))
+  (set (flatten (map #(flatten (clojure.string/split % "-"))
+                     (->> markets
+                          vals
+                          (map keys)
+                          flatten
+                          (map name))))))
 
 (defn get-all-pair-names
   "Returns unique currency pairs"
@@ -81,29 +79,21 @@
   [markets favs]
   (if (empty? markets)
     []
-    (reduce
-      (fn [acc tupl]
-        (conj acc (get-in markets tupl)))
-      []
-      favs)))
+    (reduce (fn [acc tupl] (conj acc (get-in markets tupl))) [] favs)))
 
 (defn pairs-by-query
   "Returns pairs collection only with items where :market
   or :symbol-pair fields matches the substring `q`"
   [pairs q]
   (let [lc #(.toLowerCase %)
-        q (as-> q $
-                (.toLowerCase $)
-                (apply str (re-seq #"[a-zA-Z0-9]" $)))
+        q (as-> q $ (.toLowerCase $) (apply str (re-seq #"[a-zA-Z0-9]" $)))
         find-in (fn [ticker q kw]
-                 (fn [ticker q kw]
-                  (let [v (get ticker kw)]
-                   (if-not v
-                    nil
-                    (re-find (re-pattern q) v)))))]
-    (filter
-      (fn [item] (or (find-in item q :market) (find-in item q :symbol-pair)))
-      pairs)))
+                  (fn [ticker q kw]
+                    (let [v (get ticker kw)]
+                      (if-not v nil (re-find (re-pattern q) v)))))]
+    (filter (fn [item]
+              (or (find-in item q :market) (find-in item q :symbol-pair)))
+            pairs)))
 
 (defn- to-dollar
   "Returns dollar price of curr on this market"
@@ -127,4 +117,3 @@
   (-> markets
       (get mname)
       vals))
-

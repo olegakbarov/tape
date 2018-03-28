@@ -7,6 +7,4 @@
   [market pair]
   (if (and market pair) (get-in @chart-data [market pair])))
 
-(defn set-fetching-chart [m p]
-  (swap! db assoc :ui/current-graph [m p]))
-
+(defn set-fetching-chart [m p] (swap! db assoc :ui/current-graph [m p]))

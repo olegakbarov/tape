@@ -53,8 +53,7 @@
   (go (let [endpoint (:ws-endpoint config)
             stream (create-ws-conn!)]
         (go-loop []
-                 (let [msg (<! stream)]
-                   (evt->db (js->clj (js/JSON.parse msg))))
+                 (let [msg (<! stream)] (evt->db (js->clj (js/JSON.parse msg))))
                  (recur)))))
 
 (defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))
@@ -73,13 +72,9 @@
                    btc (js/parseInt (best-pairs m :BTC-USD))]
                (set-title! btc)))))
 
-(defn stop-title-loop! []
-  (info! "Stopping title loop...")
-  (reset! t false))
+(defn stop-title-loop! [] (info! "Stopping title loop...") (reset! t false))
 
-(defstate title-loop
-  :start (start-title-loop!)
-  :stop (stop-title-loop!))
+(defstate title-loop :start (start-title-loop!) :stop (stop-title-loop!))
 
 ;; notifs loop switch
 (defonce n (atom false))
@@ -122,15 +117,11 @@
                                              vals))]
                    (dispatch-notif? markets notifs)))))))
 
-(defn stop-notifs-loop! []
-  (reset! n false)
-  (info! "Stopped notifs loop."))
+(defn stop-notifs-loop! [] (reset! n false) (info! "Stopped notifs loop."))
 
 (defn start-offline-watch-loop!
   [online-cb offline-cb]
   (.addEventListener js/window "offline" #(offline-cb))
   (.addEventListener js/window "online" #(online-cb)))
 
-(defstate notifs-loop
-  :start (start-notifs-loop!)
-  :stop (stop-notifs-loop!))
+(defstate notifs-loop :start (start-notifs-loop!) :stop (stop-notifs-loop!))

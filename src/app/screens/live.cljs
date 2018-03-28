@@ -22,8 +22,9 @@
               user-favs
               pairs-by-query
               pairs-by-market]]
-            [app.actions.charts :refer [select-chart-points
-                                        set-fetching-chart]]
+            [app.actions.charts :refer
+             [select-chart-points
+              set-fetching-chart]]
             [app.actions.api :refer [fetch-chart-data!]]
             [app.actions.ui :refer
              [toggle-filter
@@ -52,12 +53,12 @@
         swing-class (if percent (if (pos? percent) "up" "down") "")
         [kw-m kw-p] (mapv keyword [market symbol-pair])
         [dt-m dt-p] @(r/cursor db [:ui/detailed-view])]
-        ;; TODO add timestamp to view
+    ;; TODO add timestamp to view
     [:div.row_wrap
-      {:on-click #(handle-open-detailed-view kw-m kw-p)
-       :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
-                                   "rgba(0, 126, 255, 0.04)"
-                                   "white")}}
+     {:on-click #(handle-open-detailed-view kw-m kw-p)
+      :style {:background-color (if (and (= dt-m kw-m) (= dt-p kw-p))
+                                  "rgba(0, 126, 255, 0.04)"
+                                  "white")}}
      [:div.left_cell
       [:div.title symbol-pair]
       [:div.market market]]
@@ -65,8 +66,11 @@
       [:span last]
       [:div.swing {:class swing-class}
        (if (and changes amount percent)
-         (str (if (pos? percent) "+" "") percent  "% "
-              (if (pos? amount) "+" "") amount)
+         (str (if (pos? percent) "+" "")
+              percent
+              "% "
+              (if (pos? amount) "+" "")
+              amount)
          "n/a")]]]))
 
 (defn keyword<->str
@@ -82,7 +86,8 @@
       :market "Market"
       nil (erro! (str "Not a string/keyword " v)))))
 
-(defn render-rows []
+(defn render-rows
+  []
   (let [markets @(r/cursor db [:markets])
         favs @(r/cursor db [:user :favorites])
         curr-filter @(r/cursor db [:ui/current-filter])
@@ -94,25 +99,27 @@
                 nil @(r/track all-pairs markets))
         filtered @(r/track pairs-by-query pairs q)
         filtered (remove nil? filtered)] ;; TODO investigate
-      [:div.rows_wrapper
-        ; [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
-        [:> js/ReactVirtualized.AutoSizer
-         (fn [_]
-          (r/as-element
-             [:> js/ReactVirtualized.List
-               {:height 480
-                :width (.-innerWidth js/window)
-                :headerHeight 70
-                :rowHeight 45
-                :rowCount (count filtered)
-                :rowRenderer
-                  (fn [x]
-                   (let [index (aget x "index")]
-                     (r/create-element
-                      "div"
-                      #js{:style (aget x "style")
-                          :key (aget x "key")}
-                      (r/as-element [render-row (get (vec filtered) index)]))))}]))]]))
+    [:div.rows_wrapper
+     ; [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
+     [:> js/ReactVirtualized.AutoSizer
+      (fn [_]
+        (r/as-element
+         [:> js/ReactVirtualized.List
+          {:height 480
+           :width (.-innerWidth js/window)
+           :headerHeight 70
+           :rowHeight 45
+           :rowCount (count filtered)
+           :rowRenderer (fn [x]
+                          (let [index (aget x "index")]
+                            (r/create-element
+                             "div"
+                             #js
+                              {:style (aget x "style")
+                               :key (aget x "key")}
+                             (r/as-element [render-row
+                                            (get (vec filtered)
+                                                 index)]))))}]))]]))
 
 (defn select-q
   []
@@ -148,7 +155,9 @@
         open? @(r/cursor db [:ui/filterbox-open?])]
     [:div#filter_box
      [ui/text-input
-      {:on-change #(update-filter-q (-> % .-target .-value))
+      {:on-change #(update-filter-q (-> %
+                                        .-target
+                                        .-value))
        :value @(r/cursor db [:ui/filter-q])
        :label "search"}]
      [ui/input-wrap "Filter" [select-q {:key "filter"}]]
@@ -171,7 +180,8 @@
         {:keys [high low sell buy
                 symbol-pair market
                 timestamp changes avg last
-                vol vol-cur]} content
+                vol vol-cur]}
+        content
         {:keys [percent]} changes
         is-fav? (fav? favs [market pair])
         points @(r/track select-chart-points market pair)]
@@ -181,27 +191,25 @@
         [:div.market market]
         [:div.title pair]
         [:span.fav
-          {:class (if is-fav? "faved" "")
-           :on-click (if is-fav?
-                       #(remove-from-favs [(keyword market) (keyword pair)])
-                       #(add-to-favs [(keyword market) (keyword pair)]))}
-          (if is-fav? "saved" "save")]
+         {:class (if is-fav? "faved" "")
+          :on-click (if is-fav?
+                      #(remove-from-favs [(keyword market) (keyword pair)])
+                      #(add-to-favs [(keyword market) (keyword pair)]))}
+         (if is-fav? "saved" "save")]
         [:div.common_close.left_top {:on-click #(close-detailed-view)}]
         [:div.last_price
          last
          [:span.change {:class (if (pos? percent) "up" "down")}
-          (if percent (str
-                        (when (pos? percent) "+")
-                        (.toFixed percent 2) "%") "")]]]
-       (if points
-         [Chart points]
-         [:div.spinner])
+          (if percent
+            (str (when (pos? percent) "+") (.toFixed percent 2) "%")
+            "")]]]
+       (if points [Chart points] [:div.spinner])
        [:div.table
         (for [i [["High" high] ["Low" low] ["Buy" buy] ["Sell" sell]]]
           ^{:key (first i)}
           [:div.row
-            [:div.cell (first i)]
-            [:div.cell (clojure.core/last i)]])]])))
+           [:div.cell (first i)]
+           [:div.cell (clojure.core/last i)]])]])))
 
 (def height 515)
 
@@ -222,7 +230,7 @@
 (defn live-board
   []
   (fn []
-   (let [spin? @(r/cursor db [:ui/fetching-init-data?])]
+    (let [spin? @(r/cursor db [:ui/fetching-init-data?])]
       (if spin?
         [:div.spinner]
         [:div
@@ -230,4 +238,3 @@
          [filter-box]
          [render-rows]
          [detailed-view]]))))
-

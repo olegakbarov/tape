@@ -41,4 +41,3 @@
   [id]
   (do (swap! db update-in [:user :portfolio] dissoc id)
       (persist-user-currents!)))
-

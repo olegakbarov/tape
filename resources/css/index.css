@@ -10,6 +10,7 @@
 @import url("filterbox.css");
 @import url("portfolio.css");
 @import url("alerts.css");
+@import url("settings.css");
 
 html {
   height: 100%;
@@ -31,6 +32,7 @@ html {
   --red: #EB5757;
   --darkgreen: #22b52e;
   --gray: #828282;
+  --lightgray: rgba(189, 189, 189, 0.2);
 }
 
 ::-webkit-scrollbar {
@@ -60,5 +62,59 @@ body {
 #wrapper {
   margin-top: 70px;
   position: relative;
+}
+
+#settings {
+  margin-top: 70px;
+  position: relative;
+}
+
+#settings > .cell_group {
+  padding-top: 20px;
+}
+
+#settings > .group_title {
+  font-size: 16px;
+  line-height: 16px;
+  padding: 20px 10px 0;
+  font-weight: bold;
+  font-family: SF UI Display, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#settings > .cell_group > .cell {
+  width: 100%;
+  border-top: 1px solid var(--lightgray);
+  display: flex;
+}
+
+#settings > .cell_group > .cell:last-child {
+  border-bottom: 1px solid var(--lightgray);
+}
+
+#settings > .cell_group > .cell > * {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  width: 50%;
+  font-family: SF UI Text, -apple-system, BlinkMacSystemFont, sans-serif;;
+  font-size: 14px;
+}
+
+#settings > .cell_group > .cell > .left {
+  border-top: 1px solid var(--lightgray);
+  padding-left: 10px;
+}
+
+#settings > .cell_group > .cell > .left:hover {}
+
+#settings > .cell_group > .cell > .left.link:hover {
+  color: var(--blue);
+  cursor: pointer;
+}
+
+#settings > .cell_group > .cell > .right{
+  padding-right: 10px;
+  border-top: 1px solid var(--lightgray);
+  justify-content: flex-end;
 }
 

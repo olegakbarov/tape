@@ -8,10 +8,12 @@
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
             [app.components.ui :as ui]
-            [app.actions.form :refer [update-alert-form
-                                      clear-alert-form]]
-            [app.logic.curr :refer [get-market-names
-                                    get-all-pair-names]]
+            [app.actions.form :refer
+             [update-alert-form
+              clear-alert-form]]
+            [app.logic.curr :refer
+             [get-market-names
+              get-all-pair-names]]
             [app.logic.validation :refer [str->amount]]
             [app.actions.form :refer
              [update-alert-form
@@ -35,9 +37,7 @@
                            :ui/alert-edit))
   (close-every-alert-view))
 
-(defn handle-close []
-  (close-every-alert-view)
-  (clear-alert-form))
+(defn handle-close [] (close-every-alert-view) (clear-alert-form))
 
 (defn handle-change
   [e]
@@ -48,18 +48,15 @@
 
 (defn handle-submit
   []
-  (let [a (-> @db :form/alerts)]
-    (do (create-alert-record a)
-        (close-every-alert-view)
-        (clear-alert-form))))
+  (let [a (-> @db
+              :form/alerts)]
+    (do (create-alert-record a) (close-every-alert-view) (clear-alert-form))))
 
 (defn handle-update
   []
-  (when-let [a (-> @db :form/alerts)]
-    (do
-     (update-alert-record a)
-     (clear-alert-form)
-     (close-every-alert-view))))
+  (when-let [a (-> @db
+                   :form/alerts)]
+    (do (update-alert-record a) (clear-alert-form) (close-every-alert-view))))
 
 ;; ========================================
 ;; COMPONENTS
@@ -119,9 +116,7 @@
 (defn alerts-list
   []
   (let [alerts @(r/cursor db [:user :alerts])]
-    (if-not (pos? (count alerts))
-            [ui/empty-list "alerts"]
-            [alert-items])))
+    (if-not (pos? (count alerts)) [ui/empty-list "alerts"] [alert-items])))
 
 (defn edit-item
   []
@@ -177,9 +172,7 @@
     (let [open? @(r/cursor db [:ui/alert-edit])]
       [:div.motion_wrapper
        [Motion
-        {:style {:y (spring (if open?
-                              (- (:ui/alert-edit-height @db))
-                              0))}}
+        {:style {:y (spring (if open? (- (:ui/alert-edit-height @db)) 0))}}
         (fn [y] (r/create-element animated-view-edit #js {} y))]])))
 
 (def animated-view-add
@@ -198,15 +191,12 @@
     (let [open? @(r/cursor db [:ui/alert-add])]
       [:div.motion_wrapper
        [Motion
-        {:style {:y (spring (if open?
-                              (- (:ui/alert-add-height @db))
-                              0))}}
+        {:style {:y (spring (if open? (- (:ui/alert-add-height @db)) 0))}}
         (fn [y] (r/create-element animated-view-add #js {} y))]])))
 
 (defn alerts-toolbar
   [s]
-  (let [open? (not (or (:ui/alerts-edit @db)
-                       (:ui/alerts-add @db)))]
+  (let [open? (not (or (:ui/alerts-edit @db) (:ui/alerts-add @db)))]
     (when open?
       [:div.portfolio_toolbar
        [:div

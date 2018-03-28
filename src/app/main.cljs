@@ -9,6 +9,10 @@
 (def Tray (.-Tray electron))
 (def ipc (.-ipcMain electron))
 
+(def shell (.-shell electron))
+
+(defn open-in-browser [_ link] (.openExternal shell link))
+
 (goog-define dev? true)
 
 (def window (atom nil))
@@ -50,7 +54,7 @@
   (BrowserWindow. #js
                    {:x 900
                     :y 30
-                    :width 321
+                    :width 320
                     :height 800
                     :show true
                     :titleBarStyle "hidden"
@@ -87,4 +91,5 @@
       (.on app "browser-window-created" (fn [e w] (.setMenu w (clj->js nil)))))
   (.on ipc "show-window" show-window)
   (.on ipc "set-title" set-title!)
+  (.on ipc "open-external" open-in-browser)
   (set! *main-cli-fn* (fn [] nil)))

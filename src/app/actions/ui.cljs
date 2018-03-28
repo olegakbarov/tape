@@ -27,19 +27,17 @@
 
 (defn toggle-filter
   [filter-str]
-  (reset! db
-    (merge @db
-       {:ui/detailed-view nil
-        :ui/current-filter (if (= filter-str (:ui/current-filter @db))
-                               nil
-                               filter-str)})))
+  (reset!
+   db
+   (merge @db
+          {:ui/detailed-view nil
+           :ui/current-filter
+           (if (= filter-str (:ui/current-filter @db)) nil filter-str)})))
 
 
-(defn update-filter-q [q]
-  (swap! db assoc-in [:ui/filter-q] q))
+(defn update-filter-q [q] (swap! db assoc-in [:ui/filter-q] q))
 
-(defn update-filter-market [m]
-  (swap! db assoc-in [:ui/market-filter] m))
+(defn update-filter-market [m] (swap! db assoc-in [:ui/market-filter] m))
 
 (defn toggle-filterbox
   []
@@ -57,35 +55,32 @@
                                                  :user
                                                  :portfolio
                                                  (get id))
-         new-m  {:market (name market)
-                 :currency (name currency)
-                 :amount amount
-                 :id id}]
+         new-m {:market (name market)
+                :currency (name currency)
+                :amount amount
+                :id id}]
      (reset! db
-       (merge @db
-         {:ui/folio-edit id
-          :form/portfolio new-m})))))
+             (merge @db
+                    {:ui/folio-edit id
+                     :form/portfolio new-m})))))
 
 
-(defn open-add-portfolio-view
-  []
-  (swap! db assoc :ui/folio-add true))
+(defn open-add-portfolio-view [] (swap! db assoc :ui/folio-add true))
 
 
-(defn close-add-portfolio-view
-  []
-  (swap! db assoc :ui/folio-add true))
+(defn close-add-portfolio-view [] (swap! db assoc :ui/folio-add true))
 
 (defn close-every-portfolio-view
   []
-  (let [folio (-> @db :form/portfolio)]
-   (reset! db
-    (merge @db
-      {:ui/folio-add false
-       :ui/folio-edit nil
-       :form/portfolio {:market ""
-                        :currency ""
-                        :amount ""}}))))
+  (let [folio (-> @db
+                  :form/portfolio)]
+    (reset! db
+            (merge @db
+                   {:ui/folio-add false
+                    :ui/folio-edit nil
+                    :form/portfolio {:market ""
+                                     :currency ""
+                                     :amount ""}}))))
 
 ;; ALERTS
 
@@ -99,38 +94,36 @@
                :alerts
                (get id))
          {:keys [market pair amount]} a
-         new-alert  {:market market
-                     :pair pair
-                     :amount amount
-                     :repeat (:repeat a)
-                     :id id}]
-     (reset! db (merge @db
-                 {:ui/alert-edit id
-                  :form/alerts new-alert})))))
+         new-alert {:market market
+                    :pair pair
+                    :amount amount
+                    :repeat (:repeat a)
+                    :id id}]
+     (reset! db
+             (merge @db
+                    {:ui/alert-edit id
+                     :form/alerts new-alert})))))
 
 
-(defn open-add-alert-view
-  []
-  (swap! db assoc :ui/alert-add true))
+(defn open-add-alert-view [] (swap! db assoc :ui/alert-add true))
 
 
-(defn close-add-alert-view
-  []
-  (swap! db assoc :ui/alert-add true))
+(defn close-add-alert-view [] (swap! db assoc :ui/alert-add true))
 
 
 (defn close-every-alert-view
   []
-  (let [old-alert (-> @db :form/alert)
+  (let [old-alert (-> @db
+                      :form/alert)
         new-alert (merge old-alert
-                    {:market ""
-                     :pair ""
-                     :amount ""})]
+                         {:market ""
+                          :pair ""
+                          :amount ""})]
     (reset! db
-     (merge @db
-      {:ui/alert-add false
-       :ui/alert-edit nil
-       :form/alert new-alert}))))
+            (merge @db
+                   {:ui/alert-add false
+                    :ui/alert-edit nil
+                    :form/alert new-alert}))))
 
 
 (defn to-screen
@@ -139,6 +132,3 @@
       (close-every-portfolio-view)
       (close-every-alert-view)
       (swap! router assoc-in [:screen] screen)))
-
-
-
