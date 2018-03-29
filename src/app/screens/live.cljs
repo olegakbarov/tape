@@ -98,14 +98,17 @@
                 :market @(r/track pairs-by-market markets market-filter)
                 nil @(r/track all-pairs markets))
         filtered @(r/track pairs-by-query pairs q)
-        filtered (remove nil? filtered)] ;; TODO investigate
+        filtered (remove nil? filtered) ;; TODO investigate
+        ;; TODO not updated on window resize, but in prod we disable resize, lol
+        height (- (.-innerHeight js/window) 275)]
+    (js/console.log height)
     [:div.rows_wrapper
      ; [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
      [:> js/ReactVirtualized.AutoSizer
       (fn [_]
         (r/as-element
          [:> js/ReactVirtualized.List
-          {:height 480
+          {:height height
            :width (.-innerWidth js/window)
            :headerHeight 70
            :rowHeight 45
@@ -211,8 +214,6 @@
            [:div.cell (first i)]
            [:div.cell (clojure.core/last i)]])]])))
 
-(def height 515)
-
 (def animated-comp
   (r/reactify-component (fn [{c :children}]
                           (let [y (gobj/get c "y")]
@@ -222,10 +223,11 @@
 
 (defn detailed-view
   []
-  (fn [] [:div.motion_wrapper
-          [Motion
-           {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
-           (fn [x] (r/create-element animated-comp #js {} x))]]))
+  (let [height 515]
+    (fn [] [:div.motion_wrapper
+            [Motion
+             {:style {:y (spring (if (:ui/detailed-view @db) (- height) 0))}}
+             (fn [x] (r/create-element animated-comp #js {} x))]])))
 
 (defn live-board
   []
