@@ -53,7 +53,9 @@
   (go (let [endpoint (:ws-endpoint config)
             stream (create-ws-conn!)]
         (go-loop []
-                 (let [msg (<! stream)] (evt->db (js->clj (js/JSON.parse msg))))
+                 (let [msg (<! stream)]
+                   ; (evt->db (js->clj (js/JSON.parse msg))))
+                  (js/console.log msg))
                  (recur)))))
 
 (defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))

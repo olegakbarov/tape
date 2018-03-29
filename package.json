@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/cryptounicorns/desktop#readme",
   "dependencies": {
-    "electron": "1.8.2-beta5",
+    "@ibm/plex": "^1.0.1",
+    "electron": "^1.8.4",
     "electron-packager": "^8.7.2",
     "highcharts": "^6.0.6"
   }

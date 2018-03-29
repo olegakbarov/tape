@@ -1,0 +1,55 @@
+#settings {
+  margin-top: 70px;
+  position: relative;
+}
+
+#settings > .cell_group {
+  padding-top: 20px;
+}
+
+#settings > .group_title {
+  font-size: 16px;
+  line-height: 16px;
+  padding: 20px 10px 0;
+  font-weight: bold;
+  font-family: 'plex bold';
+}
+
+#settings > .cell_group > .cell {
+  width: 100%;
+  border-top: 1px solid var(--lightgray);
+  display: flex;
+}
+
+#settings > .cell_group > .cell:last-child {
+  border-bottom: 1px solid var(--lightgray);
+}
+
+#settings > .cell_group > .cell > * {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  width: 50%;
+  font-family: plex;
+  font-size: 14px;
+}
+
+#settings > .cell_group > .cell > .left {
+  border-top: 1px solid var(--lightgray);
+  padding-left: 10px;
+}
+
+#settings > .cell_group > .cell > .left:hover {}
+
+#settings > .cell_group > .cell > .left.link:hover {
+  color: var(--blue);
+  cursor: pointer;
+}
+
+#settings > .cell_group > .cell > .right{
+  padding-right: 10px;
+  border-top: 1px solid var(--lightgray);
+  justify-content: flex-end;
+}
+
+
