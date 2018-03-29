@@ -13,6 +13,7 @@
                   :ui/filterbox-open? false
                   :ui/ntf nil
                   :ui/detailed-view nil
+                  :ui/window-size [320 720]
                   :ui/folio-add false
                   :ui/folio-add-height nil ;; !!
                   :ui/folio-edit nil

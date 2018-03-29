@@ -53,10 +53,13 @@
   (go (let [endpoint (:ws-endpoint config)
             stream (create-ws-conn!)]
         (go-loop []
-                 (let [msg (<! stream)]
-                   ; (evt->db (js->clj (js/JSON.parse msg))))
-                  (js/console.log msg))
-                 (recur)))))
+          (let [msg (<! stream)]
+            (try
+              (evt->db (js->clj (js/JSON.parse msg)))
+              (catch :default e))
+                ;; TODO log and report
+                ;(js/console.log e))))
+            (recur))))))
 
 (defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))
 
@@ -71,8 +74,8 @@
   (go (while @t
              (<! (timeout timeout-ms))
              (let [m @(r/cursor db [:markets])
-                   btc (js/parseInt (best-pairs m :BTC-USD))]
-               (set-title! btc)))))
+                   btc (js/parseInt (best-pairs m :BTC-USD))]))))
+               ;(set-title! btc)))))
 
 (defn stop-title-loop! [] (info! "Stopping title loop...") (reset! t false))
 

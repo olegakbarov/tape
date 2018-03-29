@@ -31,7 +31,8 @@
               update-filter-q
               open-detailed-view
               toggle-filterbox
-              update-filter-market]]))
+              update-filter-market
+              update-window-size]]))
 
 ;; EVENT HANDLERS ARE COMPOSED OF GRANULAR API CALLS
 
@@ -99,30 +100,34 @@
                 nil @(r/track all-pairs markets))
         filtered @(r/track pairs-by-query pairs q)
         filtered (remove nil? filtered) ;; TODO investigate
-        ;; TODO not updated on window resize, but in prod we disable resize, lol
-        height (- (.-innerHeight js/window) 275)]
+        [ww wh] @(r/cursor db [:ui/window-size])
+        height (- wh 275)
+        resize-handler #(update-window-size (.-innerWidth js/window)
+                                            (.-innerHeight js/window))]
     (js/console.log height)
-    [:div.rows_wrapper
-     ; [:h1 {:style {:padding "0 10px"}} (str "Total pairs " (count filtered))]
-     [:> js/ReactVirtualized.AutoSizer
-      (fn [_]
-        (r/as-element
-         [:> js/ReactVirtualized.List
-          {:height height
-           :width (.-innerWidth js/window)
-           :headerHeight 70
-           :rowHeight 45
-           :rowCount (count filtered)
-           :rowRenderer (fn [x]
-                          (let [index (aget x "index")]
-                            (r/create-element
-                             "div"
-                             #js
-                              {:style (aget x "style")
-                               :key (aget x "key")}
-                             (r/as-element [render-row
-                                            (get (vec filtered)
-                                                 index)]))))}]))]]))
+    (r/with-let [_ (js/window.addEventListener "resize" resize-handler)]
+      [:div.rows_wrapper
+       [:> js/ReactVirtualized.AutoSizer
+        (fn [_]
+          (r/as-element
+           [:> js/ReactVirtualized.List
+            {:height height
+             :width ww
+             :headerHeight 70
+             :rowHeight 45
+             :rowCount (count filtered)
+             :rowRenderer (fn [x]
+                            (let [index (aget x "index")]
+                              (r/create-element
+                               "div"
+                               #js
+                                {:style (aget x "style")
+                                 :key (aget x "key")}
+                               (r/as-element [render-row
+                                              (get (vec filtered)
+                                                   index)]))))}]))]]
+      (finally
+        (js/window.removeEventListener "resize" resize-handler)))))
 
 (defn select-q
   []

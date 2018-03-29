@@ -15,7 +15,7 @@
 }
 
 #detailed > .header > .market {
-  font-family: SF UI Display;
+  font-family: plex bold;
   font-weight: bold;
   font-size: 15px;
   line-height: 15px;
@@ -25,7 +25,7 @@
 }
 
 #detailed > .header > .title {
-  font-family: SF UI Display;
+  font-family: plex bold;
   font-size: 26px;
   line-height: 26px;
   font-weight: bold;
@@ -47,7 +47,7 @@
 
   color: var(--green);
   border: 1px solid var(--green);
-  padding: 4px;
+  padding: 3.5px;
   border-radius: 3px;
   text-align: center;
   min-width: 46px;
@@ -63,7 +63,7 @@
 }
 
 #detailed > .header > .last_price {
-  font-family: SF UI Display;
+  font-family: plex bold;
   font-weight: bold;
   font-size: 21px;
   margin-top: 15px;
@@ -97,7 +97,7 @@
   height: 36px;
   display: flex;
   align-items: center;
-  font-family: SF UI Text;
+  font-family: plex;
   font-weight: bold;
   font-size: 11px;
   padding: 0 10px;
@@ -123,7 +123,7 @@
   background-color: white;
   top: -46px;
   left: 10px;
-  font-family: SF UI Display;
+  font-family: plex;
   font-weight: bold;
   font-size: 21px;
   line-height: 21px;

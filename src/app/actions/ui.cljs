@@ -126,6 +126,9 @@
                     :form/alert new-alert}))))
 
 
+(defn update-window-size [w h]
+  (swap! db assoc :ui/window-size [w h]))
+
 (defn to-screen
   [screen]
   (do (close-detailed-view)
