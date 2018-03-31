@@ -104,7 +104,6 @@
         height (- wh 275)
         resize-handler #(update-window-size (.-innerWidth js/window)
                                             (.-innerHeight js/window))]
-    (js/console.log height)
     (r/with-let [_ (js/window.addEventListener "resize" resize-handler)]
       [:div.rows_wrapper
        [:> js/ReactVirtualized.AutoSizer

@@ -5,6 +5,7 @@
             [cljsjs.react-select]
             [cljsjs.moment]
             [app.components.header :refer [header]]
+            [app.components.diagram :refer [diagram]]
             [app.actions.ui :refer [to-screen]]
             [app.db :refer [db]]
             [app.components.ui :as ui]
@@ -68,29 +69,46 @@
 (defn total-worth
   []
   (let [folio @(r/cursor db [:user :portfolio])
-        worth (get-total-worth folio)
+        [worth err] (get-total-worth folio)
+        t (get-total-worth folio)
+        _ (js/console.log t)
         w (.toFixed worth 2)]
-    (if (pos? w) [:div.total_worth (str "$ " w)] [:div])))
+    (if (pos? w)
+      [:div.total_worth
+       [:div.title "Total"]
+       [:div.num (if (pos? w) (str "$ " w) "")]])))
+
+(defn diagram-markets
+  [folio]
+  (let [n (count folio)
+        by-market (->> folio
+                       (group-by :market)
+                       (map-indexed (fn [i [k v]] [[k (count v) i] v]))
+                       keys)]
+    (diagram "Markets" by-market)))
+
+
+
+
+(defn diagram-currs [])
 
 (defn portfolio-list
-  []
-  (let [folio @(r/cursor db [:user :portfolio])]
-    [:div.portfolio_items_wrapper
-     (if-not (pos? (count (vals folio)))
+  [folio]
+  (let [[w h] @(r/cursor db [:ui/window-size])]
+    [:div.portfolio_list
+     (if-not (pos? (count folio))
        [ui/empty-list "portfolio items"]
-       (for [row (vals folio)]
+       (for [row folio]
          (let [{:keys [currency amount market id added]} row]
            ^{:key id}
            [:div.row_wrap
             ^{:key "currency"} {:on-click #(toggle-edit-portfolio-view id)}
             [:div.left_cell
              [:div.title (str (name currency) " " amount)]
-             [:div.market market]]
+             [:div.market (.format (js/moment added) "hh:mm MM/DD/YYYY")]]
             ^{:key "last-ctrls"}
             [:div.right_cell
-             [:div.actions
-              [:div.ts
-               (.format (js/moment added) "hh:mm:ss MM/DD/YYYY")]]]])))]))
+              market]])))]))
 
 (defn select-market
   []
@@ -213,10 +231,13 @@
 
 (defn portfolio
   []
-  [:div.portfolio_container
-   [header]
-   [total-worth]
-   [portfolio-list]
-   [portfolio-toolbar]
-   [detailed-view-edit]
-   [detailed-view-add]])
+  (let [folio (vals @(r/cursor db [:user :portfolio]))]
+    [:div.portfolio_container
+     [header]
+     [:div.portfolio_stats
+      [total-worth]
+      (diagram-markets folio)]
+     (portfolio-list folio)
+     ;[portfolio-toolbar]
+     [detailed-view-edit]
+     [detailed-view-add]]))

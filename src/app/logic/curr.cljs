@@ -95,25 +95,55 @@
               (or (find-in item q :market) (find-in item q :symbol-pair)))
             pairs)))
 
-(defn- to-dollar
-  "Returns dollar price of curr on this market"
+(defn- average [v]
+  (if (empty? v)
+    0
+    (/ (apply + v)
+       (count v))))
+
+(defn average-price
+  "Returns average price across markets relative to given base btc/usd"
+  [curr base]
+  (let [markets (vals @(r/cursor db [:markets]))
+        p-base (keyword (str (name curr) "-" (name base)))
+        get-res (fn [p] (->> markets
+                            (map #(get % p))
+                            (remove nil?)
+                            (map :last)))]
+      (average (get-res p-base))))
+
+(defn dollar-value
+  "Returns dollar price of curr on given market"
   [amount curr market]
-  ;; TODO handle case where altcoin doesn't have dollar value (if any)
-  ;; TODO spec it
   (let [pair (keyword (str (name curr) "-USD"))
-        lst @(r/cursor db [:markets (keyword market) (keyword pair) :last])]
+        lst @(r/cursor db [:markets market pair :last])]
+    (* amount lst)))
+
+(defn btc-value
+  [amount curr market]
+  (let [pair (keyword (str  (name curr) "-BTC"))
+        lst   @(r/cursor db [:markets market pair :last])]
     (* amount lst)))
 
 (defn get-total-worth
   [folio]
-  (reduce (fn [acc [id item]]
-            (let [{:keys [amount currency market]} item]
-              (+ acc (to-dollar (js/parseFloat amount) currency market))))
-          0
-          folio))
+  (reduce
+    (fn [[acc err] [id item]]
+      (let [{:keys [amount currency market]} item
+            btc (btc-value (js/parseFloat amount) currency market)
+            usd (dollar-value btc currency market)
+            avg-usd (average-price currency "USD")
+            ;avg-btc (average-price currency "BTC")
+            res (if-not (pos? usd) avg-usd)]
+        (js/console.log res)
+        [(+ acc res) nil]))
+    [0 nil] ;; read as [acc error]
+    folio))
+
 
 (defn pairs-by-market
   [markets mname]
   (-> markets
       (get mname)
       vals))
+

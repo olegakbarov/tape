@@ -55,10 +55,10 @@
         (go-loop []
           (let [msg (<! stream)]
             (try
-              (evt->db (js->clj (js/JSON.parse msg)))
+              ; (evt->db (js->clj (js/JSON.parse msg)))
               (catch :default e))
                 ;; TODO log and report
-                ;(js/console.log e))))
+                ;(js/console.log e)))
             (recur))))))
 
 (defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))
