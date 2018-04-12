@@ -4,27 +4,25 @@
   ["#27AE60"
    "#657AF3"
    "#EB5757"
-   "#22b52e"
+   "#F2994A"
    "#BB6BD9"
    "#56CCF2"])
 
 (defn diagram
   "Draws diagram for (count colors) items. When provided data
-  length exceeds this number cuts the 'tail' and mark it as 'other'"
+  length exceeds this number it cuts the 'tail' and mark it as 'other'"
   [title data]
-  (let [idx (- (count colors) 1)
+  (let [idx (count colors)
         rst (- (count data) (count colors))
-        pdata (if (> (count data) idx)
-                  (concat (take idx data) [[:other rst idx]]) ;; adding last item as 'other'
-                  data)
-        c (count pdata)]
-    (js/console.log pdata)
+        sdata (sort-by second > data) ;; clojure <3
+        pdata (if (> (count sdata) idx)
+                  (concat (take idx sdata) [[:other rst idx]]) ;; adding last item as 'other'
+                  sdata)
+        c (reduce + (map second pdata))]
     [:div.diagram_wrapper
       [:h3 title]
       [:div.diagram
-       ;; x - item name
-       ;; n - number of occurences
-       ;; i - index
+       ;; [x - item name, n - number of occurences, i - index]
         (for [[x n i] pdata]
           [:div {:key x
                  :style {:background-color (get colors i)

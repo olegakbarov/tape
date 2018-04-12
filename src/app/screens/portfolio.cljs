@@ -85,10 +85,8 @@
                        (group-by :market)
                        (map-indexed (fn [i [k v]] [[k (count v) i] v]))
                        keys)]
+    (console.log folio)
     (diagram "Markets" by-market)))
-
-
-
 
 (defn diagram-currs [])
 
