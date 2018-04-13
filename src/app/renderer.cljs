@@ -5,7 +5,9 @@
             [app.db :refer [router]]
             [app.actions.api :refer [fetch-state!]]
             [app.actions.storage :refer [read-data-file!]]
-            [app.actions.ui :refer [to-screen]]
+            [app.actions.ui :refer
+             [to-screen
+              update-window-size]]
             [app.eventloop :refer [start-offline-watch-loop!]]
             [app.actions.ntf :refer
              [ntf-gone-offline
@@ -27,6 +29,8 @@
             (.install))
         (info! (str "Sentry endpoint: " slug))))
   (fetch-state!)
+  (update-window-size (.-innerWidth js/window)
+                      (.-innerHeight js/window))
   (start-offline-watch-loop! ntf-gone-online ntf-gone-offline)
   (mount/start))
 

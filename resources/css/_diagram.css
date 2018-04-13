@@ -1,0 +1,41 @@
+.diagram {
+  width: 100%;
+  height: 13px;
+  border-radius: 13px;
+  display: flex;
+}
+
+.diagram_wrapper {
+  padding: 10px;
+}
+
+.diagram > *:first-child {
+  border-radius: 13px 0 0 13px;
+}
+
+.diagram > *:last-child {
+  border-radius: 0 13px 13px 0;
+}
+
+.diagram_wrapper > .legend {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.legend > .legend_item {
+  font-family: plex bold;
+  display: flex;
+  font-size:  9px;
+  margin-top: 8px;
+  margin-right: 8px;
+}
+
+.legend > .legend_item  > .circle {
+  margin-right: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+}
+
+

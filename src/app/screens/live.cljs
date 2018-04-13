@@ -101,7 +101,7 @@
         filtered @(r/track pairs-by-query pairs q)
         filtered (remove nil? filtered) ;; TODO investigate
         [ww wh] @(r/cursor db [:ui/window-size])
-        height (- wh 275)
+        height (- wh 215)
         resize-handler #(update-window-size (.-innerWidth js/window)
                                             (.-innerHeight js/window))]
     (r/with-let [_ (js/window.addEventListener "resize" resize-handler)]
@@ -161,14 +161,16 @@
         f @(r/cursor db [:ui/current-filter])
         open? @(r/cursor db [:ui/filterbox-open?])]
     [:div#filter_box
-     [ui/text-input
-      {:on-change #(update-filter-q (-> %
-                                        .-target
-                                        .-value))
-       :value @(r/cursor db [:ui/filter-q])
-       :label "search"}]
-     [ui/input-wrap "Filter" [select-q {:key "filter"}]]
-     [ui/input-wrap "Market" [select-market {:key "market"}]]]))
+     [:div.row.full-width
+       [ui/text-input
+        {:on-change #(update-filter-q (-> %
+                                          .-target
+                                          .-value))
+         :value @(r/cursor db [:ui/filter-q])
+         :label "search"}]]
+     [:div.row
+      [ui/input-wrap "Filter" [select-q {:key "filter"}]]
+      [ui/input-wrap "Market" [select-market {:key "market"}]]]]))
 
 (defn fav?
   [favs tupl]
