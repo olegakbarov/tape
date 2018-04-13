@@ -29,7 +29,7 @@
   [window]
   (if dev?
     (.loadURL window (str "file://" js/__dirname "/../../index.html"))
-    (.loadURL window (str "file://" js/__dirname "/index.html"))))
+    (.loadURL window (str "file://" js/__dirname "index.html"))))
 
 (defn get-window-position
   []
@@ -83,11 +83,11 @@
 
 (defn init
   []
-  (if (= js/process.platform "darwin") (.hide (.-dock app)))
+  ; (if (= js/process.platform "darwin") (.hide (.-dock app)))
   (.on app "ready" init-browser)
-  (do (.on app "ready" set-tray!)
+  (do ; (.on app "ready" set-tray!)
       ; (.on app "ready" #(set-title! nil "0000"))
-      (.on app "ready" set-tray-event-handlers)
+      (when @tray (.on app "ready" set-tray-event-handlers))
       (.on app "browser-window-created" (fn [e w] (.setMenu w (clj->js nil)))))
   (.on ipc "show-window" show-window)
   (.on ipc "set-title" set-title!)

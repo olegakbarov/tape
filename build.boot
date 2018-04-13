@@ -55,8 +55,11 @@
 
 (deftask prod-build
          []
-         (comp (cljs :ids #{"main"} :optimizations :simple)
-               (cljs :ids #{"renderer"} :optimizations :simple)))
+         (comp (cljs :ids #{"main"}
+                     ;:compiler-options {:asset-path "main.out"}
+                     :optimizations :none)
+               (cljs :ids #{"renderer"} :optimizations :none)
+               (target)))
 
 (deftask check-sources
          []

@@ -1,25 +1,37 @@
 {
-  "name": "desktop",
+  "name": "Tape",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A cryptocurrency terminal for everyone",
+  "main": "target/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
+  "postinstall": "electron-builder install-app-deps",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cryptounicorns/desktop.git"
   },
-  "author": "",
-  "license": "",
+  "author": "Cryptounicorns LLC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/cryptounicorns/desktop/issues"
   },
   "homepage": "https://github.com/cryptounicorns/desktop#readme",
-  "dependencies": {
-    "@ibm/plex": "^1.0.1",
+  "devDependencies": {
     "electron": "^1.8.4",
-    "electron-packager": "^8.7.2",
-    "highcharts": "^6.0.6"
+    "electron-builder": "^20.8.1"
+  },
+  "dependencies": {
+    "@ibm/plex": "^1.0.1"
+  },
+  "build": {
+    "appId": "sh.tape.app",
+    "files": [
+      "target/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "resources/**/*"
+    ]
   }
 }

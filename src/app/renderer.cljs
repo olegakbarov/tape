@@ -29,15 +29,15 @@
             (.install))
         (info! (str "Sentry endpoint: " slug))))
   (fetch-state!)
-  (update-window-size (.-innerWidth js/window)
-                      (.-innerHeight js/window))
   (start-offline-watch-loop! ntf-gone-online ntf-gone-offline)
   (mount/start))
 
 (defn root
   []
   (let [s (-> @router
-              :screen)]
+              :screen)
+        _ (update-window-size (.-innerWidth js/window)
+                              (.-innerHeight js/window))]
     [:div#container
      (condp = s
        :live [live-board]
