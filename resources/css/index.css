@@ -87,6 +87,7 @@ body {
   z-index: 100;
   position: fixed;
   border-bottom: 1px solid #eaeaea;
+  padding-bottom: 30px;
 }
 
 .total_worth {
@@ -95,20 +96,20 @@ body {
 }
 
 .title {
+  font-size: 17px;
+  line-height: 17px;
+}
+
+.total_worth > .num {
+  margin-top: 10px;
   font-size: 20px;
   line-height: 20px;
   font-weight: bold;
 }
 
-.total_worth > .num {
-  margin-top: 10px;
-  font-size: 15px;
-  line-height: 15px;
-}
-
 .portfolio_list {
   position: absolute;
-  top: 270px;
+  top: 400px;
   width: 100%;
   overflow: scroll;
 }

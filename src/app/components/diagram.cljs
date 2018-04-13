@@ -16,7 +16,7 @@
         rst (- (count data) (count colors))
         sdata (sort-by second > data) ;; clojure <3
         pdata (if (> (count sdata) idx)
-                  (concat (take idx sdata) [[:other rst idx]]) ;; adding last item as 'other'
+                  (concat (take (- idx 1) sdata) [[:other rst (- idx 1)]]) ;; take first 'colors - 1' and adding last item as 'other'
                   sdata)
         c (reduce + (map second pdata))]
     [:div.diagram_wrapper

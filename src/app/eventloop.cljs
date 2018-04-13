@@ -56,9 +56,9 @@
           (let [msg (<! stream)]
             (try
               ; (evt->db (js->clj (js/JSON.parse msg)))
-              (catch :default e))
+              (catch :default e
                 ;; TODO log and report
-                ;(js/console.log e)))
+                (js/console.log msg)))
             (recur))))))
 
 (defn stop-ws! [] (prn "Stopping ws ...") (reset! t false))

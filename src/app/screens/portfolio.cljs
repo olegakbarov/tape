@@ -85,10 +85,15 @@
                        (group-by :market)
                        (map-indexed (fn [i [k v]] [[k (count v) i] v]))
                        keys)]
-    (console.log folio)
     (diagram "Markets" by-market)))
 
-(defn diagram-currs [])
+(defn diagram-currs [folio]
+  (let [n (count folio)
+        by-curr (->> folio
+                     (group-by :currency)
+                     (map-indexed (fn [i [k v]] [[k (count v) i] v]))
+                     keys)]
+    (diagram "Currencies" by-curr)))
 
 (defn portfolio-list
   [folio]
@@ -234,8 +239,10 @@
      [header]
      [:div.portfolio_stats
       [total-worth]
-      (diagram-markets folio)]
+      (diagram-markets folio)
+      (diagram-currs folio)]
      (portfolio-list folio)
-     ;[portfolio-toolbar]
+     [portfolio-toolbar]
      [detailed-view-edit]
      [detailed-view-add]]))
+
