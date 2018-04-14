@@ -14,9 +14,8 @@
 
 (defn open-in-browser [_ link] (.openExternal shell link))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(goog-define dev? true)
+;; this comes from build.boot
+(goog-define dev? "true")
 
 ; const server = <your-deployment-url>
 ; const feed = `${server}/update/${process.platform}/${app.getVersion()}`
@@ -24,7 +23,9 @@
 
 (defn enable-auto-update []
   (.setFeedURL autoUpdater
-    (str (:update-endpoint config) "/update/" (.-platfrom js/process) (.getVersion app))))
+    (str (:update-endpoint config) "/update/" (.-platfrom js/process) "/" (.getVersion app))))
+
+(js/console.log (.getVersion app))
 
 (def window (atom nil))
 (def tray (atom nil))
@@ -98,6 +99,7 @@
   (.on app "ready" init-browser)
   (do ; (.on app "ready" set-tray!)
       ; (.on app "ready" #(set-title! nil "0000"))
+      (when-not dev? (enable-auto-update))
       (when @tray (.on app "ready" set-tray-event-handlers))
       (.on app "browser-window-created" (fn [e w] (.setMenu w (clj->js nil)))))
   (.on ipc "show-window" show-window)

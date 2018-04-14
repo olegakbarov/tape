@@ -1,3 +1,0 @@
-; {:require  [app.main]
-;  :init-fns [app.main/init]
-;  :compiler-options {:target :nodejs}}
