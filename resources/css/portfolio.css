@@ -1,5 +1,6 @@
 .portfolio_container {
   margin-top: 70px;
+  height: calc(100% - 70px);
 }
 
 .portfolio_stats {
@@ -8,7 +9,7 @@
   z-index: 100;
   position: fixed;
   border-bottom: 1px solid #eaeaea;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .total_worth {
@@ -42,16 +43,6 @@
   bottom: 0;
   width: 100%;
   border-top: 1px solid #eaeaea;
-}
-
-.form_empty_list {
-  padding: 70px 0;
-  margin: 0 auto;
-  text-align: center;
-  max-width: 60%;
-  text-transform: uppercase;
-  line-height: 1.4em;
-  color: #ccc;
 }
 
 .form_wrap {

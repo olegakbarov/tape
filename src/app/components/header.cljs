@@ -3,7 +3,8 @@
             [app.db :refer [db router]]
             [app.actions.ui :refer [to-screen]]
             [app.components.ntf :refer [ntf]]
-            [goog.object :as gobj]))
+            [goog.object :as gobj]
+            [app.config :refer [config]]))
 
 (defn nav
   []
@@ -29,6 +30,6 @@
   (fn []
     (let [screen (get-in @router [:screen])]
       [:div#header
-       [:div.title "Probe beta_0"]
+       [:div.title (str "Tape beta_" (:version config))]
        [nav]
        [ntf]])))

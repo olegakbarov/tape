@@ -12,6 +12,7 @@
             [app.motion :refer [Motion spring presets]]
             [app.logic.curr :refer
              [get-market-names
+              currs-by-market
               get-crypto-currs]]
             [app.logic.validation :refer
              [str->amount]]
@@ -71,7 +72,7 @@
   (let [folio @(r/cursor db [:user :portfolio])
         [worth err] (get-total-worth folio)
         t (get-total-worth folio)
-        _ (js/console.log t)
+        ; _ (js/console.log t)
         w (.toFixed worth 2)]
     (if (pos? w)
       [:div.total_worth
@@ -101,19 +102,17 @@
   [folio]
   (let [[w h] @(r/cursor db [:ui/window-size])]
     [:div.portfolio_list
-     (if-not (pos? (count folio))
-       [ui/empty-list "portfolio items"]
-       (for [row folio]
-         (let [{:keys [currency amount market id added]} row]
-           ^{:key id}
-           [:div.row_wrap
-            ^{:key "currency"} {:on-click #(toggle-edit-portfolio-view id)}
-            [:div.left_cell
-             [:div.title (str (name currency) " " amount)]
-             [:div.market (.format (js/moment added) "hh:mm MM/DD/YYYY")]]
-            ^{:key "last-ctrls"}
-            [:div.right_cell
-              market]])))]))
+     (for [row folio]
+       (let [{:keys [currency amount market id added]} row]
+         ^{:key id}
+         [:div.row_wrap
+          ^{:key "currency"} {:on-click #(toggle-edit-portfolio-view id)}
+          [:div.left_cell
+           [:div.title (str (name currency) " " amount)]
+           [:div.market (.format (js/moment added) "hh:mm MM/DD/YYYY")]]
+          ^{:key "last-ctrls"}
+          [:div.right_cell
+            market]]))]))
 
 (defn select-market
   []
@@ -131,10 +130,9 @@
 
 (defn select-curr
   []
-  ;; TODO: only allow currency available on selected market
-  (let [m @(r/cursor db [:markets])
-        v @(r/cursor db [:form/portfolio :currency])
-        opts (get-crypto-currs m)
+  (let [v @(r/cursor db [:form/portfolio :currency])
+        m @(r/cursor db [:form/portfolio :market])
+        opts (currs-by-market (keyword m))
         on-change
         #(update-portfolio-form
           :currency
@@ -237,14 +235,16 @@
 (defn portfolio
   []
   (let [folio (vals @(r/cursor db [:user :portfolio]))]
-    [:div.portfolio_container
-     [header]
-     [:div.portfolio_stats
-      [total-worth]
-      (diagram-markets folio)
-      (diagram-currs folio)]
-     (portfolio-list folio)
-     [portfolio-toolbar]
-     [detailed-view-edit]
-     [detailed-view-add]]))
+   [:div.portfolio_container
+    [header]
+    (if (pos? (count folio))
+      [:div.portfolio_stats
+       [total-worth]
+       (diagram-markets folio)
+       (diagram-currs folio)]
+      [ui/empty-list "portfolio items"])
+    (portfolio-list folio)
+    [portfolio-toolbar]
+    [detailed-view-edit]
+    [detailed-view-add]]))
 

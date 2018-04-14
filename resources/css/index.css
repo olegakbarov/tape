@@ -45,9 +45,9 @@ html {
   --lightgray: rgba(189, 189, 189, 0.2);
 }
 
-::-webkit-scrollbar {
-    display: none;
-}
+/* ::-webkit-scrollbar { */
+/*     display: none; */
+/* } */
 
 body {
   height: 100%;

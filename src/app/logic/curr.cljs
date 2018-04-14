@@ -71,9 +71,10 @@
   [market]
   (let [m @(r/cursor db [:markets])
         pairs (get m market)]
-    (reduce (fn [acc item] (flatten (conj acc (clojure.string/split item "-"))))
-            []
-            (keys pairs))))
+    (into #{}
+      (->> (keys pairs)
+           (map name)
+           (mapcat #(.split % "-"))))))
 
 (defn user-favs
   [markets favs]
@@ -87,11 +88,11 @@
   [pairs q]
   (let [lc #(.toLowerCase %)
         q (as-> q $ (.toLowerCase $) (apply str (re-seq #"[a-zA-Z0-9]" $)))
-        find-in (fn [ticker q kw]
-                  (fn [ticker q kw]
-                    (let [v (get ticker kw)]
-                      (if-not v nil (re-find (re-pattern q) v)))))]
+        find-in (fn [item q kw]
+                  (let [v (get item kw)]
+                    (if-not v nil (re-find (re-pattern q) (lc (name v))))))]
     (filter (fn [item]
+              (js/console.log (find-in item q :market))
               (or (find-in item q :market) (find-in item q :symbol-pair)))
             pairs)))
 
@@ -102,7 +103,7 @@
        (count v))))
 
 (defn average-price
-  "Returns average price across markets relative to given base btc/usd"
+  "Returns average price across markets relative to given base: btc or usd"
   [curr base]
   (let [markets (vals @(r/cursor db [:markets]))
         p-base (keyword (str (name curr) "-" (name base)))
@@ -135,7 +136,7 @@
             avg-usd (average-price currency "USD")
             ;avg-btc (average-price currency "BTC")
             res (if-not (pos? usd) avg-usd)]
-        (js/console.log res)
+        ; (js/console.log res)
         [(+ acc res) nil]))
     [0 nil] ;; read as [acc error]
     folio))

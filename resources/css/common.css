@@ -114,4 +114,21 @@ button.button:active {
   height: 100%;
 }
 
+/* ------------- VIEW -------------  */
 
+.form_empty_list {
+  text-transform: uppercase;
+  color: #ccc;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.form_empty_list > * {
+  line-height: 1.4em;
+  text-align: center;
+  max-width: 60%;
+}

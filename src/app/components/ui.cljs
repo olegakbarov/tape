@@ -27,7 +27,8 @@
 
 (defn empty-list
   [items]
-  [:div.form_empty_list (str "You haven't added any " items " yet")])
+  [:div.form_empty_list
+   [:div (str "You haven't added any " items " yet")]])
 
 (defn input-wrap
   "Wraps the input and provides label"

@@ -99,7 +99,6 @@
                 :market @(r/track pairs-by-market markets market-filter)
                 nil @(r/track all-pairs markets))
         filtered @(r/track pairs-by-query pairs q)
-        filtered (remove nil? filtered) ;; TODO investigate
         [ww wh] @(r/cursor db [:ui/window-size])
         height (- wh 215)
         resize-handler #(update-window-size (.-innerWidth js/window)
