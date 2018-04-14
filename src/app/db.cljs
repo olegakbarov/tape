@@ -7,8 +7,8 @@
 
 (defonce db
          (r/atom {:ui/fetching-init-data? true ;; hack
-                  :ui/current-filter :market
-                  :ui/market-filter :bitfinex
+                  :ui/current-filter nil
+                  :ui/market-filter nil
                   :ui/filter-q ""
                   :ui/filterbox-open? false
                   :ui/ntf nil

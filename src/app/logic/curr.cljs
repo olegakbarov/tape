@@ -92,7 +92,7 @@
                   (let [v (get item kw)]
                     (if-not v nil (re-find (re-pattern q) (lc (name v))))))]
     (filter (fn [item]
-              (js/console.log (find-in item q :market))
+              ; (js/console.log (find-in item q :market))
               (or (find-in item q :market) (find-in item q :symbol-pair)))
             pairs)))
 

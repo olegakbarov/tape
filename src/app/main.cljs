@@ -26,8 +26,6 @@
   (.setFeedURL autoUpdater
     (str (:update-endpoint config) "/update/" (.-platfrom js/process) (.getVersion app))))
 
-(js/console.log (.getVersion app) (.-platform js/process))
-
 (def window (atom nil))
 (def tray (atom nil))
 
