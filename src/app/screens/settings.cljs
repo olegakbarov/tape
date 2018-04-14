@@ -15,8 +15,7 @@
      [:div.cell]]
     [:div.group_title "Community"]
     [:div.cell_group
-     ;; TODO
-     [:div.cell {:on-click #(open-in-browser "https://t.me/libmustdie")}
+     [:div.cell {:on-click #(open-in-browser "https://t.me/joinchat/B0HztQ-ieVI8Zb3VcC1KwQ")}
       [:div.left.link "Telegram"]
       [:div.right ">"]]
      ;; TODO

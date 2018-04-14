@@ -85,7 +85,8 @@
                        (group-by :market)
                        (map-indexed (fn [i [k v]] [[k (count v) i] v]))
                        keys)]
-    (diagram "Markets" by-market)))
+   (when (pos? n)
+    (diagram "Markets" by-market))))
 
 (defn diagram-currs [folio]
   (let [n (count folio)
@@ -93,7 +94,8 @@
                      (group-by :currency)
                      (map-indexed (fn [i [k v]] [[k (count v) i] v]))
                      keys)]
-    (diagram "Currencies" by-curr)))
+    (when (pos? n)
+      (diagram "Currencies" by-curr))))
 
 (defn portfolio-list
   [folio]

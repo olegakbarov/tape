@@ -5,6 +5,7 @@
 (def path (js/require "path"))
 
 (def app (.-app electron))
+(def autoUpdater (.-app electron))
 (def BrowserWindow (.-BrowserWindow electron))
 (def Tray (.-Tray electron))
 (def ipc (.-ipcMain electron))
@@ -13,7 +14,19 @@
 
 (defn open-in-browser [_ link] (.openExternal shell link))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (goog-define dev? true)
+
+; const server = <your-deployment-url>
+; const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+; autoUpdater.setFeedURL(feed)
+
+(defn enable-auto-update []
+  (.setFeedURL autoUpdater
+    (str (:update-endpoint config) "/update/" (.-platfrom js/process) (.getVersion app))))
+
+(js/console.log (.getVersion app) (.-platform js/process))
 
 (def window (atom nil))
 (def tray (atom nil))

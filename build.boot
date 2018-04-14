@@ -56,7 +56,7 @@
 (deftask prod-build
          []
          (comp (cljs :ids #{"main"}
-                     ;:compiler-options {:asset-path "main.out"}
+                     :compiler-options {:closure-defines {'app.main/dev? false}}
                      :optimizations :none)
                (cljs :ids #{"renderer"} :optimizations :none)
                (target)))
