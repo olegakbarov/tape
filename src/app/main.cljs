@@ -5,7 +5,7 @@
 (def path (js/require "path"))
 
 (def app (.-app electron))
-(def autoUpdater (.-app electron))
+(def autoUpdater (.-autoUpdater electron))
 (def BrowserWindow (.-BrowserWindow electron))
 (def Tray (.-Tray electron))
 (def ipc (.-ipcMain electron))
@@ -14,18 +14,11 @@
 
 (defn open-in-browser [_ link] (.openExternal shell link))
 
-;; this comes from build.boot
-(goog-define dev? "true")
-
-; const server = <your-deployment-url>
-; const feed = `${server}/update/${process.platform}/${app.getVersion()}`
-; autoUpdater.setFeedURL(feed)
+(goog-define dev? false)
 
 (defn enable-auto-update []
   (.setFeedURL autoUpdater
     (str (:update-endpoint config) "/update/" (.-platfrom js/process) "/" (.getVersion app))))
-
-(js/console.log (.getVersion app))
 
 (def window (atom nil))
 (def tray (atom nil))
@@ -41,7 +34,7 @@
   [window]
   (if dev?
     (.loadURL window (str "file://" js/__dirname "/../../index.html"))
-    (.loadURL window (str "file://" js/__dirname "index.html"))))
+    (.loadURL window (str "file://" js/__dirname "/index.html"))))
 
 (defn get-window-position
   []

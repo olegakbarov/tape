@@ -20,6 +20,7 @@
             [cljsjs.raven]))
 
 (enable-console-print!)
+;(goog-define dev? "this comes from build.boot")
 
 (defn init
   []

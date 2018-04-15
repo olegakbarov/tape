@@ -22,7 +22,6 @@
             [binaryage/dirac "1.2.29" :scope "test"]
             [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
             [tolitius/boot-check "0.1.6" :scope "test"]
-            [pandeiro/boot-http "0.7.6" :scope "test"]
             ;
             [klang "0.5.13" :scope "test"]
             [cljs-http "0.1.44"]
@@ -37,9 +36,6 @@
             [cljsjs/moment "2.10.6-0"]
             [cljsjs/react-virtualized "9.18.5-1" :exclusions [cljsjs.react]]
             [cljsjs/react-motion "0.5.0-0"]
-            [cljsjs/chartjs "2.6.0-0"]
-            [cljsjs/highstock "5.0.14-0"]
-            [cljsjs/highcharts-css "5.0.10-0"]
             [cljsjs/dygraph "2.1.0-0"]
             [cljsjs/raven "3.22.1-0"]])
 
@@ -49,16 +45,14 @@
          '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]]
          '[tolitius.boot-check :as check]
          '[boot-fmt.core :refer [fmt]])
-; '[pandeiro.boot-http :refer [serve]])
-
-; (task-options! repl {:middleware '[cemerick.piggieback/wrap-cljs-repl]})
 
 (deftask prod-build
          []
          (comp (cljs :ids #{"main"}
                      :compiler-options {:closure-defines {'app.main/dev? false}}
-                     :optimizations :none)
-               (cljs :ids #{"renderer"} :optimizations :none)
+                     :optimizations :simple)
+               (cljs :ids #{"renderer"}
+                     :optimizations :simple)
                (target)))
 
 (deftask check-sources
@@ -73,11 +67,10 @@
  dev-build
  []
  (set-env! :source-paths #(conj % "dev"))
- (comp ;(serve)
-       (speak :theme "ordinance")
+ (comp (speak :theme "ordinance")
        (cljs-devtools)
        (dirac)
-       (cljs-repl)
+       (cljs-repl :ids #{"renderer"})
        (reload :ids #{"renderer"} :ws-host "localhost" :target-path "target")
        (cljs :ids #{"renderer" "mount"}
              :compiler-options {:parallel-build true})
