@@ -132,3 +132,29 @@ button.button:active {
   text-align: center;
   max-width: 60%;
 }
+
+/* ------------- FORM --------------- */
+
+.form_wrap > .row {
+  display: flex;
+}
+
+.form_wrap > .row > * {
+  width: 100%;
+}
+
+.form_wrap > .row > *:first-child {
+  padding-right: 10px;
+}
+
+.form_wrap > .row > *:last-child {
+  padding-left: 10px;
+}
+
+.form_wrap > .row.full-width > * {
+  padding: 0!important;
+}
+
+.input_label {
+  margin-bottom: 7px;
+}

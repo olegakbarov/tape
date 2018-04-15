@@ -15,13 +15,13 @@
                   :ui/detailed-view nil
                   :ui/window-size [320 720]
                   :ui/folio-add false
-                  :ui/folio-add-height nil ;; !!
+                  :ui/folio-add-height 260 ;; !!
                   :ui/folio-edit nil
-                  :ui/folio-edit-height nil ;; !!
+                  :ui/folio-edit-height 280 ;; !!
                   :ui/alert-add false
-                  :ui/alert-add-height nil ;; !!
+                  :ui/alert-add-height 260 ;; !!
                   :ui/alert-edit nil
-                  :ui/alert-edit-height nil ;; !!
+                  :ui/alert-edit-height 280 ;; !!
                   :ui/alerts-add-view false
                   :ui/alerts-edit-view nil
                   :ui/current-graph nil

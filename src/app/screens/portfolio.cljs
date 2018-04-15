@@ -148,29 +148,33 @@
   [:div.form_wrap
    [:h1 "Edit holding"]
    [ui/close "left_top" #(handle-close)]
-   [ui/input-wrap "Market" [select-market {:key "market"}]]
-   [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
+   [:div.row
+    [ui/input-wrap "Market" [select-market {:key "market"}]]
+    [ui/input-wrap "Currency" [select-curr {:key "currency"}]]]
    [ui/text-input
     {:on-change handle-change
      :value @(r/cursor db [:form/portfolio :amount])
      :label "amount"}]
-   [:div.input_wrapper
-    [ui/button
-     {:on-click handle-delete
-      :color "red"}
-     "Delete"]
-    [ui/button
-     {:on-click handle-edit
-      :color "#000"}
-     "Save"]]])
+   [:div.row
+    [:div
+     [ui/button
+      {:on-click handle-delete
+       :color "red"}
+      "Delete"]]
+    [:div
+     [ui/button
+      {:on-click handle-edit
+       :color "#000"}
+      "Save"]]]])
 
 (defn add-item
   []
   [:div.form_wrap
    [:h1 "Add holding"]
    [ui/close "left_top" #(handle-close)]
-   [ui/input-wrap "Market" [select-market {:key "market"}]]
-   [ui/input-wrap "Currency" [select-curr {:key "currency"}]]
+   [:div.row
+    [ui/input-wrap "Market" [select-market {:key "market"}]]
+    [ui/input-wrap "Currency" [select-curr {:key "currency"}]]]
    [ui/text-input
     {:on-change handle-change
      :value @(r/cursor db [:form/portfolio :amount])
@@ -185,9 +189,10 @@
   (r/reactify-component (fn [{c :children}]
                           (let [y (gobj/get c "y")]
                             [:div.detailed_view
-                             {:ref #(swap! db update-in
-                                     [:ui/folio-edit-height]
-                                     (fn [] (if % (.-offsetHeight %) 0)))
+                             ;; TODO
+                             {;:ref #(swap! db update-in
+                                     ; [:ui/folio-edit-height]
+                                     ; (fn [] (if % (.-offsetHeight %) 0))
                               :style {:transform (str "translateY(" y "px)")}}
                              [edit-item]]))))
 
@@ -204,19 +209,22 @@
   (r/reactify-component (fn [{c :children}]
                           (let [y (gobj/get c "y")]
                             [:div.detailed_view
-                             {:ref #(swap! db update-in
-                                     [:ui/folio-add-height]
-                                     (fn [] (if % (.-offsetHeight %) 0)))
+                             ;; TODO
+                             {;:ref #(swap! db update-in
+                                     ; [:ui/folio-add-height]
+                                     ; (fn [] (if % (.-offsetHeight %) 0))
                               :style {:transform (str "translateY(" y "px)")}}
                              [add-item]]))))
 
 (defn detailed-view-add
   []
   (fn []
-    (let [open? @(r/cursor db [:ui/folio-add])]
+    (let [open? @(r/cursor db [:ui/folio-add])
+          height @(r/cursor db [:ui/folio-add-height])]
+      (js/console.log height)
       [:div.motion_wrapper
        [Motion
-        {:style {:y (spring (if open? (- (:ui/folio-add-height @db)) 0))}}
+        {:style {:y (spring (if open? (- height) 0))}}
         (fn [y] (r/create-element animated-view-add #js {} y))]])))
 
 (defn portfolio-toolbar
@@ -228,7 +236,7 @@
         {:style {:padding "0 10px"
                  :width "100%"}}
         [ui/button
-         {:on-click #(open-add-portfolio-view)
+         {:on-click open-add-portfolio-view
           :color "#000"}
          "Add"]]])))
 

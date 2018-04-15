@@ -22,7 +22,7 @@
   (let [fs (js/require "fs")
         path (js/require "path")
         p (str (.getPath (.-app remote) "userData") data-file-name)]
-    (try (.writeFile fs p content #(js/cosnole.log "Data persisted to disk"))
+    (try (.writeFile fs p content #(js/console.log "Data persisted to disk"))
          (catch :default e e (js/console.error e)))))
 
 (defn read-data-file!

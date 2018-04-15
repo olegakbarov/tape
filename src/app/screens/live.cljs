@@ -158,7 +158,7 @@
   (let [q @(r/cursor db [:ui/filter-q])
         f @(r/cursor db [:ui/current-filter])
         open? @(r/cursor db [:ui/filterbox-open?])]
-    [:div#filter_box
+    [:div#filter_box.form_wrap
      [:div.row.full-width
        [ui/text-input
         {:on-change #(update-filter-q (-> %

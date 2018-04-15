@@ -19,5 +19,3 @@
    :http-endpoint HTTP_ENDPOINT
    :update-endpoint AUTO_UPDATE_ENDPOINT
    :sentry SENTRY})
-
-(js/console.log config)

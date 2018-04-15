@@ -12,9 +12,8 @@
             [app.config :refer [config]]))
 
 (when (= :dev (:env config))
-  (do (js/console.log "[actions.api] Spec activated...") (ts/instrument)))
-
-(defn log [& args] (js/console.log (pprint args)))
+  (do (js/console.log "[actions.api] Spec activated...")
+      (ts/instrument)))
 
 (defn validate-ticker
   "Returns ticker only when important fields exist (otherwise nil)"
@@ -24,7 +23,7 @@
         has-pair? #(has? :symbolPair %)
         has-last? #(has? :last %)
         checklist ((juxt has-market? has-pair? has-last?) t)]
-    (if-not (every? true? checklist) (log "Invalid ticker: " checklist) t)))
+    (if-not (every? true? checklist) (js/console.log "Invalid ticker: " checklist) t)))
 
 (defn format-msg
   [raw]
@@ -37,7 +36,7 @@
   (let [c (format-msg msg)
         valid? (and (:symbolPair c) (:market c))]
     (if-not valid?
-      (log "Invalid change msg: " c)
+      (js/console.log "Invalid change msg: " c)
       (let [market (keyword (:market c))
             pair (keyword (:symbolPair c))
             {:keys [percent amount c]} c]
@@ -72,7 +71,7 @@
   (condp = (get msg "type")
     "tickers" (process-ticker msg)
     "changes" (process-change msg)
-    :default (log "Unexpected event signature: " msg)))
+    :default (js/console.log "Unexpected event signature: " msg)))
 
 (defn state->db
   [s]

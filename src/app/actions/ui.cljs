@@ -67,7 +67,6 @@
 
 (defn open-add-portfolio-view [] (swap! db assoc :ui/folio-add true))
 
-
 (defn close-add-portfolio-view [] (swap! db assoc :ui/folio-add true))
 
 (defn close-every-portfolio-view
@@ -106,7 +105,6 @@
 
 
 (defn open-add-alert-view [] (swap! db assoc :ui/alert-add true))
-
 
 (defn close-add-alert-view [] (swap! db assoc :ui/alert-add true))
 

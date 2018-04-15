@@ -123,29 +123,33 @@
   [:div.form_wrap
    [:h1 "Edit alert"]
    [ui/close "left_top" #(handle-close)]
-   [ui/input-wrap "Market" [select-market {:key "market"}]]
-   [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]
+   [:div.row
+    [ui/input-wrap "Market" [select-market {:key "market"}]]
+    [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]]
    [ui/text-input
     {:on-change handle-change
      :label "amount"
      :value @(r/cursor db [:form/alerts :amount])}]
-   [:div.input_wrapper
-    [ui/button
-     {:on-click handle-delete
-      :color "red"}
-     "Delete"]
-    [ui/button
-     {:on-click handle-update
-      :color "#000"}
-     "Save"]]])
+   [:div.row
+    [:div
+     [ui/button
+       {:on-click handle-delete
+        :color "red"}
+       "Delete"]]
+    [:div
+     [ui/button
+       {:on-click handle-update
+        :color "#000"}
+       "Save"]]]])
 
 (defn add-item
   []
   [:div.form_wrap
    [:h1 "Add alert"]
    [ui/close "left_top" #(handle-close)]
-   [ui/input-wrap "Market" [select-market {:key "market"}]]
-   [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]
+   [:div.row
+    [ui/input-wrap "Market" [select-market {:key "market"}]]
+    [ui/input-wrap "Currency pair" [select-pair {:key "pair"}]]]
    [ui/text-input
     {:on-change handle-change
      :label "amount"
@@ -160,9 +164,9 @@
   (r/reactify-component (fn [{c :children}]
                           (let [y (gobj/get c "y")]
                             [:div.detailed_view
-                             {:ref #(swap! db update-in
-                                     [:ui/alert-edit-height]
-                                     (fn [] (if % (.-offsetHeight %) 0)))
+                             {;:ref #(swap! db update-in
+                                     ; [:ui/alert-edit-height]
+                                     ; (fn [] (if % (.-offsetHeight %) 0))
                               :style {:transform (str "translateY(" y "px)")}}
                              [edit-item]]))))
 
@@ -179,19 +183,20 @@
   (r/reactify-component (fn [{c :children}]
                           (let [y (gobj/get c "y")]
                             [:div.detailed_view
-                             {:ref #(swap! db update-in
-                                     [:ui/alert-add-height]
-                                     (fn [] (if % (.-offsetHeight %) 0)))
+                             {;:ref #(swap! db update-in
+                                     ; [:ui/alert-add-height]
+                                     ; (fn [] (if % (.-offsetHeight %) 0))
                               :style {:transform (str "translateY(" y "px)")}}
                              [add-item]]))))
 
 (defn detailed-view-add
   []
   (fn []
-    (let [open? @(r/cursor db [:ui/alert-add])]
+    (let [open? @(r/cursor db [:ui/alert-add])
+          height @(r/cursor db [:ui/alert-add-height])]
       [:div.motion_wrapper
        [Motion
-        {:style {:y (spring (if open? (- (:ui/alert-add-height @db)) 0))}}
+        {:style {:y (spring (if open? (- height) 0))}}
         (fn [y] (r/create-element animated-view-add #js {} y))]])))
 
 (defn alerts-toolbar

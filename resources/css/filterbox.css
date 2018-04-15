@@ -9,28 +9,3 @@
   border-bottom: 1px solid #eaeaea;
 }
 
-#filter_box > .row {
-  display: flex;
-}
-
-#filter_box > .row > * {
-  width: 100%;
-}
-
-#filter_box > .row > *:first-child {
-  padding-right: 10px;
-}
-
-#filter_box > .row > *:last-child {
-  padding-left: 10px;
-}
-
-#filter_box > .row.full-width > * {
-  padding: 0!important;
-}
-
-.input_label {
-  margin-bottom: 7px;
-}
-
-
