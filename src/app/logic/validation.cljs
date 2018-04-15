@@ -1,6 +1,5 @@
 (ns app.logic.validation
-  (:require [clojure.string :as s]
-            [klang.core :refer-macros [info! warn! erro! crit! fata! trac!]]))
+  (:require [clojure.string :as s]))
 
 (def seps #{"." ","})
 

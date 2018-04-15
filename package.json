@@ -1,6 +1,6 @@
 {
   "name": "Tape",
-  "version": "0.1.666",
+  "version": "0.1.1",
   "description": "A cryptocurrency terminal for everyone",
   "main": "target/main.js",
   "scripts": {
