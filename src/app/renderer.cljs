@@ -20,12 +20,12 @@
             [cljsjs.raven]))
 
 (enable-console-print!)
-;(goog-define dev? "this comes from build.boot")
+; (goog-define dev? true)
 
 (defn init
   []
   (when-let [slug (:sentry config)]
-    (do (-> js/Raven
+      (do (-> js/Raven
             (.config slug)
             (.install))
         (info! (str "Sentry endpoint: " slug))))

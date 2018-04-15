@@ -1,6 +1,8 @@
 (ns app.main
   (:require [app.config :refer [config]]))
 
+(js/console.log config)
+
 (def electron (js/require "electron"))
 (def path (js/require "path"))
 
@@ -81,7 +83,8 @@
   []
   (reset! window (make-window))
   (do (load-page @window)
-      (when dev? (.openDevTools @window #js {:mode "undocked"}))
+      ;(when dev? (.openDevTools @window #js {:mode "undocked"}))
+      (.openDevTools @window #js {:mode "undocked"})
       (.on @window "closed" #(reset! window nil))))
 
 (defn set-title! [_ text] (.setTitle @tray text))

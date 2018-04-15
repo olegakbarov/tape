@@ -26,4 +26,9 @@
      [:div.cell {:on-click #(open-in-browser "https://t.me/libmustdie")}
       [:div.left.link "Reddit"]
       [:div.right ">"]]
-     [:div.cell]]]])
+     [:div.cell]]
+    [:div.group_title "Source code"]
+    [:div.cell_group
+     [:div.cell {:on-click #(open-in-browser "https://github.com/cryptounicorns/tape")}
+      [:div.left.link "GitHub"]
+      [:div.right ">"]]]]])

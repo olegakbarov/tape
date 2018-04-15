@@ -44,7 +44,8 @@
          '[powerlaces.boot-figreload :refer [reload]]
          '[powerlaces.boot-cljs-devtools :refer [cljs-devtools dirac]]
          '[tolitius.boot-check :as check]
-         '[boot-fmt.core :refer [fmt]])
+         '[boot-fmt.core :refer [fmt]]
+         '[boot.git :refer [last-commit]])
 
 (deftask prod-build
          []
@@ -52,6 +53,7 @@
                      :compiler-options {:closure-defines {'app.main/dev? false}}
                      :optimizations :simple)
                (cljs :ids #{"renderer"}
+                     :compiler-options {:closure-defines {'app.config/commit (last-commit)}}
                      :optimizations :simple)
                (target)))
 
@@ -73,7 +75,8 @@
        (cljs-repl :ids #{"renderer"})
        (reload :ids #{"renderer"} :ws-host "localhost" :target-path "target")
        (cljs :ids #{"renderer" "mount"}
-             :compiler-options {:parallel-build true})
+             :compiler-options {:parallel-build true}
+             :closure-defines {'app.renderer/dev? true})
        ;; path.resolve(".") which is used in CLJS's node shim
        ;; returns the directory `electron` was invoked in and
        ;; not the directory our main.js file is in.
