@@ -1,7 +1,6 @@
 (ns app.renderer
   (:require [reagent.core :as reagent]
             [mount.core :as mount]
-            [klang.core :refer-macros [info! warn! erro! crit! fata! trac!]]
             [app.db :refer [router]]
             [app.actions.api :refer [fetch-state!]]
             [app.actions.storage :refer [read-data-file!]]
@@ -28,7 +27,7 @@
       (do (-> js/Raven
             (.config slug)
             (.install))
-        (info! (str "Sentry endpoint: " slug))))
+        (js/console.log (str "Sentry endpoint: " slug))))
   (fetch-state!)
   (start-offline-watch-loop! ntf-gone-online ntf-gone-offline)
   (mount/start))

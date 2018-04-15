@@ -7,11 +7,11 @@
             [app.db :refer [db]]
             [app.actions.storage :refer [persist-user-currents!]]
             [app.utils.core :refer [generate-uuid]]
-            [app.config :refer [config]]
-            [klang.core :refer-macros [info! erro!]]))
+            [app.config :refer [config]]))
 
 (when (= :dev (:env config))
-  (do (info! "[action.alerts] Spec validation activated...") (ts/instrument)))
+  (do (js/console.log "[action.alerts] Spec validation activated...")
+      (ts/instrument)))
 
 (s/fdef render-alert!
  :args

@@ -2,8 +2,7 @@
   (:require [clojure.walk]
             [app.db :refer [db router]]
             [cljs.reader :as reader]
-            [mount.core :refer [defstate]]
-            [klang.core :refer-macros [info! warn! erro! crit! fata! trac!]]))
+            [mount.core :refer [defstate]]))
 
 (def electron (js/require "electron"))
 (def remote (.-remote electron))
@@ -23,8 +22,8 @@
   (let [fs (js/require "fs")
         path (js/require "path")
         p (str (.getPath (.-app remote) "userData") data-file-name)]
-    (try (.writeFile fs p content #(info! "Data persisted to disk"))
-         (catch :default e e (erro! e)))))
+    (try (.writeFile fs p content #(js/cosnole.log "Data persisted to disk"))
+         (catch :default e e (js/console.error e)))))
 
 (defn read-data-file!
   "File with following signature
@@ -34,7 +33,6 @@
   []
   (let [fs (js/require "fs")
         p (.getPath (.-app remote) "userData")]
-    ; (js/console.log p)
     (try (let [raw-file (.readFileSync fs (str p data-file-name) "utf-8")
                contents (cljs.reader/read-string raw-file)]
            (update-db :user contents))

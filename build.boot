@@ -23,7 +23,6 @@
             [powerlaces/boot-cljs-devtools "0.2.0" :scope "test"]
             [tolitius/boot-check "0.1.6" :scope "test"]
             ;
-            [klang "0.5.13" :scope "test"]
             [cljs-http "0.1.44"]
             [compact-uuids "0.2.0"]
             [mount "0.1.12"]

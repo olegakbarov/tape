@@ -1,6 +1,5 @@
 (ns app.screens.live
-  (:require-macros [app.macros :refer [profile]]
-                   [klang.core :refer [info! warn! erro! crit! fata! trac!]])
+  (:require-macros [app.macros :refer [profile]])
   (:require [reagent.core :as r]
             [clojure.string :as s]
             [goog.object :as gobj]
@@ -85,7 +84,7 @@
       :bestprice "Best price"
       :favorites "Favorites"
       :market "Market"
-      nil (erro! (str "Not a string/keyword " v)))))
+      nil (js/console.error (str "Not a string/keyword " v)))))
 
 (defn render-rows
   []

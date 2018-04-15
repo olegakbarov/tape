@@ -3,7 +3,6 @@
   (:require [cljs.core.async :as a :refer [<! >! chan timeout sliding-buffer]]
             [reagent.core :as r]
             [mount.core :refer [defstate]]
-            [klang.core :refer-macros [info! warn! erro! crit! fata! trac!]]
             [app.db :refer [db]]
             [app.logic.curr :refer [best-pairs]]
             [app.actions.tray :refer [set-title!]]
@@ -77,7 +76,8 @@
                    btc (js/parseInt (best-pairs m :BTC-USD))]))))
                ;(set-title! btc)))))
 
-(defn stop-title-loop! [] (info! "Stopping title loop...") (reset! t false))
+(defn stop-title-loop! []
+  (reset! t false))
 
 (defstate title-loop :start (start-title-loop!) :stop (stop-title-loop!))
 
@@ -107,7 +107,6 @@
 (defn start-notifs-loop!
   []
   (reset! n true)
-  (info! "Notifs loop started ...")
   ;; TODO track -> cursor
   (let [has-notifs? (r/track #(-> @db
                                   :user/alerts
@@ -122,7 +121,8 @@
                                              vals))]
                    (dispatch-notif? markets notifs)))))))
 
-(defn stop-notifs-loop! [] (reset! n false) (info! "Stopped notifs loop."))
+(defn stop-notifs-loop! []
+  (reset! n false))
 
 (defn start-offline-watch-loop!
   [online-cb offline-cb]

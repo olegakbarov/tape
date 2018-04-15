@@ -8,12 +8,11 @@
             [cljs.pprint :refer [pprint]]
             [cljs-http.client :as http]
             [reagent.core :as r]
-            [klang.core :refer-macros [info! erro!]]
             [app.db :refer [db chart-data]]
             [app.config :refer [config]]))
 
 (when (= :dev (:env config))
-  (do (info! "[actions.api] Spec activated...") (ts/instrument)))
+  (do (js/console.log "[actions.api] Spec activated...") (ts/instrument)))
 
 (defn log [& args] (js/console.log (pprint args)))
 
