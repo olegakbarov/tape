@@ -1,6 +1,6 @@
 (def project
-  {:name "tape"
-   :version "0.1.0"})
+  {:name "see package.json"
+   :version "see package.json"})
 
 (set-env! :source-paths #{"src"}
           :resource-paths #{"resources"}
